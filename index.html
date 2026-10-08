@@ -1368,7 +1368,7 @@ function loadGlb() {
             .replace('#include <emissivemap_fragment>', `#include <emissivemap_fragment>
               { vec3 bc = diffuseColor.rgb; float limeMask = smoothstep(0.06, 0.2, bc.g - max(bc.r * 0.9, bc.b)) * smoothstep(0.12, 0.3, bc.g);
                 totalEmissiveRadiance += bc * limeMask * uLimeGlow;
-                vec3 gn = normalize(nonPerturbedNormal); vec3 vd = normalize(vViewPosition); float ndv = abs(dot(gn, vd));
+                vec3 gn = nonPerturbedNormal * inversesqrt(max(dot(nonPerturbedNormal, nonPerturbedNormal), 1e-8)); vec3 vd = vViewPosition * inversesqrt(max(dot(vViewPosition, vViewPosition), 1e-8)); float ndv = clamp(abs(dot(gn, vd)), 0.0, 1.0);
                 float rimF = pow(1.0 - ndv, 4.0); float side = smoothstep(0.15, 0.75, gn.x);
                 totalEmissiveRadiance += mix(vec3(1.0, 0.4, 0.12), vec3(0.6, 1.0, 0.2), side) * rimF * 1.1;
                 totalEmissiveRadiance += vec3(1.0, 0.42, 0.1) * smoothstep(0.07, 0.0, dEdge) * 7.0 * step(0.002, uDiss); }`);
@@ -1384,6 +1384,15 @@ function loadGlb() {
 /* ---------- post ---------- */
 const composer = new EffectComposer(renderer);
 composer.addPass(new RenderPass(scene, camera));
+/* 깨진 값(NaN·무한대) 지우기 — 엠버가 어떤 자세에서 한 픽셀 NaN 을 내면 블룸이 가로·세로로 퍼뜨려 엠버 둘레가 검은 정사각형으로 번쩍였다(10-08, 240Hz 에서 120장 중 5장). 블룸 전에 0 으로. */
+composer.addPass(new ShaderPass({
+  uniforms: { tDiffuse: { value: null } },
+  vertexShader: `varying vec2 vU; void main(){ vU = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
+  fragmentShader: `uniform sampler2D tDiffuse; varying vec2 vU;
+    void main(){ vec4 c = texture2D(tDiffuse, vU);
+      if (any(isnan(c)) || any(isinf(c))) c = vec4(0.0, 0.0, 0.0, 1.0);
+      gl_FragColor = vec4(min(c.rgb, vec3(64.0)), c.a); }`,
+}));
 const bloom = new UnrealBloomPass(new THREE.Vector2(SZ()[0] / 2, SZ()[1] / 2), LOW ? 0.6 : 0.72, 0.45, 0.88); composer.addPass(bloom);
 const finalPass = new ShaderPass({
   uniforms: { tDiffuse: { value: null }, uCA: { value: 0.0015 }, uFade: { value: 0 } },
