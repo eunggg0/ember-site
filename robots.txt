@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://eunggg0.github.io/ember-site/sitemap.xml

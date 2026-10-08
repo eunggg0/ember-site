@@ -1,0 +1,13 @@
+{
+  "_note": "사이트 전체 링크·값을 모아 둔 곳. 출시 때 실제 주소로 교체. 모든 페이지가 이 파일을 읽어 data-link / data-cfg 자리에 넣는다.",
+  "download": "https://eunggg0.github.io/ember-releases/download/",
+  "community": "#",
+  "contact": "mailto:realnoma@naver.com",
+  "source": "#",
+  "version": "1.0",
+  "privacyEffective": "2026년 10월 1일",
+  "terms": "terms.html",
+  "buy": "#",
+  "_buyNote": "2026-10-08 serverops: 출시 때 Lemon Squeezy Checkout URL(https://<가게>.lemonsqueezy.com/buy/<id>, Products ▸ Ember ▸ Share)로 교체. 앱 구매하기 버튼은 Resources/license.json 의 buyURL — 같은 값",
+  "_downloadNote": "2026-10-08 serverops: 고정 주소 — 출시마다 Tools/dev/serverops/release.sh --publish 가 이 페이지를 최신 dmg 로 돌린다(사이트는 그대로). 출시 전엔 \"아직 출시 전\" 안내"
+}

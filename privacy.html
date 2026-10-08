@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b0908">
+<meta name="color-scheme" content="dark">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="canonical" href="https://eunggg0.github.io/ember-site/privacy.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Ember">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:title" content="Ember 개인정보 처리방침">
+<meta property="og:description" content="Ember는 개인정보를 모으지 않습니다. 맥 안에서 처리하는 정보와 인터넷 연결, 권한을 정리했습니다.">
+<meta property="og:url" content="https://eunggg0.github.io/ember-site/privacy.html">
+<meta property="og:image" content="https://eunggg0.github.io/ember-site/assets/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="EMBER 글자 앞에 선 엠버 캐릭터와 로스트아크 실측 47–54 → 94–107 fps">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Ember 개인정보 처리방침">
+<meta name="twitter:description" content="Ember는 개인정보를 모으지 않습니다. 맥 안에서 처리하는 정보와 인터넷 연결, 권한을 정리했습니다.">
+<meta name="twitter:image" content="https://eunggg0.github.io/ember-site/assets/og.jpg">
+<title>Ember 개인정보 처리방침</title>
+<meta name="description" content="Ember는 개인정보를 모으지 않습니다. 맥 안에서 처리하는 정보와 인터넷 연결, 권한을 정리했습니다.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Hahmlet:wght@500;700&family=IBM+Plex+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column over a quiet ember-spark backdrop; same tokens as the main page. Single committed dark look. */
+:root{
+  color-scheme:dark;
+  --ink:#0a0706; --ink-2:#14100d; --ash:#efe6dc; --ash-dim:#a69a8f; --ash-faint:#7a6f66;
+  --ember:#ff6a1f; --gold:#ffb547; --lime:#c6ff3d;
+  --glass:rgba(255,236,220,.05); --line:rgba(255,214,180,.14);
+  --f-display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
+  --f-body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+  --gutter:clamp(16px,5vw,72px);
+  --t-xs:12px; --t-sm:14px; --t-md:16.5px; --t-lg:clamp(21px,2.2vw,27px); --t-xl:clamp(32px,5vw,62px);
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box}
+html{background:var(--ink);scroll-behavior:smooth}
+body{margin:0;background:var(--ink);color:var(--ash);font-family:var(--f-body);font-size:var(--t-md);line-height:1.72;-webkit-font-smoothing:antialiased;overflow-x:hidden;word-break:keep-all;overflow-wrap:break-word}
+a{color:var(--gold);text-underline-offset:3px}
+a:hover{color:var(--ash)}
+:focus-visible{outline:2px solid var(--lime);outline-offset:3px;border-radius:6px}
+h1,h2,h3{margin:0;text-wrap:balance;font-weight:700;letter-spacing:-.01em}
+p{margin:0}
+[hidden]{display:none!important}
+#sparks{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.glow{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(60% 45% at 75% 0%,rgba(255,106,31,.16),transparent 70%),radial-gradient(40% 35% at 0% 100%,rgba(198,255,61,.05),transparent 70%)}
+.nav,main,footer{position:relative;z-index:2}
+.nav{position:sticky;top:0;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px var(--gutter);background:rgba(10,7,6,.96);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ash);font-family:var(--f-display);font-weight:900;font-size:21px;letter-spacing:.14em}
+.brand svg{width:19px;height:25px}
+.nav ul{display:flex;flex-wrap:wrap;gap:2px;list-style:none;margin:0;padding:0}
+.nav li a{display:block;padding:7px 12px;border-radius:999px;font-size:var(--t-sm);text-decoration:none;color:var(--ash-dim)}
+.nav li a:hover{color:var(--ash);background:var(--glass)}
+.nav li a[aria-current="page"]{color:var(--ash);background:rgba(255,181,71,.12)}
+.wrap{padding-inline:var(--gutter)}
+.col{max-width:820px;margin-inline:auto}
+.eyebrow{font-family:var(--f-mono);font-size:var(--t-xs);letter-spacing:.08em;color:var(--gold)}
+.page-head{padding-block:clamp(56px,10vh,110px) 40px}
+.page-head h1{font-size:var(--t-xl);line-height:1.16;margin-top:14px}
+.page-head .lead{margin-top:18px;color:var(--ash-dim);max-width:38em}
+.muted{color:var(--ash-dim)}
+footer{margin-top:80px;padding-block:28px 32px;border-top:1px solid var(--line);background:rgba(10,7,6,.85);display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px 24px;font-size:var(--t-xs);color:var(--ash-faint)}
+footer nav{display:flex;flex-wrap:wrap;gap:6px 18px}
+footer a{color:var(--ash-dim);text-decoration:none}
+footer a:hover{color:var(--ash)}
+@media (max-width:760px){ .nav{flex-wrap:wrap} .nav ul{width:100%;overflow-x:auto;flex-wrap:nowrap;margin-inline:-6px} .nav li a{white-space:nowrap} }
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto} *{animation:none!important;transition:none!important}}
+
+.toc{display:flex;flex-wrap:wrap;gap:8px;margin-top:26px}
+.toc a{display:inline-block;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--glass);color:var(--ash-dim);text-decoration:none;font-size:var(--t-sm)}
+.toc a:hover{color:var(--ash)}
+.sec{padding-block:44px 8px;border-top:1px solid var(--line);scroll-margin-top:80px}
+.sec h2{display:flex;align-items:baseline;gap:14px;font-size:var(--t-lg);line-height:1.35}
+.sec h2 .k{font-family:var(--f-display);font-weight:900;font-size:1.5em;color:var(--gold);min-width:1.4em}
+.sec .txt{margin-top:14px;display:grid;gap:12px;color:var(--ash-dim);max-width:44em}
+.sec .txt strong{color:var(--ash);font-weight:500}
+.tbl{margin-top:18px;overflow-x:auto;border:1px solid var(--line);border-radius:16px;background:rgba(20,16,13,.6);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+table{width:100%;border-collapse:collapse;font-size:var(--t-sm);min-width:560px}
+th,td{text-align:left;vertical-align:top;padding:10px 14px;border-bottom:1px solid var(--line)}
+thead th{font-family:var(--f-mono);font-size:var(--t-xs);font-weight:500;letter-spacing:.04em;color:var(--gold);background:rgba(255,181,71,.05)}
+tbody tr:last-child td{border-bottom:0}
+td b{color:var(--ash);font-weight:500}
+td{color:var(--ash-dim)}
+tr.grp th{font-size:var(--t-xs);color:var(--ash);background:rgba(255,236,220,.04);font-weight:500;letter-spacing:.02em}
+.ob{display:inline-block;padding:2px 8px;border-radius:999px;font-size:11px;font-family:var(--f-mono);white-space:nowrap}
+.ob.src{color:var(--lime);border:1px solid rgba(198,255,61,.35)}
+.ob.ntc{color:var(--ash-dim);border:1px solid var(--line)}
+.legend{margin-top:10px;font-size:var(--t-xs);color:var(--ash-faint)}
+ol.restr{margin:6px 0 0;padding-left:1.4em;display:grid;gap:4px;font-size:var(--t-sm)}
+.callout{margin-top:16px;padding:16px 18px;border-radius:16px;border:1px solid rgba(198,255,61,.25);background:rgba(198,255,61,.04);color:var(--ash-dim);font-size:var(--t-sm)}
+.btn{display:inline-flex;align-items:center;gap:8px;margin-top:6px;padding:10px 16px;border-radius:999px;border:1px solid rgba(198,255,61,.4);color:var(--lime);text-decoration:none;font-size:var(--t-sm);background:rgba(198,255,61,.06);width:max-content}
+
+.sum{margin-top:26px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:10px}
+.sum div{padding:16px 18px;border-radius:16px;background:var(--glass);border:1px solid var(--line)}
+.sum b{display:block;color:var(--ash);font-weight:500}
+.sum span{display:block;margin-top:4px;font-size:var(--t-sm);color:var(--ash-dim)}
+.na{display:inline-block;margin-left:8px;padding:2px 8px;border-radius:999px;font-family:var(--f-mono);font-size:11px;color:var(--ash-dim);border:1px solid var(--line);vertical-align:middle}
+
+
+/* 10-07 siteredesign: 첫 페이지와 같은 제목 서체(Hahmlet) */
+:root{--f-head:"Hahmlet","Noto Serif KR","AppleMyungjo",serif}
+.page-head h1,.chap h2,.sec h2{font-family:var(--f-head);letter-spacing:-.025em}
+
+/* 10-08 ghpages: 누름 자리 44px 이상(휴대폰), 좌우 안전 영역 */
+@media (pointer:coarse){.nav li a{padding-block:12px}footer a,footer nav a{display:inline-flex;align-items:center;min-height:44px}.brand{min-height:44px}}
+:root{--gutter:max(clamp(16px,5vw,72px),env(safe-area-inset-left,0px),env(safe-area-inset-right,0px))}
+</style>
+</head>
+<body>
+<canvas id="sparks" aria-hidden="true"></canvas><div class="glow" aria-hidden="true"></div>
+<header class="nav">
+  <a class="brand" href="./" aria-label="Ember 첫 페이지로">
+    <svg viewBox="0 0 100 130" aria-hidden="true"><path fill="url(#fl)" fill-rule="evenodd" d="M50 4C62 30 88 52 88 82C88 108 70 126 50 126C30 126 12 108 12 84C12 64 24 52 32 40C34 54 40 60 46 62C42 44 44 24 50 4ZM50 71a17 17 0 1 0 0.01 0Z"/><defs><linearGradient id="fl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffb547"/><stop offset="1" stop-color="#ff6a1f"/></linearGradient></defs></svg>
+    EMBER
+  </a>
+  <ul>
+    <li><a href="./#perf">성능</a></li>
+    <li><a href="./#features">기능</a></li>
+    <li><a href="why.html">왜 만드나</a></li>
+    <li><a href="license.html">라이선스</a></li>
+    <li><a href="privacy.html" aria-current="page">개인정보</a></li>
+  </ul>
+</header>
+<main>
+
+<section class="page-head wrap"><div class="col">
+  <p class="eyebrow">개인정보 처리방침</p>
+  <h1>Ember는 개인정보를 모으지 않습니다</h1>
+  <p class="lead">Ember에는 회원가입, 광고, 분석 도구, 원격 수집이 없습니다. 엠버 AI의 음성·화면·대화 처리는 모두 맥 안에서 이뤄집니다. 아래에 무엇이 맥 안에 남고, 언제 인터넷에 연결하는지 정확히 적었습니다.</p>
+  <div class="sum">
+    <div><b>보내지 않습니다</b><span>Ember 개발자 서버로 전송되는 개인정보가 없습니다.</span></div>
+    <div><b>맥 안에서만</b><span>음성 인식, 답변, 목소리, 화면 분석을 모두 기기 안에서 처리합니다.</span></div>
+    <div><b>지울 수 있습니다</b><span>맥 안에 남는 기록은 사용자가 언제든 지울 수 있습니다.</span></div>
+  </div>
+  <nav class="toc" aria-label="이 페이지 목차">
+    <a href="#purpose">처리 목적·항목</a><a href="#local">맥 안에서 처리하는 정보</a><a href="#keep">보관·파기</a><a href="#third">제3자 제공</a><a href="#outsourcing">처리 위탁</a>
+    <a href="#network">인터넷 연결</a><a href="#perm">권한</a><a href="#rights">이용자의 권리</a><a href="#safety">안전 조치</a><a href="#web">이 웹사이트</a><a href="#officer">책임자·문의</a><a href="#date">시행일</a>
+  </nav>
+</div></section>
+<div class="wrap"><div class="col">
+<section class="sec" id="purpose"><h2><span class="k">1</span>개인정보의 처리 목적과 항목<span class=na>해당 없음</span></h2><div class="txt"><p>Ember 개발자는 이용자의 개인정보를 수집하지 않으므로 처리 목적과 처리 항목이 없습니다. 회원가입, 광고 식별자, 사용 통계, 오류 보고 자동 전송 기능도 없습니다.</p></div></section>
+<section class="sec" id="local"><h2><span class="k">2</span>맥 안에서만 처리하는 정보</h2><div class="txt"><p>아래 정보는 기능을 쓰는 동안 이용자의 맥 안에서만 처리되며, Ember 개발자에게 전달되지 않습니다.</p></div><div class="tbl "><table><thead><tr><th scope="col">정보</th><th scope="col">쓰는 곳</th><th scope="col">처리 방식</th></tr></thead><tbody><tr><td><b>마이크 소리</b></td><td>엠버 AI 호출어(“엠버야”)와 말 명령 인식</td><td>맥 안 음성 인식으로만 처리합니다. 녹음 파일은 저장하지 않습니다.</td></tr><tr><td><b>엠버 AI와 나눈 말·기억</b></td><td>대화 이어 가기, 사용자가 알려 준 내용 기억</td><td>답변은 맥 안 모델(Apple Foundation Models 또는 사용자가 받은 Gemma)이 만듭니다. 기억은 Ember 데이터 폴더(Coach)에만 저장되고 언제든 지울 수 있습니다.</td></tr><tr><td><b>게임 화면</b></td><td>보스 HUD, 게임 화면 번역·설명, 끊김 원인 표시</td><td>화면 기록 권한으로 게임 창을 맥 안에서 분석하고 바로 버립니다. 저장하거나 보내지 않습니다.</td></tr><tr><td><b>목소리 합성</b></td><td>엠버 AI 대답 읽어 주기</td><td>맥 안에서 합성합니다.</td></tr><tr><td><b>실행 기록·측정 기록·설정</b></td><td>문제 해결, Frame Check 성능 비교, 게임별 설정 기억</td><td>Ember 데이터 폴더(Logs, framecheck 등)에만 저장됩니다. 사용자가 직접 공유하지 않는 한 밖으로 나가지 않습니다.</td></tr><tr><td><b>게임·런처 계정</b></td><td>각 런처 로그인</td><td>스팀 같은 각 런처가 직접 다룹니다. Ember는 계정 정보를 보관하거나 보내지 않습니다.</td></tr></tbody></table></div></section>
+<section class="sec" id="keep"><h2><span class="k">3</span>보관 기간과 파기</h2><div class="txt"><p>Ember 개발자가 보관하는 개인정보는 없습니다.</p><p>맥 안에 남는 대화 기억, 실행 기록, 측정 기록, 설정은 이용자가 지울 때까지 맥에만 남습니다. 해당 파일이나 Ember 데이터 폴더를 지우면 바로 없어지고, Ember를 지울 때 데이터 폴더도 함께 지우면 아무것도 남지 않습니다. 녹음 파일과 화면 캡처는 처음부터 저장하지 않습니다.</p></div></section>
+<section class="sec" id="third"><h2><span class="k">4</span>개인정보의 제3자 제공<span class=na>해당 없음</span></h2><div class="txt"><p>Ember는 이용자의 개인정보를 제3자에게 제공하지 않습니다.</p></div></section>
+<section class="sec" id="outsourcing"><h2><span class="k">5</span>개인정보 처리 위탁<span class=na>해당 없음</span></h2><div class="txt"><p>개인정보 처리를 다른 곳에 맡기지 않습니다.</p></div></section>
+<section class="sec" id="network"><h2><span class="k">6</span>Ember가 인터넷에 연결하는 경우</h2><div class="txt"><p>Ember는 아래 경우에만 인터넷에 연결합니다. 이때 상대 서버에는 IP 주소, 접속 시각, 기기·앱 종류 같은 일반 접속 정보가 전달될 수 있으며, 그 처리는 각 서비스의 정책을 따릅니다.</p></div><div class="tbl "><table><thead><tr><th scope="col">언제</th><th scope="col">어디로</th><th scope="col">무엇을</th></tr></thead><tbody><tr><td><b>AI 모델 받기 (사용자가 ‘받기’를 누를 때)</b></td><td>Hugging Face</td><td>Gemma, Supertonic, Whisper 모델 파일</td></tr><tr><td><b>VC++ 런타임 설치</b></td><td>Microsoft</td><td>게임이 필요로 하는 런타임 설치 파일</td></tr><tr><td><b>Ember 런타임 업데이트 확인</b></td><td>GitHub API</td><td>새 런타임이 있는지 확인</td></tr><tr><td><b>런처·게임 실행</b></td><td>각 런처·게임 서비스</td><td>각 서비스 자체 통신 (그 서비스의 개인정보 처리방침을 따름)</td></tr><tr><td><b>보스 가이드 출처 링크 열기</b></td><td>해당 웹사이트 (브라우저로 열림)</td><td>사용자가 누른 링크</td></tr></tbody></table></div></section>
+<section class="sec" id="perm"><h2><span class="k">7</span>맥 권한과 쓰임</h2><div class="txt"><p>권한은 해당 기능을 켤 때 macOS가 물어보며, <strong>시스템 설정 › 개인정보 보호 및 보안</strong>에서 언제든 끌 수 있습니다. 끄면 그 기능만 쓸 수 없고 게임 실행에는 영향이 없습니다.</p></div><div class="tbl "><table><thead><tr><th scope="col">권한</th><th scope="col">쓰는 곳</th><th scope="col">물어보는 때</th></tr></thead><tbody><tr><td><b>마이크</b></td><td>“엠버야” 호출어와 말 명령</td><td>엠버 AI 음성 기능을 켰을 때만</td></tr><tr><td><b>음성 인식</b></td><td>말을 글자로 바꾸기 (맥 안에서만)</td><td>〃</td></tr><tr><td><b>화면 기록</b></td><td>보스 HUD, 게임 화면 번역·설명</td><td>해당 기능을 켰을 때만</td></tr><tr><td><b>로컬 네트워크</b></td><td>런처·게임이 같은 네트워크의 기기와 통신할 때</td><td>macOS가 처음에 물어봄</td></tr><tr><td><b>알림</b></td><td>게임 모드 전환, 설치 완료 같은 알림</td><td>〃</td></tr></tbody></table></div></section>
+<section class="sec" id="rights"><h2><span class="k">8</span>이용자의 권리</h2><div class="txt"><p>Ember 개발자가 가진 이용자 정보가 없으므로 열람·정정·삭제를 요청할 대상 정보도 없습니다. 맥 안에 남은 기록은 이용자가 직접 열어 보고 지울 수 있고, 권한은 언제든 거둘 수 있습니다.</p></div></section>
+<section class="sec" id="safety"><h2><span class="k">9</span>안전성 확보 조치</h2><div class="txt"><p>음성·화면·대화를 맥 밖으로 보내지 않는 구조로 만들었습니다. 받는 AI 모델은 정해 둔 판과 파일 해시로 확인한 뒤 씁니다. 엠버 AI의 고급 답변 엔진은 이 맥 안(127.0.0.1)에서만 열리고 바깥에서 접속할 수 없습니다.</p></div></section>
+<section class="sec" id="web"><h2><span class="k">10</span>이 웹사이트</h2><div class="txt"><p>이 웹사이트는 쿠키와 분석 도구를 쓰지 않습니다.</p><p>다만 페이지를 그리려고 Google Fonts에서 글꼴을, jsDelivr에서 스크립트를 불러오며, 이때 그 서버에 일반 접속 정보가 전달됩니다. 이 웹사이트가 올라가 있는 호스팅 서비스도 일반 접속 기록을 남길 수 있으며, 각 서비스의 정책을 따릅니다.</p></div></section>
+<section class="sec" id="officer"><h2><span class="k">11</span>개인정보 보호책임자와 문의</h2><div class="txt"><p>Ember는 개인정보를 처리하지 않지만, 이 방침에 대한 질문은 문의 창구로 받습니다.</p></div><a class="btn" href="#" data-link="contact">문의하기</a></section>
+<section class="sec" id="date"><h2><span class="k">12</span>시행일과 변경</h2><div class="txt"><p>이 방침은 <span data-cfg="privacyEffective">2026년 10월 1일</span>부터 시행합니다. 내용이 바뀌면 이 페이지에 바뀐 날짜와 함께 알립니다.</p></div></section>
+</div></div>
+</main>
+<footer class="wrap">
+  <p>Ember는 Apple, Microsoft, 각 게임사와 관계없는 독립 프로젝트입니다. 게임 이름과 화면은 각 권리자의 것입니다.</p>
+  <nav aria-label="바닥글"><a href="./">Ember</a><a href="why.html">왜 만드나</a><a href="license.html">라이선스와 고지</a><a href="terms.html" data-link="terms">이용 약관</a><a href="privacy.html">개인정보 처리방침</a></nav>
+</footer>
+<script>
+(() => {
+  const c = document.getElementById('sparks'); const g = c.getContext('2d');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let W, H, dpr, P = [];
+  function size() {
+    dpr = Math.min(devicePixelRatio || 1, 1.5); W = innerWidth; H = innerHeight; c.width = W * dpr; c.height = H * dpr; g.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const n = Math.round(Math.min(120, W * H / 14000)); P = Array.from({ length: n }, () => spawn(true));
+  }
+  function spawn(any) { return { x: Math.random() * W, y: any ? Math.random() * H : H + 10, r: 0.6 + Math.random() * 1.8, v: 8 + Math.random() * 26, s: Math.random() * 6.28, lime: Math.random() < 0.08, a: 0.25 + Math.random() * 0.6 }; }
+  let last = performance.now();
+  function draw(now) {
+    const dt = Math.min(0.05, (now - last) / 1000); last = now;
+    g.clearRect(0, 0, W, H); g.globalCompositeOperation = 'lighter';
+    for (const p of P) {
+      if (!reduce) { p.y -= p.v * dt; p.s += dt; p.x += Math.sin(p.s * 0.8) * 6 * dt; if (p.y < -10) Object.assign(p, spawn(false)); }
+      const fade = Math.min(1, p.y / (H * 0.35));
+      const col = p.lime ? '198,255,61' : (p.r > 1.6 ? '255,181,71' : '255,106,31');
+      const grd = g.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 5);
+      grd.addColorStop(0, `rgba(${col},${p.a * fade})`); grd.addColorStop(1, `rgba(${col},0)`);
+      g.fillStyle = grd; g.beginPath(); g.arc(p.x, p.y, p.r * 5, 0, 6.283); g.fill();
+    }
+    if (!reduce) requestAnimationFrame(draw);
+  }
+  size(); addEventListener('resize', () => { size(); if (reduce) draw(performance.now()); });
+  requestAnimationFrame(draw);
+})();
+</script>
+<script>
+/* 링크·값은 assets/site-config.json 한곳에서 읽는다 (출시 때 실제 주소로 교체). 못 읽으면 HTML 기본값을 그대로 둔다. */
+fetch('assets/site-config.json').then((r) => r.json()).then((c) => {
+  document.querySelectorAll('[data-link]').forEach((a) => { const v = c[a.dataset.link]; if (v) a.setAttribute('href', v); });
+  document.querySelectorAll('[data-cfg]').forEach((el) => { const v = c[el.dataset.cfg]; if (v) el.textContent = v; });
+}).catch(() => {});
+</script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+Ember 이용 약관
+시행일 2026-10-07
+
+1. 적용 범위
+이 약관은 Ember 앱과 Ember가 직접 만든 구성요소(자체 엔진 EmberCore와 그 안의 Ember Flow·Forge·Tone·Flare·Pulse·Boost·Lens·Guard, Ember 학습 모델, 엠버 캐릭터·그림 — 이하 ‘Ember 독점 부분’)에 적용됩니다.
+Ember에 함께 들어 있는 오픈소스 구성요소에는 각 라이선스가 적용되며, 이 약관은 그 라이선스가 주는 권리를 줄이지 않습니다. 목록과 전문은 앱의 설정 › 라이선스·고지와 웹사이트의 라이선스 페이지에 있습니다.
+
+2. 사용 허락
+Ember는 이 약관을 지키는 사용자에게, 본인이 소유하거나 관리하는 Mac에 Ember를 설치해 쓸 수 있는 비독점·양도 불가 사용권을 드립니다. Ember 독점 부분의 저작권과 그 밖의 권리는 Ember에 있습니다.
+
+3. 금지 사항 (Ember 독점 부분)
+이 약관이나 법이 허락하는 경우를 빼고, Ember 독점 부분을 복제·재배포·판매·대여하거나, 수정·역분석·디컴파일·분해하거나, 따로 떼어 다른 제품에 넣거나, 저작권·라이선스 표시를 지우면 안 됩니다.
+Ember를 불법적인 목적이나 다른 사람의 권리를 침해하는 데 쓰면 안 됩니다.
+
+4. LGPL 구성요소에 대한 권리
+Wine, DXMT, GStreamer, FFmpeg처럼 GNU LGPL을 따르는 구성요소는 앱 안에 별도 라이브러리로 들어 있습니다. 사용자는 각 라이선스에 따라 그 구성요소를 고치거나 새로 빌드한 판으로 바꿔 쓸 수 있습니다.
+LGPL 2.1 제6조에 따라, 사용자는 자기 사용을 위해 LGPL 구성요소를 고치고 그 수정을 디버깅하는 데 필요한 범위에서 Ember를 역분석할 수 있습니다. 이 허락은 LGPL 구성요소의 수정·교체·디버깅 목적에만 해당하며, 그 밖의 목적으로 Ember 독점 부분을 역분석·재배포할 권리를 주지 않습니다.
+LGPL 구성요소의 소스는 소스 공개 페이지에서 받거나, Ember를 받은 날부터 3년 동안 realnoma@naver.com 로 요청할 수 있습니다.
+
+5. 게임과 다른 회사의 서비스
+Ember는 게임을 팔거나 제공하지 않습니다. 게임, 게임 런처, 게임 계정은 각 회사의 이용 약관을 따르며, 사용자는 정당하게 가진 게임만 Ember로 실행해야 합니다.
+D3DMetal처럼 사용자가 따로 설치하는 Apple 구성요소에는 Apple의 사용권 계약이 적용됩니다.
+
+6. AI 기능
+엠버 AI의 답과 목소리는 기계가 만든 것이며 틀릴 수 있습니다. 중요한 판단에는 그대로 믿지 마세요.
+설정에서 받아 쓰는 AI 모델에는 각 모델의 라이선스가 적용됩니다. Supertonic 3 목소리 모델은 OpenRAIL-M 부록 A의 사용 제한을 지켜야 합니다.
+
+7. 보증의 부인
+Ember는 ‘있는 그대로’ 제공됩니다. 법이 허용하는 최대 범위에서, Ember는 상품성, 특정 목적 적합성, 권리 비침해를 포함한 어떤 보증도 하지 않으며, 모든 게임이 실행되거나 특정 성능이 나온다고 보장하지 않습니다.
+게임 저장 파일과 데이터는 사용자가 따로 백업해 주세요.
+
+8. 책임의 제한
+법이 허용하는 범위에서, Ember는 Ember 사용으로 생긴 간접·부수·특별·결과적 손해와 데이터 손실에 책임을 지지 않습니다. Ember의 고의나 중대한 과실로 생긴 손해, 그리고 소비자 보호 법령이 책임 제한을 허용하지 않는 경우는 예외입니다.
+
+9. 사용권의 종료
+이 약관을 어기면 사용권은 끝나며, 사용자는 Ember를 지워야 합니다. 오픈소스 구성요소에 대한 권리는 각 라이선스에 따라 계속 유지됩니다.
+
+10. 약관 변경과 준거법
+약관이 바뀌면 웹사이트와 앱에서 알립니다. 이 약관은 대한민국 법을 따릅니다.
+
+11. 문의
+이 약관, 라이선스, 소스 요청에 관한 문의는 realnoma@naver.com 로 보내 주세요.
+
+------------------------------------------------------------
+
+Ember Terms of Use
+Effective 2026-10-07
+
+1. Scope
+These terms apply to the Ember app and to the components Ember created itself (the EmberCore engine including Ember Flow, Forge, Tone, Flare, Pulse, Boost, Lens and Guard, Ember's trained models, and the Ember character and artwork — the "Ember Proprietary Parts").
+Open-source components bundled with Ember are governed by their own licenses, and nothing in these terms limits the rights those licenses grant. The list and full texts are in Settings › Licenses & Notices in the app and on the website's license page.
+
+2. License grant
+Subject to these terms, Ember grants you a non-exclusive, non-transferable license to install and use Ember on Mac computers you own or control. Ember retains all rights in the Ember Proprietary Parts.
+
+3. Restrictions (Ember Proprietary Parts)
+Except as permitted by these terms or by applicable law, you may not copy, redistribute, sell or rent the Ember Proprietary Parts; modify, reverse engineer, decompile or disassemble them; extract them for use in another product; or remove copyright or license notices.
+You may not use Ember for unlawful purposes or to infringe the rights of others.
+
+4. Rights for LGPL components
+Components licensed under the GNU LGPL, such as Wine, DXMT, GStreamer and FFmpeg, are included as separate libraries. You may modify them, or replace them with versions you rebuild, under their licenses.
+As required by section 6 of the LGPL 2.1, you may reverse engineer Ember to the extent needed to modify the LGPL components for your own use and to debug such modifications. This permission is limited to modifying, replacing and debugging the LGPL components and grants no other right to reverse engineer or redistribute the Ember Proprietary Parts.
+Source code for the LGPL components is available from the source page, or on request to realnoma@naver.com for three years from the date you received Ember.
+
+5. Games and third-party services
+Ember does not sell or provide games. Games, launchers and game accounts are governed by their providers' terms, and you may run only games you are legally entitled to use.
+Apple components you install separately, such as D3DMetal, are governed by Apple's license agreements.
+
+6. AI features
+Answers and voice output from the Ember assistant are machine-generated and may be wrong. Do not rely on them for important decisions.
+AI models you download in Settings are governed by their own licenses; the Supertonic 3 voice model is subject to the use restrictions in Attachment A of the OpenRAIL-M license.
+
+7. Disclaimer of warranty
+Ember is provided "as is". To the maximum extent permitted by law, Ember makes no warranties of any kind, including merchantability, fitness for a particular purpose and non-infringement, and does not guarantee that any game will run or reach any level of performance.
+Please keep your own backups of game saves and data.
+
+8. Limitation of liability
+To the extent permitted by law, Ember is not liable for indirect, incidental, special or consequential damages or loss of data arising from the use of Ember. This does not apply to damage caused by Ember's intent or gross negligence, or where consumer protection law does not allow such limitation.
+
+9. Termination
+If you breach these terms, your license ends and you must delete Ember. Your rights under the open-source licenses continue according to those licenses.
+
+10. Changes and governing law
+We will announce changes to these terms on the website and in the app. These terms are governed by the laws of the Republic of Korea.
+
+11. Contact
+Questions about these terms, licenses or source requests: realnoma@naver.com
