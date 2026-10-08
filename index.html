@@ -656,7 +656,7 @@ footer p{max-width:60em}
           <li><b>글자 보호</b><span><span class="bn">Ember Guard</span><button class="finfo" type="button" data-b="guard" aria-label="Ember Guard 설명" aria-expanded="false">i</button> 이름표와 HUD 글자가 번지지 않게 지킵니다.</span></li>
           <li><b>지연 관리</b>대기열을 비우고 저지연 모드로 입력 반응을 지킵니다.</li>
           <li><b>보간 HUD</b><span><span class="bn">Ember Lens</span><button class="finfo" type="button" data-b="lens" aria-label="Ember Lens 설명" aria-expanded="false">i</button> 화면 구석에 FG ON과 LAT(지연)를 바로 띄웁니다.</span></li>
-          <li><b>Flow 신경망 (실험)</b>Ember가 학습한 신경망이 움직임을 읽어 중간 장면을 만듭니다. 4K에서 드는 비용은 기존 방식의 약&nbsp;60%입니다.</li>
+          <li><b>Flow 신경망</b>Ember가 학습한 신경망이 움직임을 읽어 중간 장면을 만듭니다. 자동에서 기본으로 쓰고, 4K에서 드는 비용은 기존 방식의 약&nbsp;60%입니다.</li>
           <li><b>물결·풀숲</b>무늬가 잘게 흩어지는 장면에서도 원본 프레임을 반복하지 않고 보간합니다.</li>
           <li><b>확대 전 보간</b>MetalFX와 함께 쓰면 키우기 전 해상도에서 보간해 GPU 부담을 줄입니다. 로스트아크 게임 fps가 10% 올랐습니다.</li>
         </ul>
@@ -680,7 +680,7 @@ footer p{max-width:60em}
         </figure>
         <figure class="ba" data-key="flow" hidden>
           <div class="ba-view"><img class="ba-a" alt="일반 보간(앞뒤 두 프레임 섞기)으로 만든 중간 프레임. 활과 팔이 두 겹으로 보임"><img class="ba-b" alt="Ember Flow 신경망으로 만든 같은 순간의 중간 프레임. 활과 팔이 한 겹으로 또렷함"><span class="ba-line"></span><span class="lab a">일반 보간</span><span class="lab b">Ember Flow 신경망</span><input type="range" id="ba-flow" min="0" max="100" value="50" aria-label="일반 보간과 Ember Flow 신경망 비교 위치"></div>
-          <figcaption>원스 휴먼에서 걸으며 카메라를 돌리는 장면, 같은 순간의 보간 프레임입니다. 실제 프레임과 비교하면 일반 보간 24.6 dB, Ember Flow 신경망(실험) 26.8 dB. 손잡이를 끌어 보세요.</figcaption>
+          <figcaption>원스 휴먼에서 걸으며 카메라를 돌리는 장면, 같은 순간의 보간 프레임입니다. 실제 프레임과 비교하면 일반 보간 24.6 dB, Ember Flow 신경망 26.8 dB. 손잡이를 끌어 보세요.</figcaption>
         </figure>
       </div>
     </article>
