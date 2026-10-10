@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Ember</title>
-<meta name="description" content="Apple Silicon 맥에서 윈도우 게임을 하드웨어 한계까지 돌리는 런처, Ember.">
+<meta name="description" content="Apple Silicon 맥용 윈도우 게임 런처 Ember. 직접 테스트한 게임의 호환성, 실행 설정과 알려진 문제를 확인하세요.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" id="gf" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Hahmlet:wght@500;700&family=IBM+Plex+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" media="print">
@@ -264,12 +264,20 @@ main{position:relative;z-index:2}
 .caps dd{margin:4px 0 0;color:var(--ash-dim);font-size:var(--t-sm)}
 
 /* living ember */
-.live{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:clamp(24px,4vw,64px);margin-top:clamp(36px,6vh,64px);align-items:start}
+#living{max-width:1440px;margin-inline:auto}
+#living .sec-head{grid-template-columns:minmax(0,1fr);gap:12px}
+#living .sec-head h2{font-size:clamp(30px,3.4vw,48px);text-wrap:balance}
+#living .sec-head .note{max-width:none}
+.live{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:clamp(24px,3vw,40px);margin-top:28px;align-items:start}
 .vid{position:relative;background:#000}
 .vid video{width:100%;height:auto;aspect-ratio:1120/782;object-fit:cover}
 .vid .play{position:absolute;left:12px;bottom:12px;display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:7px 14px;font:500 var(--t-xs)/1 var(--f-mono);color:var(--ash);background:rgba(11,9,8,.82);border:1px solid var(--line-2);border-radius:4px;cursor:pointer}
 .vid figcaption,.live .small figcaption{margin-top:10px;font-size:var(--t-sm);color:var(--ash-dim)}
-.live .small{margin-top:28px}
+.live .small{margin-top:24px;display:grid;grid-template-columns:minmax(100px,.8fr) minmax(0,1fr);gap:14px;align-items:start;background:transparent}
+.live .small figcaption{margin-top:0}
+.live .vid .play{top:12px;bottom:auto}
+.live video{display:block;object-fit:contain;border:1px solid var(--line);border-radius:10px}
+.live>.vid{background:transparent}
 .live-text h3{font-family:var(--f-head);font-size:var(--t-lg);line-height:1.34}
 .live-text p{margin-top:12px;color:var(--ash-dim)}
 .live-text .facts{margin-top:22px}
@@ -442,6 +450,8 @@ footer p{max-width:60em}
 }
 </style>
 <link rel="stylesheet" href="assets/site-shell.css">
+<link rel="stylesheet" href="assets/compatibility.css">
+<script src="assets/compatibility.js" defer></script>
 <script src="assets/site-shell.js" defer></script>
 <meta name="theme-color" content="#0b0908">
 <meta name="color-scheme" content="dark">
@@ -453,15 +463,15 @@ footer p{max-width:60em}
 <meta property="og:site_name" content="Ember">
 <meta property="og:locale" content="ko_KR">
 <meta property="og:title" content="Ember">
-<meta property="og:description" content="Apple Silicon 맥에서 윈도우 게임을 하드웨어 한계까지 돌리는 런처, Ember.">
+<meta property="og:description" content="Apple Silicon 맥용 윈도우 게임 런처 Ember. 직접 테스트한 게임의 호환성, 실행 설정과 알려진 문제를 확인하세요.">
 <meta property="og:url" content="https://eunggg0.github.io/ember-site/">
 <meta property="og:image" content="https://eunggg0.github.io/ember-site/assets/og.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="EMBER 글자 앞에 선 엠버 캐릭터와 로스트아크 실측 47–54 → 94–107 fps">
+<meta property="og:image:alt" content="Ember 캐릭터와 맥용 윈도우 게임 런처 소개. 게임별 호환성 및 실행 설정">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Ember">
-<meta name="twitter:description" content="Apple Silicon 맥에서 윈도우 게임을 하드웨어 한계까지 돌리는 런처, Ember.">
+<meta name="twitter:description" content="Apple Silicon 맥용 윈도우 게임 런처 Ember. 직접 테스트한 게임의 호환성, 실행 설정과 알려진 문제를 확인하세요.">
 <meta name="twitter:image" content="https://eunggg0.github.io/ember-site/assets/og.jpg">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 </head>
@@ -477,8 +487,8 @@ footer p{max-width:60em}
   </a>
   <button class="menu" type="button" id="menubtn" aria-expanded="false" aria-controls="navlist" aria-label="메뉴"><i aria-hidden="true"></i><span class="opt">메뉴</span></button>
   <ul id="navlist">
-    <li><a href="#screens">실제 화면</a></li>
-    <li><a href="#perf">성능</a></li>
+    <li><a href="#screens">게임 호환성</a></li>
+    <li><a href="#perf">측정 안내</a></li>
     <li><a href="#features">기능</a></li>
     <li><a href="#ember">엠버</a></li>
     <li><a href="#app">앱</a></li>
@@ -512,9 +522,9 @@ footer p{max-width:60em}
         </div>
       </div>
       <div class="hero-proof">
-        <span>로스트아크 · QHD · M4 Pro 실측</span>
-        <span class="num">47–54 <span>→</span> <i>94–107</i></span>
-        <span>게임 fps → Ember Flow를 켠 화면 출력 fps</span>
+        <span>직접 확인한 게임 기록</span>
+        <a class="compat-hero-link" href="#screens">게임 호환성 <span aria-hidden="true">↗</span></a>
+        <span>실행 설정 · 테스트 범위 · 알려진 문제</span>
         <span class="hint"><span></span>내리면 엠버가 돌아섭니다</span>
       </div>
     </div>
@@ -535,10 +545,10 @@ footer p{max-width:60em}
       <p>Ember Flow는 중간 프레임을 만들고, Ember Forge는 화면을 더 선명하게 합니다. Ember Pulse는 프레임이 일정한 간격으로 표시되도록 조절합니다.</p>
     </div>
     <div class="cap r" style="--t:432vh">
-      <p class="eyebrow lime">Ember Flow · 로스트아크 실측</p>
+      <p class="eyebrow lime">Ember Flow · 프레임 보간</p>
       <h2>게임 프레임 사이에 한&nbsp;장을 더해 출력 fps를 두&nbsp;배로.</h2>
-      <p class="bnums"><span>게임</span><b>47–54</b><span>→ 화면</span><span class="nw"><b>94–107</b> fps</span></p>
-      <p>FEX 엔진, QHD, MetalFX, 게임 모드를 켜고 마을을 걸으며 쟀습니다. 버려진 보간 프레임은 한 장도 없었습니다.</p>
+      <p class="bnums"><span>화면 출력</span><span class="nw"><b>최대 2배</b></span></p>
+      <p>실제 효과는 게임과 설정에 따라 다릅니다. 게임별 기록에서 보간 전 게임 fps와 보간 후 화면 출력 fps를 함께 확인하세요.</p>
     </div>
     <div class="ring-hold">
       <div class="ring-cap">
@@ -552,91 +562,72 @@ footer p{max-width:60em}
   <section class="mani wrap" id="mani" aria-label="Ember 한 줄 소개">
     <div class="mani-in">
       <p class="slogan" lang="en"><span>Windows games,</span><span>on your Mac.</span></p>
-      <p class="prose" id="prose">Ember는 윈도우 게임을 Apple Silicon 맥에서 돌리는 런처입니다. 엔진과 그래픽 변환기는 게임마다 알맞게 골라 두고, 게임이 켜지다 튕기면 다른 변환기로 다시 띄웁니다. Ember가 만든 프레임 보간·화질 개선·프레임 간격 조절 기능도 함께 제공합니다. 이 페이지의 숫자는 모두 M4 Pro 맥북 프로에서 직접 잰 값입니다.</p>
+      <p class="prose" id="prose">Ember는 윈도우 게임을 Apple Silicon 맥에서 돌리는 런처입니다. 엔진과 그래픽 변환기는 게임마다 알맞게 골라 두고, 게임이 켜지다 튕기면 다른 변환기로 다시 띄웁니다. Ember가 만든 프레임 보간·화질 개선·프레임 간격 조절 기능도 함께 제공합니다. 게임별 테스트 범위와 M4 Pro에서 잰 성능 기록을 아래에서 확인할 수 있습니다.</p>
     </div>
   </section>
 
   <div class="sheet">
-  <!-- ===== 실제 화면 ===== -->
-  <section class="sec" id="screens" aria-labelledby="loa-title">
-    <div class="sec-head wrap">
-      <p class="eyebrow">실제 화면 · 4K 캡처</p>
-      <h2 id="loa-title">손대지 않은 로스트아크 화면</h2>
-      <p class="note">Ember로 실행한 로스트아크를 4K로 그대로 캡처했습니다. 왼쪽 위 작은 판이 Ember Lens입니다. 게임 fps, 보간 상태(FG), 화면 출력 fps, 지연을 바로 보여 줍니다.</p>
-    </div>
-    <figure class="bleed">
-      <img src="assets/loa-town-fg.webp" alt="로스트아크 마하라카 해변. 왼쪽 위 Ember HUD에 게임 49 fps, FG ON, 출력 100 fps" loading="lazy" width="1920" height="1080">
-      <figure class="hudzoom">
-        <img src="assets/loa-hud.webp" alt="Ember Lens 확대: 49 FPS 20.3 ms, MIN 25 MAX 66, FG ON OUT 100, LAT 50 ms 120 Hz" loading="lazy" width="680" height="176">
-        <figcaption><span>게임</span><b>49 fps · 20.3 ms</b><span class="l">FG ON</span><b>화면 출력 100 fps</b><span>지연</span><b>50 ms · 120 Hz</b></figcaption>
-      </figure>
-      <figcaption class="bleed-cap"><span><b>마하라카 해변</b> · 게임 49 fps에 보간을 더해 화면 출력 100 fps</span><span class="mono">FEX · QHD · MetalFX · Ember Flow · 게임 모드</span></figcaption>
-    </figure>
-    <div class="loa-grid wrap">
-      <aside class="loa-stat" aria-label="로스트아크 마을 걷기 실측">
-        <p class="eyebrow lime">마을 걷기 실측</p>
-        <p class="num">94–107<small>fps</small></p>
-        <p class="sub">화면 출력 fps. 게임 fps 47–54의 정확히&nbsp;2배</p>
-        <ul class="facts">
-          <li>버려진 보간 프레임<b>0</b></li>
-          <li>Ember가 쓰는 GPU 시간<b>7.6 → 5.6&nbsp;ms</b></li>
-          <li>렌더 단계(합친 뒤)<b>140 → 75개</b></li>
-          <li>주 스레드가 도는 곳<b>성능 코어</b></li>
-        </ul>
-        <div class="chips"><span>FEX</span><span>QHD</span><span>MetalFX</span><span>Ember Flow</span><span>게임 모드</span></div>
-      </aside>
-      <div class="loa-shots">
-        <figure><img src="assets/loa-waterpark.webp" alt="로스트아크 마하라카 워터파크. Ember HUD에 게임 44 fps, FG ON, 출력 89 fps" loading="lazy" width="1920" height="1080"><figcaption><b>워터파크</b>물 효과가 많고 사람이 붐비는 곳에서도 보간 (게임 44 → 화면 출력 89 fps)</figcaption></figure>
-        <figure><img src="assets/loa-menu.webp" alt="로스트아크 게임 메뉴와 캐릭터 일러스트. Ember HUD에 게임 49 fps, 출력 97 fps" loading="lazy" width="1920" height="1080"><figcaption><b>게임 메뉴</b>Ember Guard가 메뉴 글자를 지키며 보간 (게임 49 → 화면 출력 97 fps)</figcaption></figure>
-        <figure><img src="assets/loa-charselect.webp" alt="로스트아크 캐릭터 선택 화면. Ember HUD에 FG PAUSE (LOW FPS 27)" loading="lazy" width="1920" height="1080"><figcaption><b>캐릭터 선택</b>fps가 너무 낮은 장면에서는 보간을 잠시 멈추고 HUD에 FG PAUSE로 알립니다</figcaption></figure>
-      </div>
-    </div>
-    <p class="foot-note wrap">측정: M4 Pro 맥북 프로 · 화면 속 캐릭터·길드 이름과 계정 정보는 가렸습니다. 게임 화면의 권리는 개발사·배급사에 있습니다.</p>
+  <!-- ===== 게임 호환성 ===== -->
+  <section class="sec wrap" id="screens" aria-labelledby="compat-title">
+    <div class="sec-head"><p class="eyebrow">게임 호환성 · 테스트 기록</p><h2 id="compat-title">어떤 게임을 할 수 있나요?</h2><p class="note">직접 실행해 기록을 남긴 게임들입니다. 게임을 고르면 확인한 장면, 실행 설정, 프레임과 남은 문제를 볼 수 있습니다.</p></div>
+    <form class="compat-tools" role="search" aria-label="게임 호환성 검색" hidden><div><label for="compat-query">게임 찾기</label><input id="compat-query" type="search" placeholder="게임 이름 검색 · 한글 / 영문" autocomplete="off" aria-controls="compat-list"></div><div><label for="compat-filter">확인 결과</label><select id="compat-filter" aria-controls="compat-list"><option value="all">전체 결과</option><option value="play">플레이 확인</option><option value="issues">문제 있음</option><option value="menu">메뉴 확인</option><option value="blocked">실행 실패</option></select></div><button type="reset">초기화</button></form>
+    <div class="compat-meta"><p id="compat-count" role="status" aria-live="polite" aria-atomic="true">총 12개 게임 · 이름순</p><span>기록 정리 2026.10.10</span></div>
+    <div class="compat-head" aria-hidden="true"><span>게임</span><span>확인 결과</span><span>실행 설정</span><span>확인한 범위</span><span></span></div>
+    <div id="compat-list"><details class="compat-game" id="game-l4d2" data-status="play" data-search="Left 4 Dead 2 L4D2">
+      <summary><span class="compat-name"><strong>레프트 4 데드 2</strong><small>Steam</small></span><span class="compat-status play">플레이 확인</span><span class="compat-renderer">DXVK</span><span class="compat-scope">죽음의 센터 · 로컬 캠페인</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
+      <div class="compat-detail"><div><p class="compat-result">첫 맵 옥상에서 이동하며 플레이를 확인했습니다.</p><dl><div><dt>확인 환경</dt><dd>M4 Pro · 1600×900 · 120Hz · 봇과 플레이</dd></div><div><dt>프레임 기록</dt><dd>게임 128–146 fps · 평균 약 138 fps</dd></div><div><dt>주의할 점</dt><dd>Ember에서 수정한 DXVK로 확인한 결과입니다. 다른 DXVK 배포본과 결과가 다를 수 있습니다.</dd></div><div><dt>기록 확인일</dt><dd><time datetime="2026-09-28">2026-09-28</time> · 프레임 기록은 별도 회차일 수 있습니다.</dd></div></dl><a class="compat-permalink" href="#game-l4d2">이 게임 바로가기 ↗</a></div></div>
+    </details>
+<details class="compat-game" id="game-lostark" data-status="play" data-search="Lost Ark">
+      <summary><span class="compat-name"><strong>로스트아크</strong><small>STOVE</small></span><span class="compat-status play">플레이 확인</span><span class="compat-renderer">FEX · DXMT</span><span class="compat-scope">마을 이동 · 워터파크</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
+      <div class="compat-detail"><div><p class="compat-result">마을 이동과 플레이를 확인했습니다. 최근 FEX 런타임 변경 뒤에도 인게임 화면을 확인했습니다.</p><dl><div><dt>확인 환경</dt><dd>M4 Pro · FEX · QHD · MetalFX · Ember Flow · 게임 모드</dd></div><div><dt>프레임 기록</dt><dd>기존 마을 측정: 게임 47–54 → 화면 출력 94–107 fps</dd></div><div><dt>주의할 점</dt><dd>FEX 캐시를 새로 만드는 첫 실행은 더 오래 걸릴 수 있습니다. 게임 내 웹 화면에서 간헐적인 오류가 남아 있습니다.</dd></div><div><dt>기록 확인일</dt><dd><time datetime="2026-10-09">2026-10-09</time> · 프레임 기록은 별도 회차일 수 있습니다.</dd></div></dl><a class="compat-permalink" href="#game-lostark">이 게임 바로가기 ↗</a></div><figure class="compat-shot"><a href="assets/loa-town-fg.webp" target="_blank" rel="noopener"><img src="assets/loa-town-fg.webp" alt="Ember로 실행한 로스트아크 실제 화면" loading="lazy" width="1600" height="900"></a><figcaption>기존 테스트 화면 · 누르면 원본 보기</figcaption></figure></div>
+    </details>
+<details class="compat-game" id="game-lethal" data-status="play" data-search="Lethal Company">
+      <summary><span class="compat-name"><strong>리썰 컴퍼니</strong><small>Steam</small></span><span class="compat-status play">플레이 확인</span><span class="compat-renderer">D3DMetal</span><span class="compat-scope">LAN 호스트 · 우주선 내부</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
+      <div class="compat-detail"><div><p class="compat-result">LAN 호스트로 우주선에 진입해 화면과 성능을 확인했습니다.</p><dl><div><dt>확인 환경</dt><dd>M4 Pro · 60Hz · 우주선 진입 후 30초</dd></div><div><dt>프레임 기록</dt><dd>게임 60 fps · 해당 장면 GPU 사용률 약 51%</dd></div><div><dt>주의할 점</dt><dd>인터넷 로비·온라인 협동은 이 기록의 확인 범위에 포함되지 않습니다. 마이크 이름의 한글은 게임 글꼴에서 네모로 보일 수 있습니다.</dd></div><div><dt>기록 확인일</dt><dd><time datetime="2026-09-28">2026-09-28</time> · 프레임 기록은 별도 회차일 수 있습니다.</dd></div></dl><a class="compat-permalink" href="#game-lethal">이 게임 바로가기 ↗</a></div></div>
+    </details>
+<details class="compat-game" id="game-requiem" data-status="issues" data-search="RESIDENT EVIL requiem">
+      <summary><span class="compat-name"><strong>바이오하자드 레퀴엠</strong><small>Steam · 체험판</small></span><span class="compat-status issues">문제 있음</span><span class="compat-renderer">D3DMetal</span><span class="compat-scope">체험판 · 첫 방</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
+      <div class="compat-detail"><div><p class="compat-result">D3DMetal에서 타이틀·메뉴와 첫 방 플레이를 확인했습니다.</p><dl><div><dt>확인 환경</dt><dd>M4 Pro · 120Hz 4K 디스플레이</dd></div><div><dt>프레임 기록</dt><dd>정지 약 83 fps · 이동 약 70 fps · 이동 중 p99 약 50 ms</dd></div><div><dt>주의할 점</dt><dd>이동할 때 끊김이 기록됐습니다. DXMT에서는 실행해도 화면이 검게 나옵니다.</dd></div><div><dt>기록 확인일</dt><dd><time datetime="2026-10-04">2026-10-04</time> · 프레임 기록은 별도 회차일 수 있습니다.</dd></div></dl><a class="compat-permalink" href="#game-requiem">이 게임 바로가기 ↗</a></div></div>
+    </details>
+<details class="compat-game" id="game-valheim" data-status="menu" data-search="Valheim">
+      <summary><span class="compat-name"><strong>발헤임</strong><small>Steam</small></span><span class="compat-status menu">메뉴 확인</span><span class="compat-renderer">D3DMetal</span><span class="compat-scope">인트로 · 메뉴 · 설정</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
+      <div class="compat-detail"><div><p class="compat-result">인트로 영상, 메인 메뉴와 설정 화면을 확인했습니다.</p><dl><div><dt>확인 환경</dt><dd>M4 Pro · 60Hz · 게임 모드</dd></div><div><dt>프레임 기록</dt><dd>메뉴 60 fps · 메뉴 자체 프레임 제한</dd></div><div><dt>주의할 점</dt><dd>이 실행 기록만으로 월드 플레이·멀티플레이 안정성을 판정하지 않습니다. Steam 오버레이 주입 시 시작 직후 종료된 기록이 한 차례 있습니다.</dd></div><div><dt>기록 확인일</dt><dd><time datetime="2026-09-28">2026-09-28</time> · 프레임 기록은 별도 회차일 수 있습니다.</dd></div></dl><a class="compat-permalink" href="#game-valheim">이 게임 바로가기 ↗</a></div></div>
+    </details>
+<details class="compat-game" id="game-stellar" data-status="issues" data-search="Stellar Blade">
+      <summary><span class="compat-name"><strong>스텔라 블레이드</strong><small>Steam · 체험판</small></span><span class="compat-status issues">문제 있음</span><span class="compat-renderer">D3DMetal / DXMT</span><span class="compat-scope">체험판 · 캠프와 인게임</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
+      <div class="compat-detail"><div><p class="compat-result">D3DMetal에서 인게임 플레이를 확인했습니다. DXMT에서도 실행·보간 측정 기록이 있습니다.</p><dl><div><dt>확인 환경</dt><dd>M4 Pro · 데모 · 그래픽 경로별 별도 측정</dd></div><div><dt>프레임 기록</dt><dd>기존 DXMT 측정: 게임 55 → 화면 출력 110 fps · 안정성 보증 수치 아님</dd></div><div><dt>주의할 점</dt><dd>DXMT 경로의 GPU 멈춤과 FSR3 사용 시 화면 깨짐은 조사 중입니다. D3DMetal 결과와 구분해서 보세요.</dd></div><div><dt>기록 확인일</dt><dd><time datetime="2026-10-10">2026-10-10</time> · 프레임 기록은 별도 회차일 수 있습니다.</dd></div></dl><a class="compat-permalink" href="#game-stellar">이 게임 바로가기 ↗</a></div><figure class="compat-shot"><a href="assets/stellar.webp" target="_blank" rel="noopener"><img src="assets/stellar.webp" alt="Ember로 실행한 스텔라 블레이드 실제 화면" loading="lazy" width="1600" height="900"></a><figcaption>기존 테스트 화면 · 누르면 원본 보기</figcaption></figure></div>
+    </details>
+<details class="compat-game" id="game-overwatch" data-status="issues" data-search="Overwatch">
+      <summary><span class="compat-name"><strong>오버워치</strong><small>Steam</small></span><span class="compat-status issues">문제 있음</span><span class="compat-renderer">D3DMetal</span><span class="compat-scope">Steam판 · 실행 후 플레이</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
+      <div class="compat-detail"><div><p class="compat-result">실행 실패를 수정한 뒤 사용자가 게임 실행을 확인했습니다.</p><dl><div><dt>확인 환경</dt><dd>M4 Pro · Steam판 · 사용자 플레이 및 프레임 기록</dd></div><div><dt>프레임 기록</dt><dd>최근 20개 측정 구간: 게임 중앙값 47.4 fps · 최저 28.2 fps</dd></div><div><dt>주의할 점</dt><dd>플레이 중 심한 프레임 저하가 보고됐고 원인을 조사 중입니다. 한국 Battle.net판은 별도 기록이며 이 결과를 적용할 수 없습니다.</dd></div><div><dt>기록 확인일</dt><dd><time datetime="2026-10-10">2026-10-10</time> · 프레임 기록은 별도 회차일 수 있습니다.</dd></div></dl><a class="compat-permalink" href="#game-overwatch">이 게임 바로가기 ↗</a></div></div>
+    </details>
+<details class="compat-game" id="game-oncehuman" data-status="play" data-search="Once Human">
+      <summary><span class="compat-name"><strong>원스 휴먼</strong><small>Steam</small></span><span class="compat-status play">플레이 확인</span><span class="compat-renderer">D3DMetal / DXMT</span><span class="compat-scope">필드 이동 · 보간 비교</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
+      <div class="compat-detail"><div><p class="compat-result">필드 플레이와 프레임 보간을 확인했습니다. DXMT에서는 보간 방식에 따른 고유 프레임과 반복 프레임도 비교했습니다.</p><dl><div><dt>확인 환경</dt><dd>M4 Pro · 그래픽 경로별 별도 측정</dd></div><div><dt>프레임 기록</dt><dd>기존 D3DMetal 측정: Ember Flow 사용 시 화면 출력 약 114 fps</dd></div><div><dt>주의할 점</dt><dd>아래 화면 출력 수치는 D3DMetal 측정입니다. DXMT 결과와 합쳐 비교하지 않습니다.</dd></div><div><dt>기록 확인일</dt><dd><time datetime="2026-10-07">2026-10-07</time> · 프레임 기록은 별도 회차일 수 있습니다.</dd></div></dl><a class="compat-permalink" href="#game-oncehuman">이 게임 바로가기 ↗</a></div><figure class="compat-shot"><a href="assets/oncehuman.webp" target="_blank" rel="noopener"><img src="assets/oncehuman.webp" alt="Ember로 실행한 원스 휴먼 실제 화면" loading="lazy" width="1600" height="900"></a><figcaption>기존 테스트 화면 · 누르면 원본 보기</figcaption></figure></div>
+    </details>
+<details class="compat-game" id="game-witcher3" data-status="blocked" data-search="The Witcher 3 Wild Hunt">
+      <summary><span class="compat-name"><strong>위쳐 3: 와일드 헌트</strong><small>Steam</small></span><span class="compat-status blocked">실행 실패</span><span class="compat-renderer">D3DMetal / DXMT</span><span class="compat-scope">DX12판 · 시작 단계</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
+      <div class="compat-detail"><div><p class="compat-result">REDlauncher를 건너뛰어 게임 실행 파일이 시작되는 단계까지 확인했습니다.</p><dl><div><dt>확인 환경</dt><dd>Steam 빌드 25646871 · Rosetta · DX12</dd></div><div><dt>프레임 기록</dt><dd>인게임 프레임 측정 없음 · 시작 실패 기록만 있음</dd></div><div><dt>주의할 점</dt><dd>검은 창 뒤 멈춤이 남아 있어 플레이할 수 없습니다. D3DMetal과 DXMT 모두 시작 단계에서 문제가 기록됐습니다.</dd></div><div><dt>기록 확인일</dt><dd><time datetime="2026-10-07">2026-10-07</time> · 프레임 기록은 별도 회차일 수 있습니다.</dd></div></dl><a class="compat-permalink" href="#game-witcher3">이 게임 바로가기 ↗</a></div></div>
+    </details>
+<details class="compat-game" id="game-cs2" data-status="play" data-search="Counter-Strike 2 CS2">
+      <summary><span class="compat-name"><strong>카운터 스트라이크 2</strong><small>Steam</small></span><span class="compat-status play">플레이 확인</span><span class="compat-renderer">D3DMetal</span><span class="compat-scope">더스트 2 · 로컬 봇전</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
+      <div class="compat-detail"><div><p class="compat-result">메뉴·한글·소리와 봇전 플레이를 확인했습니다.</p><dl><div><dt>확인 환경</dt><dd>M4 Pro · 1920×1080 · 120Hz · 높음 · MSAA 4×</dd></div><div><dt>프레임 기록</dt><dd>게임 평균 95.8 fps · 보간 없음</dd></div><div><dt>주의할 점</dt><dd>독점 전체 화면에서는 창이 보이지 않습니다. 전체 화면 창 모드를 사용하세요. 공식 매치메이킹·VAC 서버는 시험하지 않았습니다.</dd></div><div><dt>기록 확인일</dt><dd><time datetime="2026-10-03">2026-10-03</time> · 프레임 기록은 별도 회차일 수 있습니다.</dd></div></dl><a class="compat-permalink" href="#game-cs2">이 게임 바로가기 ↗</a></div><figure class="compat-shot"><a href="assets/cs2.webp" target="_blank" rel="noopener"><img src="assets/cs2.webp" alt="Ember로 실행한 카운터 스트라이크 2 실제 화면" loading="lazy" width="1600" height="900"></a><figcaption>기존 테스트 화면 · 누르면 원본 보기</figcaption></figure></div>
+    </details>
+<details class="compat-game" id="game-tf2" data-status="play" data-search="Team Fortress 2 TF2">
+      <summary><span class="compat-name"><strong>팀 포트리스 2</strong><small>Steam · 64비트판</small></span><span class="compat-status play">플레이 확인</span><span class="compat-renderer">DXVK</span><span class="compat-scope">2Fort · 로컬 봇전</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
+      <div class="compat-detail"><div><p class="compat-result">메뉴·한글·인트로 영상과 로컬 맵 플레이를 확인했습니다.</p><dl><div><dt>확인 환경</dt><dd>M4 Pro · 1920×1080 · 120Hz · VSync 끔 · 봇 8명</dd></div><div><dt>프레임 기록</dt><dd>게임 170–190 fps · 보간 없음</dd></div><div><dt>주의할 점</dt><dd>첫 맵 진입 때 셰이더 처리로 잠깐 멈출 수 있습니다. 공식 매치메이킹·VAC 서버는 시험하지 않았습니다.</dd></div><div><dt>기록 확인일</dt><dd><time datetime="2026-10-02">2026-10-02</time> · 프레임 기록은 별도 회차일 수 있습니다.</dd></div></dl><a class="compat-permalink" href="#game-tf2">이 게임 바로가기 ↗</a></div><figure class="compat-shot"><a href="assets/tf2.webp" target="_blank" rel="noopener"><img src="assets/tf2.webp" alt="Ember로 실행한 팀 포트리스 2 실제 화면" loading="lazy" width="1600" height="900"></a><figcaption>기존 테스트 화면 · 누르면 원본 보기</figcaption></figure></div>
+    </details>
+<details class="compat-game" id="game-pragmata" data-status="play" data-search="PRAGMATA">
+      <summary><span class="compat-name"><strong>프라그마타</strong><small>Steam · 데모</small></span><span class="compat-status play">플레이 확인</span><span class="compat-renderer">D3DMetal</span><span class="compat-scope">데모 · 튜토리얼 전투</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
+      <div class="compat-detail"><div><p class="compat-result">D3DMetal에서 한글·컷신과 튜토리얼 전투를 확인했습니다.</p><dl><div><dt>확인 환경</dt><dd>M4 Pro 24GB · 1080p · FSR3 성능 중시 · 게임 자체 FSR 프레임 생성</dd></div><div><dt>프레임 기록</dt><dd>튜토리얼 측정: 화면 출력 105–115 fps · 게임 자체 FSR 프레임 생성</dd></div><div><dt>주의할 점</dt><dd>DXMT 경로는 검은 화면 문제가 남아 있습니다. 게임 자체 프레임 생성과 Ember Flow를 함께 켜지 않는 설정으로 기록했습니다.</dd></div><div><dt>기록 확인일</dt><dd><time datetime="2026-10-04">2026-10-04</time> · 프레임 기록은 별도 회차일 수 있습니다.</dd></div></dl><a class="compat-permalink" href="#game-pragmata">이 게임 바로가기 ↗</a></div></div>
+    </details></div>
+    <p class="compat-empty" hidden>조건에 맞는 게임이 없습니다. 검색어 또는 확인 결과를 바꿔 보세요.</p>
+    <p class="foot-note">플레이 확인은 적힌 장면과 설정에서의 결과입니다. 전체 구간이나 온라인 매칭의 동작을 보장하지 않습니다. 기록이 없는 게임은 목록에 넣지 않았습니다. 게임 이름과 화면의 권리는 각 개발사·배급사에 있습니다.</p>
   </section>
 
-  <!-- ===== 측정 장부 ===== -->
-  <section class="sec wrap" id="perf" aria-labelledby="perf-title">
-    <div class="sec-head">
-      <p class="eyebrow">측정 기록</p>
-      <h2 id="perf-title">직접 잰 프레임</h2>
-      <p class="note">M4 Pro 맥북 프로에서 실제로 돌려 본 결과입니다. 숫자는 장면과 설정에 따라 달라집니다. 회색 막대는 게임 fps, 주황 막대는 Ember Flow를 켠 화면 출력 fps입니다.</p>
-    </div>
-    <div class="ledger" role="table" aria-label="게임별 실측 fps">
-      <div class="lg-head" role="row">
-        <span role="columnheader">게임 · 실행 조건</span>
-        <span class="ax" role="columnheader"><span class="lg-key"><span><i></i>게임 fps</span><span><i class="o"></i>화면 출력 (Ember Flow)</span></span></span>
-        <span class="r" role="columnheader">fps</span>
-      </div>
-      <div class="lg-row" role="row">
-        <div class="lg-game" role="cell"><img src="assets/loa-town-fg.webp" alt="" loading="lazy" width="1920" height="1080"><div><h3>로스트아크</h3><p>FEX · QHD · MetalFX · Ember Flow · 게임 모드 · 마을 걷기</p></div></div>
-        <div class="axis-wrap" role="cell" aria-label="게임 47–54, 화면 94–107"><div class="axis" data-ticks><span class="bar g" data-r="47,54"></span><span class="bar o" data-r="94,107"></span></div></div>
-        <div class="lg-val" role="cell"><p class="num">94–107</p><p>게임 47–54의 정확히 2배</p></div>
-      </div>
-      <div class="lg-row" role="row">
-        <div class="lg-game" role="cell"><img src="assets/stellar.webp" alt="" loading="lazy" width="1600" height="900"><div><h3>스텔라 블레이드 체험판</h3><p>DXMT D3D12 · Ember Flow</p></div></div>
-        <div class="axis-wrap" role="cell" aria-label="게임 55, 화면 110"><div class="axis" data-ticks><span class="bar g" data-r="55,55"></span><span class="bar o" data-r="110,110"></span></div></div>
-        <div class="lg-val" role="cell"><p class="num">55<em>→</em>110</p><p>보간 전 → 후</p></div>
-      </div>
-      <div class="lg-row" role="row">
-        <div class="lg-game" role="cell"><img src="assets/oncehuman.webp" alt="" loading="lazy" width="1600" height="900"><div><h3>원스 휴먼</h3><p>D3DMetal · Ember Flow · 필드</p></div></div>
-        <div class="axis-wrap" role="cell" aria-label="화면 약 114"><div class="axis" data-ticks><span class="bar o solo" data-r="114,114"></span></div></div>
-        <div class="lg-val" role="cell"><p class="num">≈114</p><p>Ember Flow를 켠 화면 출력</p></div>
-      </div>
-      <div class="lg-row" role="row">
-        <div class="lg-game" role="cell"><img src="assets/cs2.webp" alt="" loading="lazy" width="1600" height="900"><div><h3>카운터 스트라이크 2</h3><p>D3DMetal · 봇전</p></div></div>
-        <div class="axis-wrap" role="cell" aria-label="게임 96–111"><div class="axis" data-ticks><span class="bar g solo" data-r="96,111"></span></div></div>
-        <div class="lg-val" role="cell"><p class="num">96–111</p><p>보간 없음</p></div>
-      </div>
-      <div class="lg-row" role="row">
-        <div class="lg-game" role="cell"><img src="assets/tf2.webp" alt="" loading="lazy" width="1600" height="900"><div><h3>팀 포트리스 2</h3><p>DXVK · 일반 경기</p></div></div>
-        <div class="axis-wrap" role="cell" aria-label="게임 170–192"><div class="axis" data-ticks><span class="bar g solo" data-r="170,192"></span></div></div>
-        <div class="lg-val" role="cell"><p class="num">170–192</p><p>보간 없음</p></div>
-      </div>
-      <div class="lg-row scale" role="presentation">
-        <div class="axis-wrap"><div class="lg-scale" aria-hidden="true"><span style="left:0">0</span><span style="left:30%">60</span><span style="left:60%">120</span><span style="left:90%">180 fps</span></div></div>
-      </div>
-    </div>
-    <p class="foot-note">측정: M4 Pro 맥북 프로 · 각 게임 화면은 Ember로 실행해 직접 캡처했습니다. 게임 이름과 화면의 권리는 각 개발사·배급사에 있습니다.</p>
+  <section class="sec wrap compat-guide" id="perf" aria-labelledby="perf-title">
+    <div class="sec-head"><p class="eyebrow">프레임 기록 읽는 법</p><h2 id="perf-title">실행 조건까지 함께 보세요.</h2></div>
+    <div class="compat-guide-grid"><div><h3>게임 fps</h3><p>게임이 실제로 그린 프레임 수입니다. 같은 게임도 맵, 해상도, 설정에 따라 달라집니다.</p></div><div><h3>화면 출력 fps</h3><p>프레임 생성을 켜면 중간 프레임까지 포함합니다. Ember Flow와 게임 자체 프레임 생성은 구분해 적었습니다.</p></div><div><h3>테스트 범위</h3><p>메뉴, 로컬 봇전, 체험판과 온라인 플레이를 구분합니다. 평균 fps가 높아도 끊김이나 멈춤이 있으면 함께 표시합니다.</p></div></div>
   </section>
 
   <!-- ===== 기능 ===== -->
@@ -677,8 +668,8 @@ footer p{max-width:60em}
             <g id="cad-real"></g><g id="cad-out"></g>
             <rect id="cad-scan" x="0" y="32" width="2" height="128" fill="#efe6dc" opacity=".5"/>
           </svg>
-          <figcaption>로스트아크처럼 게임이 약 50 fps일 때. 진짜 프레임(금색) 사이마다 Ember Flow 프레임(라임)이 하나씩 들어가 화면은 정확히 두 배가 됩니다.</figcaption>
-          <p class="spec"><span><b>로스트아크 47–54 → 94–107 fps</b></span><span>스텔라 블레이드 체험판 55 → 110 fps</span><span>원스 휴먼(D3DMetal) 화면 출력 약 114 fps</span><span>보충형 지연 40.4 → 33~36 ms</span></p>
+          <figcaption>작동 원리를 설명하는 예시입니다. 게임이 50 fps일 때, 진짜 프레임(금색) 사이마다 Ember Flow 프레임(라임)이 하나씩 들어가 화면은 정확히 두 배가 됩니다.</figcaption>
+          <p class="spec"><span><a href="#screens">게임별 실제 측정 기록 보기 ↗</a></span></p>
         </figure>
         <figure class="ba" data-key="flow" hidden>
           <div class="ba-view"><img class="ba-a" alt="일반 보간(앞뒤 두 프레임 섞기)으로 만든 중간 프레임. 활과 팔이 두 겹으로 보임"><img class="ba-b" alt="Ember Flow 신경망으로 만든 같은 순간의 중간 프레임. 활과 팔이 한 겹으로 또렷함"><span class="ba-line"></span><span class="lab a">일반 보간</span><span class="lab b">Ember Flow 신경망</span><input type="range" id="ba-flow" min="0" max="100" value="50" aria-label="일반 보간과 Ember Flow 신경망 비교 위치"></div>
@@ -807,7 +798,7 @@ footer p{max-width:60em}
   <section class="sec wrap" id="living" aria-labelledby="live-title">
     <div class="sec-head">
       <p class="eyebrow">앱 안의 엠버 · 움직이는 배경</p>
-      <h2 id="live-title">앱 화면을 돌아다니는 엠버</h2>
+      <h2 id="live-title">앱 안에서 움직이는 엠버</h2>
       <p class="note">아래 영상은 Ember 앱을 그대로 녹화한 것입니다.</p>
     </div>
     <div class="live">
@@ -819,8 +810,8 @@ footer p{max-width:60em}
         <figcaption>평소엔 사이드바 아래에 있다가, 1~2분에 한 번 나들이를 나갑니다.</figcaption>
       </figure>
       <div class="live-text">
-        <h3>걸어 다니고, 카드를 밀고, 탭을 따라옵니다.</h3>
-        <p>카드 뒤에서 빼꼼 올라와 톡 치면 카드가 용수철처럼 흔들리고, 큰 그림 가장자리에 걸터앉기도 합니다. 멀리 가면 원근에 맞춰 작아지고, 탭을 옮기면 차원문에서 상체를 내밀어 두리번거린 뒤 걸어 나옵니다. 마우스로 집어 들면 목덜미를 잡힌 듯 대롱대롱 흔들립니다.</p>
+        <h3>엠버가 화면 곳곳을 돌아다닙니다.</h3>
+        <p>카드 뒤에서 고개를 내밀고, 그림 가장자리에 앉거나 탭을 따라 이동합니다. 마우스로 집어 옮길 수도 있습니다.</p>
         <ul class="facts">
           <li>동작<b>16가지</b></li>
           <li>앱 CPU(코어 하나 기준)<b>평균 약 17%</b></li>
@@ -832,7 +823,7 @@ footer p{max-width:60em}
             <source src="assets/media/app-mascot-tabs.mp4" type="video/mp4"><source src="assets/media/app-mascot-tabs.webm" type="video/webm">
           </video>
           <button class="play" type="button" hidden>재생</button>
-          <figcaption>움직이는 배경입니다. 홈 그림 자리에서는 같은 그림으로 만든 영상이 반복되고, 바탕에는 불씨가 날립니다. 게임이 떠 있거나 창이 가려졌을 때, 동작 줄이기나 저전력 모드에서는 멈춥니다.</figcaption>
+          <figcaption>탭을 옮기는 엠버와 움직이는 배경. 게임 실행 중이거나 창이 가려지면 멈추며, 동작 줄이기·저전력 모드에서도 재생하지 않습니다.</figcaption>
         </figure>
       </div>
     </div>
@@ -1280,7 +1271,7 @@ floor.rotation.x = -Math.PI / 2; scene.add(floor);
 /* ---------- glass ring: nine names in refracting iridescent slabs ---------- */
 const C = new THREE.Vector3(0, 1.8, 0), R = 5.5;
 const SLABS = [
-  ['FLOW', '프레임 보간', '×2', '로스트아크 47–54 → 94–107 fps'],
+  ['FLOW', '프레임 보간', '×2', '중간 프레임을 더해 화면 출력을 높입니다'],
   ['GUARD', '글자·이름표 보호', '95→0%', '워터파크에서 보간을 포기한 비율'],
   ['FORGE', 'AI 디테일 복원', '−57%', '원본과 차이 33~57% 줄임(LPIPS)'],
   ['TONE', 'AI 화질 다듬기', '0.3ms', 'QHD 프레임당 GPU 시간'],
