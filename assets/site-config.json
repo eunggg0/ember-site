@@ -7,7 +7,7 @@
   "version": "1.0",
   "privacyEffective": "2026년 10월 1일",
   "terms": "https://eunggg0.github.io/ember-site/terms.html",
-  "buy": "https://emberapp.lemonsqueezy.com/checkout/buy/7c1144c7-df2d-4439-9816-6581a5fac9e2",
-  "_buyNote": "2026-10-08 serverops: 출시 때 Lemon Squeezy Checkout URL(https://<가게>.lemonsqueezy.com/buy/<id>, Products ▸ Ember ▸ Share)로 교체. 앱 구매하기 버튼은 Resources/license.json 의 buyURL — 같은 값",
+  "buy": "https://buy.polar.sh/polar_cl_wUtq8qYuvazxpk9D7QIe3VzElK9emzYDTQTSO0tZ8jm",
+  "_buyNote": "Polar 고정 결제 링크: 1년 업데이트 / 평생 업데이트 중 선택. 앱 Resources/license.json과 동일한 주소.",
   "_downloadNote": "2026-10-08 serverops: 고정 주소 — 출시마다 Tools/dev/serverops/release.sh --publish 가 이 페이지를 최신 dmg 로 돌린다(사이트는 그대로). 출시 전엔 \"아직 출시 전\" 안내"
 }
