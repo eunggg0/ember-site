@@ -33,7 +33,7 @@
 /* 첫 페이지와 같은 숯빛 지면. 큰 숫자 하나, 문장 하나, 갈 곳 목록. */
 :root{
   color-scheme:dark;
-  --ink:#0b0908; --ash:#efe6dc; --ash-dim:#a89c91; --ash-faint:#857a70; --gold:#ffb547; --line:rgba(255,214,180,.13);
+  --ink:#0b0908; --ash:#efe6dc; --ash-dim:#b2a79c; --ash-faint:#857a70; --gold:#ffb547; --line:rgba(255,214,180,.13);
   --f-display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
   --f-head:"Hahmlet","Noto Serif KR","AppleMyungjo",serif;
   --f-body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
@@ -59,17 +59,20 @@ nav li a span{font-family:var(--f-mono);font-size:12px;color:var(--ash-faint)}
 nav li a:hover{color:var(--gold)}
 footer{padding-block:24px calc(24px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line);font-size:12px;color:var(--ash-faint)}
 </style>
+<link rel="stylesheet" href="assets/site-shell.css">
+<script src="assets/site-shell.js" defer></script>
+
 </head>
 <body>
-<header><a class="brand" href="./" aria-label="Ember 첫 페이지로"><svg viewBox="0 0 100 130" aria-hidden="true"><path fill="#ff8a3a" fill-rule="evenodd" d="M50 4C62 30 88 52 88 82C88 108 70 126 50 126C30 126 12 108 12 84C12 64 24 52 32 40C34 54 40 60 46 62C42 44 44 24 50 4ZM50 71a17 17 0 1 0 0.01 0Z"/></svg>EMBER</a></header>
+<header><a class="brand" href="index.html" aria-label="Ember 첫 페이지로"><svg viewBox="0 0 100 130" aria-hidden="true"><path fill="#ff8a3a" fill-rule="evenodd" d="M50 4C62 30 88 52 88 82C88 108 70 126 50 126C30 126 12 108 12 84C12 64 24 52 32 40C34 54 40 60 46 62C42 44 44 24 50 4ZM50 71a17 17 0 1 0 0.01 0Z"/></svg>EMBER</a></header>
 <main>
   <p class="code" aria-hidden="true">404</p>
   <h1>찾는 페이지가 없습니다.</h1>
   <p>주소가 바뀌었거나 잘못 입력됐을 수 있습니다. 아래에서 가려던 곳을 고르세요.</p>
   <nav aria-label="갈 곳">
     <ul>
-      <li><a href="./">Ember 첫 페이지<span>/</span></a></li>
-      <li><a href="./#download">Mac용 다운로드<span>#download</span></a></li>
+      <li><a href="index.html">Ember 첫 페이지<span>/</span></a></li>
+      <li><a href="index.html#download">Mac용 다운로드<span>#download</span></a></li>
       <li><a href="why.html">왜 만드나<span>why</span></a></li>
       <li><a href="license.html">라이선스와 고지<span>license</span></a></li>
       <li><a href="privacy.html">개인정보 처리방침<span>privacy</span></a></li>

@@ -32,7 +32,7 @@
 /* Layout: one reading column over a quiet ember-spark backdrop; same tokens as the main page. Single committed dark look. */
 :root{
   color-scheme:dark;
-  --ink:#0a0706; --ink-2:#14100d; --ash:#efe6dc; --ash-dim:#a69a8f; --ash-faint:#7a6f66;
+  --ink:#0a0706; --ink-2:#14100d; --ash:#efe6dc; --ash-dim:#b2a79c; --ash-faint:#998d82;
   --ember:#ff6a1f; --gold:#ffb547; --lime:#c6ff3d;
   --glass:rgba(255,236,220,.05); --line:rgba(255,214,180,.14);
   --f-display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
@@ -114,17 +114,20 @@ ol.restr{margin:6px 0 0;padding-left:1.4em;display:grid;gap:4px;font-size:var(--
 @media (pointer:coarse){.nav li a{padding-block:12px}footer a,footer nav a{display:inline-flex;align-items:center;min-height:44px}.brand{min-height:44px}}
 :root{--gutter:max(clamp(16px,5vw,72px),env(safe-area-inset-left,0px),env(safe-area-inset-right,0px))}
 </style>
+<link rel="stylesheet" href="assets/site-shell.css">
+<script src="assets/site-shell.js" defer></script>
+
 </head>
 <body>
 <canvas id="sparks" aria-hidden="true"></canvas><div class="glow" aria-hidden="true"></div>
 <header class="nav">
-  <a class="brand" href="./" aria-label="Ember 첫 페이지로">
+  <a class="brand" href="index.html" aria-label="Ember 첫 페이지로">
     <svg viewBox="0 0 100 130" aria-hidden="true"><path fill="url(#fl)" fill-rule="evenodd" d="M50 4C62 30 88 52 88 82C88 108 70 126 50 126C30 126 12 108 12 84C12 64 24 52 32 40C34 54 40 60 46 62C42 44 44 24 50 4ZM50 71a17 17 0 1 0 0.01 0Z"/><defs><linearGradient id="fl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffb547"/><stop offset="1" stop-color="#ff6a1f"/></linearGradient></defs></svg>
     EMBER
   </a>
   <ul>
-    <li><a href="./#perf">성능</a></li>
-    <li><a href="./#features">기능</a></li>
+    <li><a href="index.html#perf">성능</a></li>
+    <li><a href="index.html#features">기능</a></li>
     <li><a href="why.html">왜 만드나</a></li>
     <li><a href="license.html">라이선스</a></li>
     <li><a href="privacy.html" aria-current="page">개인정보</a></li>
@@ -157,13 +160,13 @@ ol.restr{margin:6px 0 0;padding-left:1.4em;display:grid;gap:4px;font-size:var(--
 <section class="sec" id="rights"><h2><span class="k">8</span>이용자의 권리</h2><div class="txt"><p>Ember 개발자가 가진 이용자 정보가 없으므로 열람·정정·삭제를 요청할 대상 정보도 없습니다. 맥 안에 남은 기록은 이용자가 직접 열어 보고 지울 수 있고, 권한은 언제든 거둘 수 있습니다.</p></div></section>
 <section class="sec" id="safety"><h2><span class="k">9</span>안전성 확보 조치</h2><div class="txt"><p>음성·화면·대화를 맥 밖으로 보내지 않는 구조로 만들었습니다. 내려받는 AI 모델은 정해 둔 버전과 파일 해시를 확인한 뒤 씁니다. 엠버 AI의 고급 답변 엔진은 이 맥 안(127.0.0.1)에서만 열리고 바깥에서 접속할 수 없습니다.</p></div></section>
 <section class="sec" id="web"><h2><span class="k">10</span>이 웹사이트</h2><div class="txt"><p>이 웹사이트는 쿠키와 분석 도구를 쓰지 않습니다.</p><p>다만 페이지를 표시하려고 Google Fonts에서 글꼴을, jsDelivr에서 스크립트를 불러오며, 이때 그 서버에 일반 접속 정보가 전달됩니다. 이 웹사이트가 올라가 있는 호스팅 서비스도 일반 접속 기록을 남길 수 있으며, 각 서비스의 정책을 따릅니다.</p></div></section>
-<section class="sec" id="officer"><h2><span class="k">11</span>개인정보 보호책임자와 문의</h2><div class="txt"><p>Ember는 개인정보를 처리하지 않지만, 이 방침에 대한 질문은 문의 창구로 받습니다.</p></div><a class="btn" href="#" data-link="contact">문의하기</a></section>
+<section class="sec" id="officer"><h2><span class="k">11</span>개인정보 보호책임자와 문의</h2><div class="txt"><p>Ember는 개인정보를 처리하지 않지만, 이 방침에 대한 질문은 문의 창구로 받습니다.</p></div><a class="btn" href="mailto:realnoma@naver.com" data-link="contact">문의하기</a></section>
 <section class="sec" id="date"><h2><span class="k">12</span>시행일과 변경</h2><div class="txt"><p>이 방침은 <span data-cfg="privacyEffective">2026년 10월 1일</span>부터 시행합니다. 내용이 바뀌면 이 페이지에 바뀐 날짜와 함께 알립니다.</p></div></section>
 </div></div>
 </main>
 <footer class="wrap">
   <p>Ember는 Apple, Microsoft, 각 게임사와 관계없는 독립 프로젝트입니다. 게임 이름과 화면은 각 권리자의 것입니다.</p>
-  <nav aria-label="바닥글"><a href="./">Ember</a><a href="why.html">왜 만드나</a><a href="license.html">라이선스와 고지</a><a href="terms.html" data-link="terms">이용 약관</a><a href="privacy.html">개인정보 처리방침</a></nav>
+  <nav aria-label="바닥글"><a href="index.html">Ember</a><a href="why.html">왜 만드나</a><a href="license.html">라이선스와 고지</a><a href="terms.html" data-link="terms">이용 약관</a><a href="privacy.html">개인정보 처리방침</a></nav>
 </footer>
 <script>
 (() => {
@@ -195,8 +198,8 @@ ol.restr{margin:6px 0 0;padding-left:1.4em;display:grid;gap:4px;font-size:var(--
 </script>
 <script>
 /* 링크·값은 assets/site-config.json 한곳에서 읽는다 (출시 때 실제 주소로 교체). 못 읽으면 HTML 기본값을 그대로 둔다. */
-fetch('assets/site-config.json').then((r) => r.json()).then((c) => {
-  document.querySelectorAll('[data-link]').forEach((a) => { const v = c[a.dataset.link]; if (v) a.setAttribute('href', v); });
+fetch('assets/site-config.json').then((r) => { if (!r.ok) throw new Error('config'); return r.json(); }).then((c) => {
+  document.querySelectorAll('[data-link]').forEach((a) => { const v = c[a.dataset.link]; if (v) a.setAttribute('href', v.replace('https://eunggg0.github.io/ember-site/', './')); });
   document.querySelectorAll('[data-cfg]').forEach((el) => { const v = c[el.dataset.cfg]; if (v) el.textContent = v; });
 }).catch(() => {});
 </script>

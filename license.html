@@ -32,7 +32,7 @@
 /* Layout: one reading column over a quiet ember-spark backdrop; same tokens as the main page. Single committed dark look. */
 :root{
   color-scheme:dark;
-  --ink:#0a0706; --ink-2:#14100d; --ash:#efe6dc; --ash-dim:#a69a8f; --ash-faint:#7a6f66;
+  --ink:#0a0706; --ink-2:#14100d; --ash:#efe6dc; --ash-dim:#b2a79c; --ash-faint:#998d82;
   --ember:#ff6a1f; --gold:#ffb547; --lime:#c6ff3d;
   --glass:rgba(255,236,220,.05); --line:rgba(255,214,180,.14);
   --f-display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
@@ -123,17 +123,20 @@ ul.fp b{color:var(--ash);font-weight:500}
 @media (pointer:coarse){.nav li a{padding-block:12px}footer a,footer nav a{display:inline-flex;align-items:center;min-height:44px}.brand{min-height:44px}}
 :root{--gutter:max(clamp(16px,5vw,72px),env(safe-area-inset-left,0px),env(safe-area-inset-right,0px))}
 </style>
+<link rel="stylesheet" href="assets/site-shell.css">
+<script src="assets/site-shell.js" defer></script>
+
 </head>
 <body>
 <canvas id="sparks" aria-hidden="true"></canvas><div class="glow" aria-hidden="true"></div>
 <header class="nav">
-  <a class="brand" href="./" aria-label="Ember 첫 페이지로">
+  <a class="brand" href="index.html" aria-label="Ember 첫 페이지로">
     <svg viewBox="0 0 100 130" aria-hidden="true"><path fill="url(#fl)" fill-rule="evenodd" d="M50 4C62 30 88 52 88 82C88 108 70 126 50 126C30 126 12 108 12 84C12 64 24 52 32 40C34 54 40 60 46 62C42 44 44 24 50 4ZM50 71a17 17 0 1 0 0.01 0Z"/><defs><linearGradient id="fl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffb547"/><stop offset="1" stop-color="#ff6a1f"/></linearGradient></defs></svg>
     EMBER
   </a>
   <ul>
-    <li><a href="./#perf">성능</a></li>
-    <li><a href="./#features">기능</a></li>
+    <li><a href="index.html#perf">성능</a></li>
+    <li><a href="index.html#features">기능</a></li>
     <li><a href="why.html">왜 만드나</a></li>
     <li><a href="license.html" aria-current="page">라이선스</a></li>
     <li><a href="privacy.html">개인정보</a></li>
@@ -181,7 +184,7 @@ SPDX-License-Identifier: LGPL-2.1-or-later</pre><p class="legend"><a href="https
 </main>
 <footer class="wrap">
   <p>Ember는 Apple, Microsoft, 각 게임사와 관계없는 독립 프로젝트입니다. 게임 이름과 화면은 각 권리자의 것입니다.</p>
-  <nav aria-label="바닥글"><a href="./">Ember</a><a href="why.html">왜 만드나</a><a href="license.html">라이선스와 고지</a><a href="terms.html" data-link="terms">이용 약관</a><a href="privacy.html">개인정보 처리방침</a></nav>
+  <nav aria-label="바닥글"><a href="index.html">Ember</a><a href="why.html">왜 만드나</a><a href="license.html">라이선스와 고지</a><a href="terms.html" data-link="terms">이용 약관</a><a href="privacy.html">개인정보 처리방침</a></nav>
 </footer>
 <script>
 (() => {
@@ -213,8 +216,8 @@ SPDX-License-Identifier: LGPL-2.1-or-later</pre><p class="legend"><a href="https
 </script>
 <script>
 /* 링크·값은 assets/site-config.json 한곳에서 읽는다 (출시 때 실제 주소로 교체). 못 읽으면 HTML 기본값을 그대로 둔다. */
-fetch('assets/site-config.json').then((r) => r.json()).then((c) => {
-  document.querySelectorAll('[data-link]').forEach((a) => { const v = c[a.dataset.link]; if (v) a.setAttribute('href', v); });
+fetch('assets/site-config.json').then((r) => { if (!r.ok) throw new Error('config'); return r.json(); }).then((c) => {
+  document.querySelectorAll('[data-link]').forEach((a) => { const v = c[a.dataset.link]; if (v) a.setAttribute('href', v.replace('https://eunggg0.github.io/ember-site/', './')); });
   document.querySelectorAll('[data-cfg]').forEach((el) => { const v = c[el.dataset.cfg]; if (v) el.textContent = v; });
 }).catch(() => {});
 </script>

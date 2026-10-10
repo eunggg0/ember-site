@@ -1,0 +1,17 @@
+/* Shared navigation fixes. Keep each page's existing layout, palette and artwork. */
+html{scroll-padding-top:calc(var(--site-nav-height,80px) + 16px)}
+header.nav{z-index:30;isolation:isolate}
+header .brand{flex-shrink:0;min-height:44px}
+header.nav li a{display:flex;align-items:center;min-height:44px}
+main .sec[id]{scroll-margin-top:0}
+main .txt,main .txt>*{min-width:0;overflow-wrap:anywhere}
+.nav a:focus-visible,.menu:focus-visible{outline:2px solid var(--lime);outline-offset:3px}
+#lens[hidden]{display:none!important}
+.ftip{max-height:calc(100svh - var(--site-nav-height,80px) - 32px);overflow-y:auto;overscroll-behavior:contain}
+@media(max-width:760px){
+  html{--site-nav-height:132px}
+  header.nav ul{max-width:100%;overscroll-behavior-x:contain}
+}
+@media(max-width:900px){
+  #nav.open #navlist{max-height:calc(100svh - var(--site-nav-height,80px) - 12px);overflow-y:auto;overscroll-behavior:contain}
+}

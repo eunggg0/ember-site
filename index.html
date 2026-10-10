@@ -21,7 +21,7 @@
   --ink-2:#14110f;        /* 한 단 높은 면 */
   --ink-3:#1c1815;        /* 선 위 채움 */
   --ash:#efe6dc;          /* 본문 */
-  --ash-dim:#a89c91;      /* 보조 */
+  --ash-dim:#b2a79c;      /* 보조 */
   --ash-faint:#857a70;    /* 캡션 (숯 위 4.6:1) */
   --ember:#ff6a1f;        /* 불씨 주황 */
   --gold:#ffb547;         /* 불씨 금 */
@@ -59,7 +59,7 @@ ul,ol{padding:0;list-style:none}
 #stage-fallback{position:fixed;inset:0;z-index:0;display:grid;place-items:end center;background:var(--ink);overflow:hidden}
 #stage-fallback .fw{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--f-display);font-weight:900;font-size:29vw;letter-spacing:.04em;color:#2a211b;line-height:1}
 #stage-fallback img{position:relative;height:84vh;width:auto;max-width:90vw;object-fit:contain}
-.grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.06;mix-blend-mode:overlay;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+.grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.035;mix-blend-mode:overlay;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
 main{position:relative;z-index:2}
 
 /* ---------- nav ---------- */
@@ -71,7 +71,7 @@ main{position:relative;z-index:2}
 .nav ul{display:flex;gap:22px}
 .nav li a{font-size:var(--t-sm);text-decoration:none;color:var(--ash-dim);transition:color .2s}
 .nav li a:hover{color:var(--ash)}
-.get{display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border-radius:6px;font-size:var(--t-sm);font-weight:700;text-decoration:none;color:#170b04;background:var(--gold);white-space:nowrap}
+.get{display:inline-flex;align-items:center;justify-content:center;min-height:44px;gap:8px;transition:background .18s ease;padding:9px 16px;border-radius:6px;font-size:var(--t-sm);font-weight:700;text-decoration:none;color:#170b04;background:var(--gold);white-space:nowrap}
 .get:hover{background:#ffc66e}
 .get svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
 .get.lg{padding:16px 26px;font-size:18px;border-radius:8px}
@@ -441,6 +441,8 @@ footer p{max-width:60em}
   *,*::before,*::after{animation:none!important;transition:none!important}
 }
 </style>
+<link rel="stylesheet" href="assets/site-shell.css">
+<script src="assets/site-shell.js" defer></script>
 <meta name="theme-color" content="#0b0908">
 <meta name="color-scheme" content="dark">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
@@ -465,7 +467,7 @@ footer p{max-width:60em}
 </head>
 <body>
 <canvas id="stage" aria-hidden="true"></canvas>
-<div id="stage-fallback" hidden aria-hidden="true"><span class="fw">EMBER</span><img src="assets/ember-cutout.webp" alt="" width="871" height="1600"></div>
+<div id="stage-fallback" aria-hidden="true"><span class="fw">EMBER</span><img src="assets/ember-cutout.webp" alt="" width="871" height="1600"></div>
 <div class="grain" aria-hidden="true"></div>
 
 <header class="nav" id="nav">
@@ -482,10 +484,10 @@ footer p{max-width:60em}
     <li><a href="#app">앱</a></li>
     <li><a href="why.html">왜 만드나</a></li>
   </ul>
-  <a class="get" href="#download" data-link="download"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M6 10l6 6 6-6M4 20h16"/></svg><span class="opt">Mac용 </span>다운로드</a>
+  <a class="get" href="https://eunggg0.github.io/ember-releases/download/" data-link="download"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M6 10l6 6 6-6M4 20h16"/></svg><span class="opt">Mac용 </span>다운로드</a>
 </header>
 
-<div class="lens off" id="lens" aria-hidden="true"><canvas id="lensg" width="128" height="48"></canvas><span>이 페이지</span><span><b id="lensfps">--</b> fps</span></div>
+<div class="lens off" id="lens" hidden aria-hidden="true"><canvas id="lensg" width="128" height="48"></canvas><span>이 페이지</span><span><b id="lensfps">--</b> fps</span></div>
 
 <main id="top">
   <section class="act" id="act" aria-labelledby="hero-title">
@@ -502,10 +504,10 @@ footer p{max-width:60em}
     <div class="hero wrap">
       <div class="hero-copy">
         <p class="eyebrow">Apple Silicon 맥용 윈도우 게임 런처</p>
-        <h1 id="hero-title"><span class="sr">Ember. </span>윈도우 게임을 맥에서,<br><em>하드웨어가 낼 수 있는 만큼.</em></h1>
-        <p class="lead">번역 엔진과 그래픽 변환기, Ember Flow 프레임 보간, 맥 안에서 도는 AI 비서까지. 게임마다 알맞게 Ember가 맞춰 둡니다.</p>
+        <h1 id="hero-title"><span class="sr">Ember. </span>맥에서 윈도우 게임을<br><em>시작하세요.</em></h1>
+        <p class="lead">게임에 맞는 실행 설정과 Ember Flow 프레임 보간을 제공합니다. 문제가 생기면 맥에서 동작하는 AI 비서에게 물어보세요.</p>
         <div class="hero-row">
-          <a class="get" href="#download" data-link="download"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M6 10l6 6 6-6M4 20h16"/></svg>Mac용 다운로드</a>
+          <a class="get" href="https://eunggg0.github.io/ember-releases/download/" data-link="download"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M6 10l6 6 6-6M4 20h16"/></svg>Mac용 다운로드</a>
           <span class="hero-meta">버전 <span data-cfg="version">1.0</span> · Apple Silicon · macOS 14 이상</span>
         </div>
       </div>
@@ -518,29 +520,29 @@ footer p{max-width:60em}
     </div>
 
     <div class="cap" style="--t:108vh">
-      <p class="eyebrow">불씨에서 시작합니다</p>
+      <p class="eyebrow">간단한 게임 실행</p>
       <h2>설치하고, 게임을 고르고, 실행하면 됩니다.</h2>
       <p>Ember는 윈도우 게임을 Apple Silicon 맥에서 돌리는 런처입니다. 엔진과 그래픽 설정은 게임마다 Ember가 알맞게 잡아 둡니다. 바꾸고 싶으면 언제든 직접 고르면 됩니다.</p>
     </div>
     <div class="cap r" style="--t:188vh">
       <p class="eyebrow">맥의 성능을 끝까지</p>
       <h2>GPU와 성능 코어를 게임에 몰아줍니다.</h2>
-      <p>화면은 Metal로 바로 그리고, 게임은 성능 코어에서 돌도록 챙깁니다.</p>
+      <p>그래픽은 Metal로 처리하고, 게임이 성능 코어를 우선 사용하도록 설정합니다.</p>
     </div>
     <div class="cap" style="--t:268vh">
-      <p class="eyebrow">남는 힘은</p>
-      <h2>Ember가 직접 만든 엔진에 씁니다.</h2>
-      <p>프레임을 채우는 Ember Flow, 디테일을 벼리는 Ember Forge, 프레임을 고르게 내보내는 Ember Pulse.</p>
+      <p class="eyebrow">Ember 자체 기술</p>
+      <h2>프레임 보간부터 화질 개선까지.</h2>
+      <p>Ember Flow는 중간 프레임을 만들고, Ember Forge는 화면을 더 선명하게 합니다. Ember Pulse는 프레임이 일정한 간격으로 표시되도록 조절합니다.</p>
     </div>
     <div class="cap r" style="--t:432vh">
       <p class="eyebrow lime">Ember Flow · 로스트아크 실측</p>
-      <h2>진짜 프레임마다 한&nbsp;장씩 더해, 정확히 두&nbsp;배가 됩니다.</h2>
+      <h2>게임 프레임 사이에 한&nbsp;장을 더해 출력 fps를 두&nbsp;배로.</h2>
       <p class="bnums"><span>게임</span><b>47–54</b><span>→ 화면</span><span class="nw"><b>94–107</b> fps</span></p>
       <p>FEX 엔진, QHD, MetalFX, 게임 모드를 켜고 마을을 걸으며 쟀습니다. 버려진 보간 프레임은 한 장도 없었습니다.</p>
     </div>
     <div class="ring-hold">
       <div class="ring-cap">
-        <p class="eyebrow">유리판 열한 장</p>
+        <p class="eyebrow">Ember의 11가지 기능</p>
         <h2>Ember가 직접 만든 엔진은 열한 가지입니다.</h2>
         <p>Flow · Guard · Forge · Tone · Flare · Pulse · Boost · Kindle · Kiln · Spark · Lens. MetalFX·DXMT·D3DMetal처럼 다른 곳에서 만든 기술은 원래 이름으로 부르고, 그 위에서 Ember가 직접 만든 것에만 Ember의 이름을 붙였습니다.</p>
       </div>
@@ -549,8 +551,8 @@ footer p{max-width:60em}
 
   <section class="mani wrap" id="mani" aria-label="Ember 한 줄 소개">
     <div class="mani-in">
-      <p class="slogan" lang="en"><span>Windows games,</span><span>native on Mac.</span></p>
-      <p class="prose" id="prose">Ember는 윈도우 게임을 Apple Silicon 맥에서 돌리는 런처입니다. 엔진과 그래픽 변환기는 게임마다 알맞게 골라 두고, 게임이 켜지다 튕기면 다른 변환기로 다시 띄웁니다. 남는 힘은 Ember가 직접 만든 보간·화질·페이싱 엔진에 씁니다. 이 페이지의 숫자는 모두 M4 Pro 맥북 프로에서 직접 잰 값입니다.</p>
+      <p class="slogan" lang="en"><span>Windows games,</span><span>on your Mac.</span></p>
+      <p class="prose" id="prose">Ember는 윈도우 게임을 Apple Silicon 맥에서 돌리는 런처입니다. 엔진과 그래픽 변환기는 게임마다 알맞게 골라 두고, 게임이 켜지다 튕기면 다른 변환기로 다시 띄웁니다. Ember가 만든 프레임 보간·화질 개선·프레임 간격 조절 기능도 함께 제공합니다. 이 페이지의 숫자는 모두 M4 Pro 맥북 프로에서 직접 잰 값입니다.</p>
     </div>
   </section>
 
@@ -696,14 +698,14 @@ footer p{max-width:60em}
       </article>
       <article class="ix">
         <div class="ix-name"><strong>Ember <span>Forge</span></strong><span class="kind">AI 디테일 복원<button class="finfo" type="button" data-b="forge" aria-label="Ember Forge 설명" aria-expanded="false">i</button></span></div>
-        <div class="ix-text"><p>MetalFX로 두 배 키운 화면에서 Ember가 만든 AI 모델이 뭉개진 디테일과 지나치게 날 선 테두리를 다듬습니다. 낮은 해상도로 돌려 프레임은 벌고, 화면은 또렷하게 지킵니다.</p>
+        <div class="ix-text"><p>MetalFX로 두 배 키운 화면에서 Ember가 만든 AI 모델이 뭉개진 디테일과 지나치게 날 선 테두리를 다듬습니다. 낮은 해상도로 실행하면서 부족해진 디테일을 보완합니다.</p>
           <details><summary>자세히</summary><ul class="pts"><li><b>부담</b>FHD → 4K에서 GPU 시간 약 1.4 ms 추가 (M4 Pro).</li><li><b>게임에서</b>원스 휴먼에서 켜고 꺼도 60 fps 그대로였습니다.</li><li><b>기본값</b>꺼짐. 게임 설정에서 켭니다. D3DMetal에서 FHD를 4K로 정확히 두 배 키울 때 동작합니다.</li></ul>
           <figure class="ba" data-key="forge" hidden><div class="ba-view"><img class="ba-a" alt="MetalFX만으로 키운 화면"><img class="ba-b" alt="MetalFX와 Ember Forge로 키운 화면"><span class="ba-line"></span><span class="lab a">MetalFX만</span><span class="lab b">+ Ember Forge</span><input type="range" id="ba-forge" min="0" max="100" value="50" aria-label="MetalFX만과 Ember Forge 비교 위치"></div></figure></details></div>
         <div class="ix-val"><p class="num">−33~57%</p><p>원본과의 차이(LPIPS), MetalFX만 쓸 때와 비교</p></div>
       </article>
       <article class="ix">
         <div class="ix-name"><strong>Ember <span>Tone</span></strong><span class="kind">AI 화질 다듬기<button class="finfo" type="button" data-b="tone" aria-label="Ember Tone 설명" aria-expanded="false">i</button></span></div>
-        <div class="ix-text"><p>화면의 색과 대비를 은은하게 다듬습니다. 게임을 켤 때 색 보정표를 한 번 만들어 두고, 프레임마다 그 표만 읽습니다.</p>
+        <div class="ix-text"><p>화면의 색과 대비를 자연스럽게 다듬습니다. 게임을 켤 때 색 보정표를 한 번 만들어 두고, 프레임마다 그 표만 읽습니다.</p>
           <details><summary>자세히</summary><ul class="pts"><li><b>같이 켜기</b>원스 휴먼에서 Ember Flow와 같이 켜도 104 fps 그대로였습니다.</li><li><b>기본값</b>꺼짐. 배터리 모드를 켜 두면 전원 없이 쓸 때 저절로 꺼집니다.</li></ul>
           <figure class="ba" data-key="tone" hidden><div class="ba-view"><img class="ba-a" alt="Ember Tone 끔"><img class="ba-b" alt="Ember Tone 켬"><span class="ba-line"></span><span class="lab a">Tone 끔</span><span class="lab b">Tone 켬</span><input type="range" id="ba-tone" min="0" max="100" value="50" aria-label="Ember Tone 끔과 켬 비교 위치"></div></figure></details></div>
         <div class="ix-val"><p class="num">0.3<em>ms</em></p><p>프레임당 GPU 시간 (QHD 0.3~0.4 ms)</p></div>
@@ -711,13 +713,13 @@ footer p{max-width:60em}
       <article class="ix">
         <div class="ix-name"><strong>Ember <span>Flare</span></strong><span class="kind">진짜 HDR · AI 자동 HDR<button class="finfo" type="button" data-b="flare" aria-label="Ember Flare 설명" aria-expanded="false">i</button></span></div>
         <div class="ix-text"><p>HDR 게임은 HDR10(PQ) 10비트 출력을 그대로 맥의 HDR 화면에 보냅니다. SDR 게임도 밝은 곳만 살려 HDR로 보여 주고, 글자·메뉴는 그대로 둡니다.</p>
-          <details><summary>자세히</summary><ul class="pts"><li><b>정확한 밝기</b>SDR 흰색 100 nit는 100 nit 그대로 나옵니다.</li><li><b>부드러운 접기</b>화면이 낼 수 있는 밝기를 넘는 빛만 BT.2390 방식으로 접습니다.</li><li><b>두 경로 모두</b>DXMT와 D3DMetal에서 똑같이 동작합니다.</li><li><b>조건</b>HDR을 지원하는 디스플레이가 필요합니다. 자동 HDR은 기본 꺼짐이고, 게임이 HDR을 직접 켜면 자동 HDR은 꺼집니다.</li></ul></details></div>
+          <details><summary>자세히</summary><ul class="pts"><li><b>정확한 밝기</b>SDR 흰색 100 nit는 100 nit 그대로 나옵니다.</li><li><b>밝기 조절</b>디스플레이의 최대 밝기를 넘는 부분은 BT.2390 방식으로 조절합니다.</li><li><b>두 경로 모두</b>DXMT와 D3DMetal에서 똑같이 동작합니다.</li><li><b>조건</b>HDR을 지원하는 디스플레이가 필요합니다. 자동 HDR은 기본 꺼짐이고, 게임이 HDR을 직접 켜면 자동 HDR은 꺼집니다.</li></ul></details></div>
         <div class="ix-val"><p class="num">0.8<em>ms</em></p><p>4K 프레임당 GPU 시간 (1080p 0.3 ms)</p></div>
       </article>
       <article class="ix">
         <div class="ix-name"><strong>Ember <span>Pulse</span></strong><span class="kind">프레임 페이싱<button class="finfo" type="button" data-b="pulse" aria-label="Ember Pulse 설명" aria-expanded="false">i</button></span></div>
         <div class="ix-text"><p>화면이 다음 프레임을 받을 시각을 재고, 그 시각에 맞춰 프레임을 넘깁니다. 프레임이 고르게 나가고 지연은 줄어듭니다.</p>
-          <details><summary>자세히</summary><ul class="pts"><li><b>지연</b>원스 휴먼 12.6~15.3 → 4.5~6.4 ms.</li><li><b>기본값</b>DXMT(D3D11) 게임에서 자동으로 켜집니다. GPU가 꽉 찬 장면에서는 스스로 쉽니다.</li></ul></details></div>
+          <details><summary>자세히</summary><ul class="pts"><li><b>지연</b>원스 휴먼 12.6~15.3 → 4.5~6.4 ms.</li><li><b>기본값</b>DXMT(D3D11) 게임에서 자동으로 켜집니다. GPU 사용량이 높은 장면에서는 자동으로 꺼집니다.</li></ul></details></div>
         <div class="ix-val"><p class="num long">55–101<em>→</em>4–10</p><p>원스 휴먼에서 25 ms 넘게 끊긴 횟수</p></div>
       </article>
       <article class="ix">
@@ -733,15 +735,15 @@ footer p{max-width:60em}
         <div class="ix-val"><p class="num long">4.1–4.3<em>→</em>2.3–2.4</p><p>로스트아크 웹 화면이 뜨기까지, 초</p></div>
       </article>
       <article class="ix">
-        <div class="ix-name"><strong>Ember <span>Kiln</span></strong><span class="kind">셰이더 미리 굽기<button class="finfo" type="button" data-b="kiln" aria-label="Ember Kiln 설명" aria-expanded="false">i</button></span></div>
-        <div class="ix-text"><p>게임이 쓰는 셰이더를 게임 밖에서 미리 구워 둡니다. 처음 보는 장면이나 첫 전투에서 셰이더를 만드느라 멈추지 않습니다.</p>
-          <details><summary>자세히</summary><ul class="pts"><li><b>원스 휴먼</b>Rosetta에서 첫 입장 때 멈춘 시간 11.8초 → 0.8초.</li><li><b>마을 첫 45초</b>로스트아크 게임 fps 50 → 59.</li><li><b>기본값</b>DXMT 게임에서 기본으로 켜집니다. 게임을 끈 뒤에 굽고, 게임 안 비용은 없습니다.</li></ul></details></div>
+        <div class="ix-name"><strong>Ember <span>Kiln</span></strong><span class="kind">셰이더 미리 준비<button class="finfo" type="button" data-b="kiln" aria-label="Ember Kiln 설명" aria-expanded="false">i</button></span></div>
+        <div class="ix-text"><p>게임이 꺼져 있을 때 셰이더를 미리 준비합니다. 새 장면이나 첫 전투에서 셰이더를 처리하느라 생기는 끊김을 줄입니다.</p>
+          <details><summary>자세히</summary><ul class="pts"><li><b>원스 휴먼</b>Rosetta에서 첫 입장 때 멈춘 시간 11.8초 → 0.8초.</li><li><b>마을 첫 45초</b>로스트아크 게임 fps 50 → 59.</li><li><b>기본값</b>DXMT 게임에서 기본으로 켜집니다. 게임을 끈 뒤에 준비하므로 플레이 중에는 이 작업이 실행되지 않습니다.</li></ul></details></div>
         <div class="ix-val"><p class="num long">30.5<em>→</em>0.6</p><p>로스트아크 첫 실행 때 셰이더 때문에 멈춘 시간, 초</p></div>
       </article>
       <article class="ix">
         <div class="ix-name"><strong>Ember <span>Spark</span></strong><span class="kind">입력 지연 줄이기<button class="finfo" type="button" data-b="spark" aria-label="Ember Spark 설명" aria-expanded="false">i</button></span></div>
-        <div class="ix-text"><p>게임이 다음 프레임을 너무 일찍 시작하지 않게 잠깐 붙잡습니다. 그 프레임은 더 새로운 입력을 담아, 조작이 화면에 더 빨리 닿습니다.</p>
-          <details><summary>자세히</summary><ul class="pts"><li><b>리썰 컴퍼니</b>60 fps 상한에서 입력 지연 37~39 → 18~29 ms.</li><li><b>손해</b>fps와 화면 p99는 그대로였습니다.</li><li><b>기본값</b>DXMT 게임에서 기본으로 켜집니다. Ember Flow를 켜면 저절로 꺼집니다.</li></ul></details></div>
+        <div class="ix-text"><p>게임이 다음 프레임을 너무 일찍 시작하지 않게 잠깐 붙잡습니다. 최근 입력을 프레임에 반영해, 조작 결과가 화면에 표시되기까지의 시간을 줄입니다.</p>
+          <details><summary>자세히</summary><ul class="pts"><li><b>리썰 컴퍼니</b>60 fps 상한에서 입력 지연 37~39 → 18~29 ms.</li><li><b>성능 영향</b>fps와 화면 p99는 그대로였습니다.</li><li><b>기본값</b>DXMT 게임에서 기본으로 켜집니다. Ember Flow를 켜면 저절로 꺼집니다.</li></ul></details></div>
         <div class="ix-val"><p class="num long">35–39<em>→</em>26–28</p><p>발헤임 60 fps 상한 입력 지연, ms</p></div>
       </article>
       <article class="ix">
@@ -780,7 +782,7 @@ footer p{max-width:60em}
     <div class="quote">
       <div>
         <blockquote><span>“엠버야,</span> 로아 켜고 30분 뒤에 알려&nbsp;줘.”</blockquote>
-        <p class="ai-lead">말로 부르면 여러 단계 명령도 한 번에 처리합니다. 듣고, 생각하고, 대답하는 일은 모두 이 맥 안에서 끝납니다.</p>
+        <p class="ai-lead">말로 부르면 여러 단계 명령도 한 번에 처리합니다. 음성 인식과 답변 생성은 모두 맥에서 처리합니다.</p>
       </div>
       <figure class="side"><img src="assets/ui-coach.webp" alt="게임 위 엠버 말풍선. 듣는 중, 설정 변경 대답, 기믹 알림" loading="lazy" width="900" height="1047"><figcaption>게임 위에 뜨는 엠버 말풍선</figcaption></figure>
     </div>
@@ -792,7 +794,7 @@ footer p{max-width:60em}
       <div><dt>화면</dt><dd>게임 화면 번역·설명</dd></div>
       <div><dt>목소리</dt><dd>자연스러운 합성 음성</dd></div>
       <div><dt>듣기</dt><dd>게임 소리 속에서도 “엠버야”를 알아들음</dd></div>
-      <div><dt>문제 해결</dt><dd>원인을 찾아 한 번에 고침</dd></div>
+      <div><dt>문제 해결</dt><dd>원인 확인과 설정 변경</dd></div>
       <div><dt>대화</dt><dd>“MetalFX도”, “반대로”처럼 이어 말하기</dd></div>
       <div><dt>먼저 알림</dt><dd>fps가 떨어지거나 뜨거워지면 먼저 말함</dd></div>
       <div><dt>왜 끊겨</dt><dd>잰 값으로 원인과 고칠 점을 알려 줌</dd></div>
@@ -805,7 +807,7 @@ footer p{max-width:60em}
   <section class="sec wrap" id="living" aria-labelledby="live-title">
     <div class="sec-head">
       <p class="eyebrow">앱 안의 엠버 · 움직이는 배경</p>
-      <h2 id="live-title">앱 안에 엠버가 삽니다</h2>
+      <h2 id="live-title">앱 화면을 돌아다니는 엠버</h2>
       <p class="note">아래 영상은 Ember 앱을 그대로 녹화한 것입니다.</p>
     </div>
     <div class="live">
@@ -890,30 +892,30 @@ footer p{max-width:60em}
     <div class="stop" data-stop="end" style="top:80vh"></div>
     <div class="end-in">
       <p class="eyebrow">Ember <span data-cfg="version">1.0</span></p>
-      <h2 id="end-title">맥에서, 윈도우 게임에 불을 붙이세요.</h2>
-      <p><a class="get lg" href="./#download" data-link="download"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M6 10l6 6 6-6M4 20h16"/></svg>Mac용 다운로드</a></p>
+      <h2 id="end-title">맥에서 윈도우 게임을 시작하세요.</h2>
+      <p><a class="get lg" href="https://eunggg0.github.io/ember-releases/download/" data-link="download"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M6 10l6 6 6-6M4 20h16"/></svg>Mac용 다운로드</a></p>
       <ul class="req" aria-label="필요 조건">
         <li>맥<b>Apple Silicon (M1 이상)</b></li>
         <li>macOS<b>14 Sonoma 이상</b></li>
         <li>“엠버야” 호출어<b>macOS 26 이상</b></li>
         <li>D3DMetal 경로<b>Apple 게임 포팅 툴킷 설치 시</b></li>
       </ul>
-      <p class="end-links"><a href="#" data-link="contact">문의하기</a><a href="why.html">왜 만드나</a><a href="license.html">라이선스와 고지</a><a href="terms.html" data-link="terms">이용 약관</a><a href="privacy.html">개인정보 처리방침</a></p>
+      <p class="end-links"><a href="mailto:realnoma@naver.com" data-link="contact">문의하기</a><a href="why.html">왜 만드나</a><a href="license.html">라이선스와 고지</a><a href="terms.html" data-link="terms">이용 약관</a><a href="privacy.html">개인정보 처리방침</a></p>
     </div>
   </section>
 </main>
 
 <footer class="wrap">
   <p>Ember는 Apple, Microsoft, 각 게임사와 관계없는 독립 프로젝트입니다. 게임 이름과 화면은 각 권리자의 것입니다. © 2026 Ember</p>
-  <nav class="foot-links" aria-label="바닥글"><a href="why.html">왜 만드나</a><a href="license.html">라이선스와 고지</a><a href="terms.html" data-link="terms">이용 약관</a><a href="privacy.html">개인정보 처리방침</a><a href="#" data-link="contact">문의하기</a></nav>
+  <nav class="foot-links" aria-label="바닥글"><a href="why.html">왜 만드나</a><a href="license.html">라이선스와 고지</a><a href="terms.html" data-link="terms">이용 약관</a><a href="privacy.html">개인정보 처리방침</a><a href="mailto:realnoma@naver.com" data-link="contact">문의하기</a></nav>
 </footer>
 
 <div class="ftip" id="ftip" role="tooltip" aria-hidden="true"></div>
 
 <script>
 /* 링크·값은 assets/site-config.json 한곳에서 읽는다 (출시 때 실제 주소로 교체). 못 읽으면 HTML 기본값을 그대로 둔다. */
-fetch('assets/site-config.json').then((r) => r.json()).then((c) => {
-  document.querySelectorAll('[data-link]').forEach((a) => { const v = c[a.dataset.link]; if (v) a.setAttribute('href', v.replace(/^\.\/(?=#)/, '')); });
+fetch('assets/site-config.json').then((r) => { if (!r.ok) throw new Error('config'); return r.json(); }).then((c) => {
+  document.querySelectorAll('[data-link]').forEach((a) => { const v = c[a.dataset.link]; if (v) a.setAttribute('href', v.replace('https://eunggg0.github.io/ember-site/', './').replace(/^\.\/(?=#)/, '')); });
   document.querySelectorAll('[data-cfg]').forEach((el) => { const v = c[el.dataset.cfg]; if (v) el.textContent = v; });
 }).catch(() => {});
 </script>
@@ -929,7 +931,10 @@ addEventListener('scroll', navUpd, { passive: true }); navUpd();
 { const mb = document.getElementById('menubtn'); const set = (o) => { nav.classList.toggle('open', o); mb.setAttribute('aria-expanded', o); };
   mb.addEventListener('click', () => set(!nav.classList.contains('open')));
   document.getElementById('navlist').addEventListener('click', (e) => { if (e.target.closest('a')) set(false); });
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && nav.classList.contains('open')) { set(false); mb.focus(); } }); }
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && nav.classList.contains('open')) { set(false); mb.focus(); } });
+  document.addEventListener('pointerdown', (e) => { if (!nav.contains(e.target)) set(false); });
+  document.addEventListener('focusin', (e) => { if (!nav.contains(e.target)) set(false); });
+  matchMedia('(max-width:900px)').addEventListener('change', () => set(false)); }
 
 /* manifesto: 스크롤을 따라 낱말이 하나씩 켜진다 */
 const mani = document.getElementById('mani'), prose = document.getElementById('prose');
@@ -981,16 +986,22 @@ fetch('assets/cmp/list.json').then((r) => r.ok ? r.json() : []).catch(() => []).
   const sel = (t, focus) => { tabs.forEach((x) => { const on = x === t; x.setAttribute('aria-selected', on); x.tabIndex = on ? 0 : -1; document.getElementById(x.getAttribute('aria-controls')).hidden = !on; }); if (focus) t.focus(); };
   tabs.forEach((t, i) => {
     t.addEventListener('click', () => sel(t));
-    t.addEventListener('keydown', (e) => { const d = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 }[e.key]; if (d) { e.preventDefault(); sel(tabs[(i + d + tabs.length) % tabs.length], true); } });
+    t.addEventListener('keydown', (e) => { if (e.key === 'Home' || e.key === 'End') { e.preventDefault(); sel(e.key === 'Home' ? tabs[0] : tabs[tabs.length - 1], true); return; } const d = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 }[e.key]; if (d) { e.preventDefault(); sel(tabs[(i + d + tabs.length) % tabs.length], true); } });
   });
 }
 
-/* videos: 보일 때만 재생, 동작 줄이기면 재생 단추 */
+/* Videos retain an accessible pause/retry action, including autoplay failures. */
 document.querySelectorAll('.vid').forEach((f) => {
   const v = f.querySelector('video'), btn = f.querySelector('.play');
-  if (reduce) { btn.hidden = false; btn.addEventListener('click', () => { if (v.paused) { v.play(); btn.textContent = '멈춤'; } else { v.pause(); btn.textContent = '재생'; } }); return; }
-  new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { v.preload = 'auto'; v.play().catch(() => { btn.hidden = false; }); } else v.pause(); }), { threshold: 0.25 }).observe(v);
-  btn.addEventListener('click', () => { v.play(); btn.hidden = true; });
+  let visible = false, userPaused = false, userStarted = false;
+  btn.hidden = false;
+  const label = () => { btn.textContent = v.paused ? '재생' : '멈춤'; btn.setAttribute('aria-label', v.paused ? '영상 재생' : '영상 일시정지'); };
+  const play = () => { v.preload = 'auto'; v.play().catch(() => { label(); }); };
+  const sync = () => { if (visible && !document.hidden && !userPaused && (!reduce || userStarted)) play(); else v.pause(); };
+  v.addEventListener('play', label); v.addEventListener('pause', label); v.addEventListener('error', label);
+  btn.addEventListener('click', () => { if (v.paused) { userPaused = false; userStarted = true; play(); } else { userPaused = true; v.pause(); } });
+  new IntersectionObserver((es) => { visible = es[0].isIntersecting; sync(); }, {threshold:0.25}).observe(v);
+  document.addEventListener('visibilitychange', sync); label();
 });
 })();
 </script>
@@ -999,15 +1010,15 @@ document.querySelectorAll('.vid').forEach((f) => {
 (() => {
 /* Ember 고유 기능 설명 판 — 앱의 FeatureInfo(EmberBrand.lines)와 같은 글. 수치는 실측만. */
 const D = {
-  flow:   ['Ember Flow','프레임 보간','프레임 사이를 흐르듯 채워 화면 프레임을 두 배로 늘립니다',['게임 프레임이 모자랄 때 프레임 사이를 채웁니다. 화면 프레임이 최대 두 배가 됩니다.','앞뒤 프레임에서 물체가 움직인 길을 GPU가 찾습니다. 그 길을 따라 중간 장면을 새로 그립니다.','로스트아크 QHD 47~54 → 94~107 fps. GPU 시간은 FHD에서 약 1 ms 듭니다.','기본은 꺼짐입니다. 게임 fps가 화면 주사율만큼 나오면 쉬고, 너무 느려지면 잠시 멈춥니다.']],
-  forge:  ['Ember Forge','AI 디테일 복원','키운 화면의 디테일을 다시 벼려 냅니다',['MetalFX로 키운 화면의 잔디·글자·가장자리를 다시 또렷하게 합니다.','Ember가 학습한 작은 신경망이 키운 화면을 고쳐 그립니다. 원본 4K에 가깝게 다듬습니다.','원본과의 차이가 MetalFX만 쓸 때보다 33~57% 적습니다. FHD → 4K에서 GPU 1.4 ms를 더 씁니다.','기본은 꺼짐입니다. D3DMetal에서 FHD를 4K로 정확히 두 배 키울 때만 동작합니다.']],
-  tone:   ['Ember Tone','AI 화질 다듬기','색과 대비를 은은하게 살립니다',['게임 화면의 색과 대비를 은은하게 다듬습니다.','게임을 켤 때 신경망이 색 보정표를 한 번 만들어 둡니다. 프레임마다 그 표만 읽습니다.','프레임당 GPU 0.3~0.4 ms(QHD). 원스 휴먼에서 Ember Flow와 같이 켜도 104 fps 그대로였습니다.','기본은 꺼짐입니다. 배터리 모드를 켜 두면 전원 없이 쓸 때 저절로 꺼집니다.']],
+  flow:   ['Ember Flow','프레임 보간','중간 프레임을 만들어 화면 출력 fps를 최대 두 배로 늘립니다',['게임 프레임이 모자랄 때 프레임 사이를 채웁니다. 화면 프레임이 최대 두 배가 됩니다.','앞뒤 프레임에서 물체가 움직인 길을 GPU가 찾습니다. 그 길을 따라 중간 장면을 새로 그립니다.','로스트아크 QHD 47~54 → 94~107 fps. GPU 시간은 FHD에서 약 1 ms 듭니다.','기본은 꺼짐입니다. 게임 fps가 화면 주사율만큼 나오면 쉬고, 너무 느려지면 잠시 멈춥니다.']],
+  forge:  ['Ember Forge','AI 디테일 복원','확대한 화면의 디테일을 더 선명하게 합니다',['MetalFX로 키운 화면의 잔디·글자·가장자리를 다시 또렷하게 합니다.','Ember가 학습한 작은 신경망이 키운 화면을 고쳐 그립니다. 원본 4K에 가깝게 다듬습니다.','원본과의 차이가 MetalFX만 쓸 때보다 33~57% 적습니다. FHD → 4K에서 GPU 1.4 ms를 더 씁니다.','기본은 꺼짐입니다. D3DMetal에서 FHD를 4K로 정확히 두 배 키울 때만 동작합니다.']],
+  tone:   ['Ember Tone','AI 화질 다듬기','색과 대비를 자연스럽게 살립니다',['게임 화면의 색과 대비를 자연스럽게 다듬습니다.','게임을 켤 때 신경망이 색 보정표를 한 번 만들어 둡니다. 프레임마다 그 표만 읽습니다.','프레임당 GPU 0.3~0.4 ms(QHD). 원스 휴먼에서 Ember Flow와 같이 켜도 104 fps 그대로였습니다.','기본은 꺼짐입니다. 배터리 모드를 켜 두면 전원 없이 쓸 때 저절로 꺼집니다.']],
   flare:  ['Ember Flare','AI 자동 HDR','SDR 게임의 밝은 곳을 HDR로 살립니다',['SDR 게임의 해·불꽃 같은 밝은 곳을 HDR 화면에서 더 밝게 보여 줍니다.','작은 신경망이 밝은 곳이 원래 얼마나 밝았을지 추정합니다. 그곳만 밝히고 글자·메뉴는 그대로 둡니다.','프레임당 GPU 1080p 0.3 ms, 4K 0.8 ms입니다.','기본은 꺼짐입니다. HDR을 켠 모니터에서만 동작하고, 게임이 HDR을 직접 켜면 자동 HDR은 꺼집니다.']],
-  pulse:  ['Ember Pulse','프레임 페이싱','프레임을 화면 주기에 맞춰 고르게 보내고, 지연은 줄입니다',['프레임이 들쭉날쭉 나가서 생기는 끊김과 지연을 줄입니다.','화면이 다음 프레임을 받을 시각을 잽니다. 그 시각에 맞춰 프레임을 넘깁니다.','원스 휴먼에서 25 ms 넘게 끊긴 횟수 55~101번 → 4~10번. 지연은 12.6~15.3 → 4.5~6.4 ms였습니다.','DXMT(D3D11) 게임에서 자동으로 켜집니다. GPU가 꽉 찬 장면에서는 스스로 쉽니다.']],
+  pulse:  ['Ember Pulse','프레임 페이싱','프레임을 화면 주기에 맞춰 고르게 보내고, 지연은 줄입니다',['프레임이 들쭉날쭉 나가서 생기는 끊김과 지연을 줄입니다.','화면이 다음 프레임을 받을 시각을 잽니다. 그 시각에 맞춰 프레임을 넘깁니다.','원스 휴먼에서 25 ms 넘게 끊긴 횟수 55~101번 → 4~10번. 지연은 12.6~15.3 → 4.5~6.4 ms였습니다.','DXMT(D3D11) 게임에서 자동으로 켜집니다. GPU 사용량이 높은 장면에서는 자동으로 꺼집니다.']],
   boost:  ['Ember Boost','게임 모드 부스트','게임은 성능 코어에, 다른 앱은 뒤로 보냅니다',['게임 스레드를 성능 코어에 먼저 올리고, 다른 앱은 뒤로 밉니다.','게임 모드가 켜지면 게임 스레드의 우선순위를 올립니다. Wine 서버도 높은 우선순위로 둡니다.','뒤에서 영상 인코딩이 도는 동안 로스트아크 61.2 → 64.0 fps. 게임이 성능 코어에 머문 비율 81 → 94%.','게임 모드가 켜져 있을 때만 동작합니다. 자동은 직접 재 보고 손해가 없을 때만 켭니다.']],
   kindle: ['Ember Kindle','미리 번역','게임을 켜기 전에 미리 번역해 첫 실행 버벅임을 줄입니다',['처음 켤 때 번역을 기다리느라 생기는 버벅임을 줄입니다.','지난 실행에서 모아 둔 코드 목록으로, 맥이 쉴 때 FEX 번역 캐시를 미리 채웁니다.','로스트아크 웹 화면이 뜨기까지 4.1~4.3초 → 2.3~2.4초. 50 ms 넘게 끊긴 횟수 4번 → 1번.','FEX 엔진 게임에서 저절로 동작합니다. 전원이 연결돼 있을 때만 하고, 게임을 켜면 바로 멈춥니다.']],
-  kiln:   ['Ember Kiln','셰이더 미리 굽기','셰이더를 미리 구워 첫 전투 끊김을 없앱니다',['게임이 쓰는 셰이더를 게임 밖에서 미리 구워, 처음 보는 장면에서 멈추지 않게 합니다.','게임이 만든 파이프라인 목록을 적어 둡니다. 게임을 끈 뒤 그 목록을 이 Mac용 GPU 코드로 한 번에 굽습니다.','셰이더 때문에 멈춘 시간: 로스트아크(FEX) 30.5초 → 0.6초, 원스 휴먼(Rosetta) 11.8초 → 0.8초. 로스트아크 마을 첫 45초 게임 fps 50 → 59.','DXMT 게임에서 기본으로 켜집니다. 게임 중에는 굽지 않고, 게임 안 비용은 없습니다.']],
-  spark:  ['Ember Spark','입력 지연 줄이기','조작이 화면에 닿는 시간을 줄입니다',['조작한 것이 화면에 닿기까지의 시간을 줄입니다.','게임이 다음 프레임을 너무 일찍 시작하지 않게 잠깐 붙잡습니다. 그 프레임은 더 새로운 입력을 담습니다.','60 fps 상한에서 입력 지연 발헤임 35~39 → 26~28 ms, 리썰 컴퍼니 37~39 → 18~29 ms. fps와 화면 p99는 그대로였습니다.','DXMT 게임에서 기본으로 켜집니다. Ember Flow를 켜면 저절로 꺼집니다.']],
+  kiln:   ['Ember Kiln','셰이더 미리 준비','셰이더를 미리 준비해 첫 전투의 끊김을 줄입니다',['게임이 꺼져 있을 때 셰이더를 미리 준비해, 새 장면에서 생기는 끊김을 줄입니다.','게임이 만든 파이프라인 목록을 적어 둡니다. 게임을 끈 뒤 그 목록에 따라 이 맥에서 사용할 GPU 코드를 미리 만듭니다.','셰이더 때문에 멈춘 시간: 로스트아크(FEX) 30.5초 → 0.6초, 원스 휴먼(Rosetta) 11.8초 → 0.8초. 로스트아크 마을 첫 45초 게임 fps 50 → 59.','DXMT 게임에서 기본으로 켜집니다. 게임 중에는 셰이더를 미리 준비하는 작업이 실행되지 않습니다.']],
+  spark:  ['Ember Spark','입력 지연 줄이기','조작 결과가 화면에 표시될 때까지의 시간을 줄입니다',['조작 결과가 화면에 표시되기까지의 시간을 줄입니다.','게임이 다음 프레임을 너무 일찍 시작하지 않게 잠깐 붙잡습니다. 최근 입력이 프레임에 반영되도록 합니다.','60 fps 상한에서 입력 지연 발헤임 35~39 → 26~28 ms, 리썰 컴퍼니 37~39 → 18~29 ms. fps와 화면 p99는 그대로였습니다.','DXMT 게임에서 기본으로 켜집니다. Ember Flow를 켜면 저절로 꺼집니다.']],
   lens:   ['Ember Lens','화면 안 HUD','fps·지연·보간 상태를 게임 화면 안에 띄웁니다',['fps·지연·보간 상태와 보스 판·말풍선을 게임 화면 안에 보여 줍니다.','따로 창을 띄우지 않고, 게임이 내보내는 마지막 프레임 위에 직접 그립니다.','판 2장에 GPU 0.03~0.06 ms(4K). 따로 띄운 창보다 1.5~1.8 fps 높고 지연은 1.3~1.7 ms 짧습니다.','기본은 게임 화면 안에 그립니다. 그릴 수 없는 게임(D3D12·DXVK 등)에서는 저절로 따로 띄운 창으로 바뀝니다.']],
   guard:  ['Ember Guard','글자·이름표 보호','글자와 이름표가 번지지 않게 지킵니다',['Ember Flow가 만든 중간 장면에서 글자와 이름표가 번지지 않게 지킵니다.','앞뒤 원본의 같은 자리에 날카로운 획이 있으면 원본 그대로 둡니다. 움직임으로 설명할 수 없는 장면은 통째로 원본을 씁니다.','원스 휴먼 8장면 화질(PSNR) 25.0 → 26.3 dB. 로스트아크 워터파크에서 보간을 포기하던 비율 95% → 0%.','Ember Flow를 켜면 늘 같이 켜집니다. 따로 끌 필요가 없습니다.']],
 };
@@ -1027,11 +1038,13 @@ function place() {
   const w = tip.offsetWidth, h = tip.offsetHeight;
   let x = Math.round(r.left + r.width / 2 - w / 2); x = Math.max(16, Math.min(x, vw - w - 16));
   let y = r.bottom + 10; if (y + h > vh - 12 && r.top - h - 10 > 12) y = r.top - h - 10;
+  const minY = Math.max(12, (document.querySelector('header.nav')?.getBoundingClientRect().bottom || 0) + 8);
+  y = Math.max(minY, Math.min(y, vh - h - 12));
   tip.style.left = x + 'px'; tip.style.top = Math.round(y) + 'px';
 }
 function open(btn, pin) {
   clearTimeout(tOpen); clearTimeout(tClose);
-  if (cur && cur !== btn) cur.setAttribute('aria-expanded', 'false');
+  if (cur && cur !== btn) { cur.setAttribute('aria-expanded', 'false'); cur.removeAttribute('aria-describedby'); }
   if (!fill(btn.dataset.b)) return;
   cur = btn; pinned = !!pin;
   btn.setAttribute('aria-expanded', 'true'); btn.setAttribute('aria-describedby', 'ftip');
@@ -1075,6 +1088,7 @@ import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js'
 import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 
+async function initStage() {
 const CFG = {
   glb: 'assets/ember.gltf.json',      // 3D 엠버 (data-URI glTF, 기본색 4096)
   glbLow: 'assets/ember-mobile.gltf.json', // 휴대폰·저사양: 텍스처 전부 2048 (GPU 메모리 약 270MB → 67MB)
@@ -1274,7 +1288,7 @@ const SLABS = [
   ['PULSE', '프레임 페이싱', '4–10', '25 ms 넘는 끊김 (전에는 55–101번)'],
   ['BOOST', '게임 모드 부스트', '94%', '성능 코어에 머문 비율 (전에는 81%)'],
   ['KINDLE', '미리 번역', '2.3s', '웹 화면이 뜨기까지 (전에는 4.1–4.3초)'],
-  ['KILN', '셰이더 미리 굽기', '0.6s', '셰이더 멈춤 (전에는 30.5초)'],
+  ['KILN', '셰이더 미리 준비', '0.6s', '셰이더 멈춤 (전에는 30.5초)'],
   ['SPARK', '입력 지연 줄이기', '−10ms', '발헤임 입력 지연 (60 fps 상한)'],
   ['LENS', '화면 안 HUD', '+1.8', '따로 띄운 창보다 fps +1.5–1.8'],
 ];
@@ -1485,7 +1499,10 @@ function resize() {
   buildKeyframes(); buildXforms(); measureStops(); placeWord(); first = true;
 }
 const ringCap = document.querySelector('.ring-cap');
-const lens = document.getElementById('lens'), lensFps = document.getElementById('lensfps'), lg = document.getElementById('lensg').getContext('2d');
+const debugFPS = new URLSearchParams(location.search).get('debug') === 'fps';
+const lens = document.getElementById('lens'), lensFps = document.getElementById('lensfps');
+const lg = debugFPS ? document.getElementById('lensg').getContext('2d') : null;
+lens.hidden = !debugFPS;
 const clock = new THREE.Clock(); let t = 0, acc = 0, frames = 0, slowFor = 0, degraded = false, running = false, visAct = true, visEnd = false, waveStop = ''; const ft = [];
 function frame() {
   if (!running || dead) return;
@@ -1541,18 +1558,20 @@ function frame() {
 
   ft.push(dt * 1000); if (ft.length > 32) ft.shift(); acc += dt; frames++;
   if (acc > 0.5) {
-    const fps = frames / acc; lensFps.textContent = Math.round(fps); acc = 0; frames = 0;
+    const fps = frames / acc; if (debugFPS) lensFps.textContent = Math.round(fps); acc = 0; frames = 0;
     if (fps < 50 && t > 3) { if (++slowFor >= 4) { slowFor = 0; if (DPR > 1) { DPR = 1; renderer.setPixelRatio(1); composer.setPixelRatio(1); PU.uPR.value = 1; lastSz = [0, 0]; resize(); Object.assign(ST, { DPR: 1, degraded: 1 }); } else if (!degraded) { degraded = true; ST.degraded = 2; } else if (geo.drawRange.count === Infinity || geo.drawRange.count > N / 2) { geo.setDrawRange(0, Math.floor(N / 2)); ST.degraded = 3; } else if (fps < 20) toFallback('slow'); } } else slowFor = 0;
+    if (lg) {
     lg.clearRect(0, 0, 128, 48); lg.strokeStyle = '#c6ff3d'; lg.lineWidth = 2; lg.beginPath();
     ft.forEach((v, j) => { const x = j * 4, y = 46 - Math.min(44, v / 33.3 * 44); j ? lg.lineTo(x, y) : lg.moveTo(x, y); }); lg.stroke();
     lg.strokeStyle = 'rgba(255,181,71,.35)'; lg.lineWidth = 1; lg.beginPath(); lg.moveTo(0, 46 - 22); lg.lineTo(128, 46 - 22); lg.stroke();
+    }
   }
   requestAnimationFrame(frame);
 }
 function setRunning() {
   const want = (visAct || visEnd) && !document.hidden && !dead;
   canvas.style.visibility = (visAct || visEnd) ? 'visible' : 'hidden';
-  lens.classList.toggle('off', !visAct);
+  lens.classList.toggle('off', !debugFPS || !visAct);
   if (want && !running) { running = true; first = true; clock.getDelta(); requestAnimationFrame(frame); } else if (!want) running = false;
 }
 async function start() {
@@ -1572,7 +1591,15 @@ async function start() {
   document.addEventListener('visibilitychange', setRunning);
   setRunning();
 }
-start();
+await start();
+if (!dead) document.getElementById('stage-fallback').hidden = true;
+}
+initStage().catch(() => {
+  document.getElementById('stage').hidden = true;
+  document.getElementById('stage-fallback').hidden = false;
+  document.getElementById('lens').hidden = true;
+  window.__emberStage = {...window.__emberStage, fallback:'unavailable'};
+});
 </script>
 </body>
 </html>
