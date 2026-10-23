@@ -33,7 +33,7 @@
 :root{
   color-scheme:dark;
   --ink:#0a0706; --ink-2:#14100d; --ash:#efe6dc; --ash-dim:#b2a79c; --ash-faint:#998d82;
-  --ember:#ff6a1f; --gold:#ffb547; --lime:#c6ff3d;
+  --ember:#ff6a1f; --gold:#ffb547; --lime:#ffb547;
   --glass:rgba(255,236,220,.05); --line:rgba(255,214,180,.14);
   --f-display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
   --f-body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
@@ -52,7 +52,7 @@ h1,h2,h3{margin:0;text-wrap:balance;font-weight:700;letter-spacing:-.01em}
 p{margin:0}
 [hidden]{display:none!important}
 #sparks{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
-.glow{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(60% 45% at 75% 0%,rgba(255,106,31,.16),transparent 70%),radial-gradient(40% 35% at 0% 100%,rgba(198,255,61,.05),transparent 70%)}
+.glow{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(60% 45% at 75% 0%,rgba(255,106,31,.16),transparent 70%),radial-gradient(40% 35% at 0% 100%,rgba(255,181,71,.05),transparent 70%)}
 .nav,main,footer{position:relative;z-index:2}
 .nav{position:sticky;top:0;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px var(--gutter);background:rgba(10,7,6,.96);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
 .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ash);font-family:var(--f-display);font-weight:900;font-size:21px;letter-spacing:.14em}
@@ -92,12 +92,12 @@ td b{color:var(--ash);font-weight:500}
 td{color:var(--ash-dim)}
 tr.grp th{font-size:var(--t-xs);color:var(--ash);background:rgba(255,236,220,.04);font-weight:500;letter-spacing:.02em}
 .ob{display:inline-block;padding:2px 8px;border-radius:999px;font-size:11px;font-family:var(--f-mono);white-space:nowrap}
-.ob.src{color:var(--lime);border:1px solid rgba(198,255,61,.35)}
+.ob.src{color:var(--lime);border:1px solid rgba(255,181,71,.35)}
 .ob.ntc{color:var(--ash-dim);border:1px solid var(--line)}
 .legend{margin-top:10px;font-size:var(--t-xs);color:var(--ash-faint)}
 ol.restr{margin:6px 0 0;padding-left:1.4em;display:grid;gap:4px;font-size:var(--t-sm)}
-.callout{margin-top:16px;padding:16px 18px;border-radius:16px;border:1px solid rgba(198,255,61,.25);background:rgba(198,255,61,.04);color:var(--ash-dim);font-size:var(--t-sm)}
-.btn{display:inline-flex;align-items:center;gap:8px;margin-top:6px;padding:10px 16px;border-radius:999px;border:1px solid rgba(198,255,61,.4);color:var(--lime);text-decoration:none;font-size:var(--t-sm);background:rgba(198,255,61,.06);width:max-content}
+.callout{margin-top:16px;padding:16px 18px;border-radius:16px;border:1px solid rgba(255,181,71,.25);background:rgba(255,181,71,.04);color:var(--ash-dim);font-size:var(--t-sm)}
+.btn{display:inline-flex;align-items:center;gap:8px;margin-top:6px;padding:10px 16px;border-radius:999px;border:1px solid rgba(255,181,71,.4);color:var(--lime);text-decoration:none;font-size:var(--t-sm);background:rgba(255,181,71,.06);width:max-content}
 
 .sum{margin-top:26px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:10px}
 .sum div{padding:16px 18px;border-radius:16px;background:var(--glass);border:1px solid var(--line)}
@@ -156,7 +156,8 @@ ol.restr{margin:6px 0 0;padding-left:1.4em;display:grid;gap:4px;font-size:var(--
 <li><b>DXVK</b> — CrossOver 공개 소스 판. zlib</li>
 <li><b>GStreamer·GLib·FFmpeg 등</b> — 영상·소리 재생 라이브러리. LGPL</li>
 <li><b>wine-gecko</b> — MPL</li>
-<li><b>ForgePlay에서 온 Wine 수정 7건</b> — 원본과 고지</li></ul></div></section>
+<li><b>ForgePlay에서 온 Wine 수정 7건</b> — 원본과 고지</li></ul>
+  <p class="legend">10월 20일 설치분에는 DXMT의 GPU 결과 읽기·대기 처리 개선과 저지연 화면 대기열 자동 조절이 포함됩니다. 이처럼 오픈소스 구성요소 안에서 고친 부분과 EmberCore를 부르는 연결부도 소스 공개 범위에 포함합니다.</p></div></section>
 <section class="sec" id="with"><h2><span class="k">2</span>함께 올리는 것</h2><div class="txt"><ul>
 <li>원본 소스에 대한 Ember 수정(패치 시리즈)과 바뀐 파일 목록</li>
 <li>실제 빌드에 쓴 설정과 빌드 스크립트, 다시 빌드하는 방법</li>
@@ -187,7 +188,7 @@ ol.restr{margin:6px 0 0;padding-left:1.4em;display:grid;gap:4px;font-size:var(--
     for (const p of P) {
       if (!reduce) { p.y -= p.v * dt; p.s += dt; p.x += Math.sin(p.s * 0.8) * 6 * dt; if (p.y < -10) Object.assign(p, spawn(false)); }
       const fade = Math.min(1, p.y / (H * 0.35));
-      const col = p.lime ? '198,255,61' : (p.r > 1.6 ? '255,181,71' : '255,106,31');
+      const col = p.lime ? '255,181,71' : (p.r > 1.6 ? '255,181,71' : '255,106,31');
       const grd = g.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 5);
       grd.addColorStop(0, `rgba(${col},${p.a * fade})`); grd.addColorStop(1, `rgba(${col},0)`);
       g.fillStyle = grd; g.beginPath(); g.arc(p.x, p.y, p.r * 5, 0, 6.283); g.fill();

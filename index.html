@@ -3,6 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Ember</title>
 <meta name="description" content="Apple Silicon 맥용 윈도우 게임 런처 Ember. 직접 테스트한 게임의 호환성, 실행 설정과 알려진 문제를 확인하세요.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,7 +16,7 @@
 <style>
 /* Concept: "불 꺼진 대장간". 첫 막은 WebGL 한 장면(거대한 EMBER 글자 앞의 3D 엠버 → 궤도 → 불씨로 타서 흩어짐 → ×2 → 유리 고리),
    그 아래는 숯빛 지면 위의 편집 지면(넓은 실제 화면 / 측정 장부 / 엔진 색인 / 인용 / 영상 / 앱 둘러보기).
-   주황은 열(화면 출력·강조), 라임은 Ember가 더한 것(보간 프레임·실측 표시)에만. 단일 다크 룩. */
+   주황과 금색으로 화면 출력·보간 프레임·실측을 강조한다. 단일 다크 룩. */
 :root{
   color-scheme:dark;
   --ink:#0b0908;          /* 숯 */
@@ -25,7 +27,7 @@
   --ash-faint:#857a70;    /* 캡션 (숯 위 4.6:1) */
   --ember:#ff6a1f;        /* 불씨 주황 */
   --gold:#ffb547;         /* 불씨 금 */
-  --lime:#c6ff3d;         /* Ember가 더한 것 */
+  --lime:#ffb547;         /* Ember가 더한 것 */
   --line:rgba(255,214,180,.13);
   --line-2:rgba(255,214,180,.24);
   --f-display:"Big Shoulders Display","Arial Narrow","Helvetica Neue Condensed",Impact,sans-serif;
@@ -571,7 +573,7 @@ footer p{max-width:60em}
   <section class="sec wrap" id="screens" aria-labelledby="compat-title">
     <div class="sec-head"><p class="eyebrow">게임 호환성 · 테스트 기록</p><h2 id="compat-title">어떤 게임을 할 수 있나요?</h2><p class="note">직접 실행해 기록을 남긴 게임들입니다. 게임을 고르면 확인한 장면, 실행 설정, 프레임과 남은 문제를 볼 수 있습니다.</p></div>
     <form class="compat-tools" role="search" aria-label="게임 호환성 검색" hidden><div><label for="compat-query">게임 찾기</label><input id="compat-query" type="search" placeholder="게임 이름 검색 · 한글 / 영문" autocomplete="off" aria-controls="compat-list"></div><div><label for="compat-filter">확인 결과</label><select id="compat-filter" aria-controls="compat-list"><option value="all">전체 결과</option><option value="play">플레이 확인</option><option value="issues">문제 있음</option><option value="menu">메뉴 확인</option><option value="blocked">실행 실패</option></select></div><button type="reset">초기화</button></form>
-    <div class="compat-meta"><p id="compat-count" role="status" aria-live="polite" aria-atomic="true">총 12개 게임 · 이름순</p><span>기록 정리 2026.10.10</span></div>
+    <div class="compat-meta"><p id="compat-count" role="status" aria-live="polite" aria-atomic="true">총 12개 게임 · 이름순</p><span>기록 정리 <span data-cfg="siteUpdated">2026-10-20</span></span></div>
     <div class="compat-head" aria-hidden="true"><span>게임</span><span>확인 결과</span><span>실행 설정</span><span>확인한 범위</span><span></span></div>
     <div id="compat-list"><details class="compat-game" id="game-l4d2" data-status="play" data-search="Left 4 Dead 2 L4D2">
       <summary><span class="compat-name"><strong>레프트 4 데드 2</strong><small>Steam</small></span><span class="compat-status play">플레이 확인</span><span class="compat-renderer">DXVK</span><span class="compat-scope">죽음의 센터 · 로컬 캠페인</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
@@ -579,43 +581,43 @@ footer p{max-width:60em}
     </details>
 <details class="compat-game" id="game-lostark" data-status="play" data-search="Lost Ark">
       <summary><span class="compat-name"><strong>로스트아크</strong><small>STOVE</small></span><span class="compat-status play">플레이 확인</span><span class="compat-renderer">FEX · DXMT</span><span class="compat-scope">마을 이동 · 워터파크</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
-      <div class="compat-detail"><div><p class="compat-result">마을 이동과 플레이를 확인했습니다. 최근 FEX 런타임 변경 뒤에도 인게임 화면을 확인했습니다.</p><dl><div><dt>확인 환경</dt><dd>M4 Pro · FEX · QHD · MetalFX · Ember Flow · 게임 모드</dd></div><div><dt>프레임 기록</dt><dd>기존 마을 측정: 게임 47–54 → 화면 출력 94–107 fps</dd></div><div><dt>주의할 점</dt><dd>FEX 캐시를 새로 만드는 첫 실행은 더 오래 걸릴 수 있습니다. 게임 내 웹 화면에서 간헐적인 오류가 남아 있습니다.</dd></div><div><dt>기록 확인일</dt><dd><time datetime="2026-10-09">2026-10-09</time> · 프레임 기록은 별도 회차일 수 있습니다.</dd></div></dl><a class="compat-permalink" href="#game-lostark">이 게임 바로가기 ↗</a></div><figure class="compat-shot"><a href="assets/loa-town-fg.webp" target="_blank" rel="noopener"><img src="assets/loa-town-fg.webp" alt="Ember로 실행한 로스트아크 실제 화면" loading="lazy" width="1600" height="900"></a><figcaption>기존 테스트 화면 · 누르면 원본 보기</figcaption></figure></div>
+      <div class="compat-detail"><div><p class="compat-result">마을 이동과 플레이를 확인했습니다. 10월 22일에는 FEX로 3시간 9분 연속 실행해 튕김 기록이 없었습니다.</p><dl><div><dt>확인 환경</dt><dd>이 맥(M4 Pro) · FEX · DXMT · QHD · MetalFX · Ember Flow · 게임 모드 · 항목별 별도 회차</dd></div><div><dt>프레임 기록</dt><dd>기존 마을 측정: 게임 47–54 → 화면 출력 94–107 fps · 붐비는 장면 게임 fps +7%(50.2 → 53.7) · 별도 재정렬 비교: 1초 최대 프레임 시간 중앙값 약 23–29 → 17–20 ms</dd></div><div><dt>주의할 점</dt><dd>FEX 캐시를 새로 만드는 첫 실행은 더 오래 걸릴 수 있습니다. 게임 내 웹 화면에서 간헐적인 오류가 남아 있습니다.</dd></div><div><dt>기록 확인일</dt><dd><time datetime="2026-10-22">2026-10-22</time> · 연속 실행 3시간 9분 · 프레임 항목은 별도 회차 · 이 맥(M4 Pro)에서 잰 값</dd></div></dl><a class="compat-permalink" href="#game-lostark">이 게임 바로가기 ↗</a></div><figure class="compat-shot"><a href="assets/loa-town-fg.webp" target="_blank" rel="noopener"><img src="assets/loa-town-fg.webp" alt="Ember로 실행한 로스트아크 실제 화면" loading="lazy" width="1600" height="900"></a><figcaption>10월 23일 화면 · 왼쪽 위는 Ember Lens · 누르면 원본 보기</figcaption></figure></div>
     </details>
 <details class="compat-game" id="game-lethal" data-status="play" data-search="Lethal Company">
-      <summary><span class="compat-name"><strong>리썰 컴퍼니</strong><small>Steam</small></span><span class="compat-status play">플레이 확인</span><span class="compat-renderer">D3DMetal</span><span class="compat-scope">LAN 호스트 · 우주선 내부</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
-      <div class="compat-detail"><div><p class="compat-result">LAN 호스트로 우주선에 진입해 화면과 성능을 확인했습니다.</p><dl><div><dt>확인 환경</dt><dd>M4 Pro · 60Hz · 우주선 진입 후 30초</dd></div><div><dt>프레임 기록</dt><dd>게임 60 fps · 해당 장면 GPU 사용률 약 51%</dd></div><div><dt>주의할 점</dt><dd>인터넷 로비·온라인 협동은 이 기록의 확인 범위에 포함되지 않습니다. 마이크 이름의 한글은 게임 글꼴에서 네모로 보일 수 있습니다.</dd></div><div><dt>기록 확인일</dt><dd><time datetime="2026-09-28">2026-09-28</time> · 프레임 기록은 별도 회차일 수 있습니다.</dd></div></dl><a class="compat-permalink" href="#game-lethal">이 게임 바로가기 ↗</a></div></div>
+      <summary><span class="compat-name"><strong>리썰 컴퍼니</strong><small>Steam</small></span><span class="compat-status play">플레이 확인</span><span class="compat-renderer">D3DMetal / DXMT</span><span class="compat-scope">LAN 호스트 · 우주선 내부</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
+      <div class="compat-detail"><div><p class="compat-result">LAN 호스트로 우주선에 진입해 화면과 성능을 확인했습니다.</p><dl><div><dt>확인 환경</dt><dd>M4 Pro · 60Hz · 우주선 진입 후 30초</dd></div><div><dt>프레임 기록</dt><dd>게임 60 fps · 해당 장면 GPU 사용률 약 51% · 별도 측정(Rosetta · DXMT · 4K · Ember Flow): 전체 지연 51.5 → 43.0 ms · 10월 21일 Rosetta · D3DMetal FHD: 게임 약 120 → 화면 출력 약 139 fps · 10월 17일 FEX · DXMT FHD: 화면 출력 약 155 fps(최대 프레임 시간 19.8 ms)</dd></div><div><dt>주의할 점</dt><dd>인터넷 로비·온라인 협동은 이 기록의 확인 범위에 포함되지 않습니다. 마이크 이름의 한글은 게임 글꼴에서 네모로 보일 수 있습니다.</dd></div><div><dt>기록 확인일</dt><dd><time datetime="2026-10-19">2026-10-19</time> · DXMT 지연 측정 · 우주선 플레이 확인은 2026-09-28 · 프레임 기록은 별도 회차일 수 있습니다.</dd></div></dl><a class="compat-permalink" href="#game-lethal">이 게임 바로가기 ↗</a></div></div>
     </details>
-<details class="compat-game" id="game-requiem" data-status="issues" data-search="RESIDENT EVIL requiem">
-      <summary><span class="compat-name"><strong>바이오하자드 레퀴엠</strong><small>Steam · 체험판</small></span><span class="compat-status issues">문제 있음</span><span class="compat-renderer">D3DMetal</span><span class="compat-scope">체험판 · 첫 방</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
-      <div class="compat-detail"><div><p class="compat-result">D3DMetal에서 타이틀·메뉴와 첫 방 플레이를 확인했습니다.</p><dl><div><dt>확인 환경</dt><dd>M4 Pro · 120Hz 4K 디스플레이</dd></div><div><dt>프레임 기록</dt><dd>정지 약 83 fps · 이동 약 70 fps · 이동 중 p99 약 50 ms</dd></div><div><dt>주의할 점</dt><dd>이동할 때 끊김이 기록됐습니다. DXMT에서는 실행해도 화면이 검게 나옵니다.</dd></div><div><dt>기록 확인일</dt><dd><time datetime="2026-10-04">2026-10-04</time> · 프레임 기록은 별도 회차일 수 있습니다.</dd></div></dl><a class="compat-permalink" href="#game-requiem">이 게임 바로가기 ↗</a></div></div>
+<details class="compat-game" id="game-requiem" data-status="play" data-search="RESIDENT EVIL requiem">
+      <summary><span class="compat-name"><strong>바이오하자드 레퀴엠</strong><small>Steam · 체험판</small></span><span class="compat-status play">플레이 확인</span><span class="compat-renderer">D3DMetal</span><span class="compat-scope">체험판 · 첫 방</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
+      <div class="compat-detail"><div><p class="compat-result">D3DMetal에서 타이틀·메뉴와 첫 방 플레이를 확인했습니다. 10월 21일에도 D3DMetal로 정상 실행되어 프레임을 측정했습니다.</p><dl><div><dt>확인 환경</dt><dd>M4 Pro · 10월 4일 120Hz 4K 디스플레이 · 10월 21일 FHD</dd></div><div><dt>프레임 기록</dt><dd>10월 4일: 정지 약 83 fps · 이동 약 70 fps · 이동 중 p99 약 50 ms · 10월 21일 FHD Ember Flow: 게임 약 115 → 화면 출력 약 137 fps</dd></div><div><dt>주의할 점</dt><dd>이동할 때 끊김이 10월 4일 기록에 있으며 10월 21일 측정에는 최대 프레임 시간을 따로 남기지 않았습니다. DXMT에서는 화면이 검게 나오므로 이 게임은 Rosetta · D3DMetal 경로로 실행하고, FEX 엔진은 지원하지 않습니다.</dd></div><div><dt>기록 확인일</dt><dd><time datetime="2026-10-21">2026-10-21</time> · FHD 프레임 측정 · 첫 방 플레이는 2026-10-04 · 프레임 기록은 별도 회차일 수 있습니다.</dd></div></dl><a class="compat-permalink" href="#game-requiem">이 게임 바로가기 ↗</a></div></div>
     </details>
-<details class="compat-game" id="game-valheim" data-status="menu" data-search="Valheim">
-      <summary><span class="compat-name"><strong>발헤임</strong><small>Steam</small></span><span class="compat-status menu">메뉴 확인</span><span class="compat-renderer">D3DMetal</span><span class="compat-scope">인트로 · 메뉴 · 설정</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
-      <div class="compat-detail"><div><p class="compat-result">인트로 영상, 메인 메뉴와 설정 화면을 확인했습니다.</p><dl><div><dt>확인 환경</dt><dd>M4 Pro · 60Hz · 게임 모드</dd></div><div><dt>프레임 기록</dt><dd>메뉴 60 fps · 메뉴 자체 프레임 제한</dd></div><div><dt>주의할 점</dt><dd>이 실행 기록만으로 월드 플레이·멀티플레이 안정성을 판정하지 않습니다. Steam 오버레이 주입 시 시작 직후 종료된 기록이 한 차례 있습니다.</dd></div><div><dt>기록 확인일</dt><dd><time datetime="2026-09-28">2026-09-28</time> · 프레임 기록은 별도 회차일 수 있습니다.</dd></div></dl><a class="compat-permalink" href="#game-valheim">이 게임 바로가기 ↗</a></div></div>
+<details class="compat-game" id="game-valheim" data-status="play" data-search="Valheim">
+      <summary><span class="compat-name"><strong>발헤임</strong><small>Steam</small></span><span class="compat-status play">플레이 확인</span><span class="compat-renderer">DXMT / D3DMetal</span><span class="compat-scope">실행 · 60초 프레임 측정</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
+      <div class="compat-detail"><div><p class="compat-result">인트로 영상과 메뉴를 확인했고, FEX · DXMT와 Rosetta · DXMT 양쪽에서 60초 프레임을 측정했습니다.</p><dl><div><dt>확인 환경</dt><dd>이 맥(M4 Pro) · FEX · DXMT · FHD · 60 fps 상한 · 보간 끔</dd></div><div><dt>프레임 기록</dt><dd>60 fps · 저지연 화면 대기열 자동 조절: 내부 지연 10.2 → 5.6 ms · 10월 21일 FEX · DXMT FHD: 게임 60 → 화면 출력 120 fps(Ember Flow, 최대 프레임 시간 28.9 ms) · 10월 17일 Rosetta · DXMT: 같은 120 fps(최대 18.6 ms)</dd></div><div><dt>주의할 점</dt><dd>FEX에서는 새 코드를 번역하느라 Rosetta보다 최대 프레임 시간이 약 10 ms 깁니다. 기록에 측정 장면(메뉴 또는 월드)이 따로 남아 있지 않아 월드 전체 구간과 멀티플레이 안정성은 보장하지 않습니다.</dd></div><div><dt>기록 확인일</dt><dd><time datetime="2026-10-21">2026-10-21</time> · 항목별 별도 회차 · 이 맥(M4 Pro)에서 잰 값</dd></div></dl><a class="compat-permalink" href="#game-valheim">이 게임 바로가기 ↗</a></div></div>
     </details>
-<details class="compat-game" id="game-stellar" data-status="issues" data-search="Stellar Blade">
-      <summary><span class="compat-name"><strong>스텔라 블레이드</strong><small>Steam · 체험판</small></span><span class="compat-status issues">문제 있음</span><span class="compat-renderer">D3DMetal / DXMT</span><span class="compat-scope">체험판 · 캠프와 인게임</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
-      <div class="compat-detail"><div><p class="compat-result">D3DMetal에서 인게임 플레이를 확인했습니다. DXMT에서도 실행·보간 측정 기록이 있습니다.</p><dl><div><dt>확인 환경</dt><dd>M4 Pro · 데모 · 그래픽 경로별 별도 측정</dd></div><div><dt>프레임 기록</dt><dd>기존 DXMT 측정: 게임 55 → 화면 출력 110 fps · 안정성 보증 수치 아님</dd></div><div><dt>주의할 점</dt><dd>DXMT 경로의 GPU 멈춤과 FSR3 사용 시 화면 깨짐은 조사 중입니다. D3DMetal 결과와 구분해서 보세요.</dd></div><div><dt>기록 확인일</dt><dd><time datetime="2026-10-10">2026-10-10</time> · 프레임 기록은 별도 회차일 수 있습니다.</dd></div></dl><a class="compat-permalink" href="#game-stellar">이 게임 바로가기 ↗</a></div><figure class="compat-shot"><a href="assets/stellar.webp" target="_blank" rel="noopener"><img src="assets/stellar.webp" alt="Ember로 실행한 스텔라 블레이드 실제 화면" loading="lazy" width="1600" height="900"></a><figcaption>기존 테스트 화면 · 누르면 원본 보기</figcaption></figure></div>
+<details class="compat-game" id="game-stellar" data-status="play" data-search="Stellar Blade">
+      <summary><span class="compat-name"><strong>스텔라 블레이드</strong><small>Steam · 체험판</small></span><span class="compat-status play">플레이 확인</span><span class="compat-renderer">D3DMetal / DXMT · FEX</span><span class="compat-scope">체험판 · 캠프와 인게임</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
+      <div class="compat-detail"><div><p class="compat-result">D3DMetal에서 인게임 플레이를 확인했습니다. FEX · DXMT와 Rosetta · DXMT에서도 FHD 약 60 fps로 실행·측정했고(10월 22일), FEX에서 간헐적으로 화면이 멈추던 문제도 고쳤습니다(9판 중 3판 → 7판 중 0판).</p><dl><div><dt>확인 환경</dt><dd>M4 Pro · 데모 · 그래픽 경로별 별도 측정</dd></div><div><dt>프레임 기록</dt><dd>D3DMetal · Ember Flow · 144Hz: 게임 60 → 화면 출력 평균 116.7 fps · 4K D3DMetal(10월 23일): 게임 약 34 → 화면 출력 약 55 fps · FHD DXMT(10월 22일): FEX · Rosetta 모두 약 60 fps · Rosetta D3DMetal 부드러움 방식 표시 개선: FHD 지연 24.2 → 14.1 ms · 출력 116.6 → 119.2 fps, QHD 지연 24.2 → 15.8 ms · 출력 114.0 → 118.8 fps · 안정성 보증 수치 아님</dd></div><div><dt>주의할 점</dt><dd>예전에 DXMT 경로에서 GPU 멈춤과 FSR3 사용 시 화면 깨짐이 기록됐고, 최근 측정에서는 따로 확인하지 않았습니다. FEX 기록의 최대 프레임 시간 약 290–307 ms는 측정을 시작하며 창을 처음 앞으로 올릴 때의 끊김으로 확인했습니다(Rosetta도 600 ms 이상). D3DMetal 결과와 구분해서 보세요.</dd></div><div><dt>기록 확인일</dt><dd><time datetime="2026-10-23">2026-10-23</time> · 4K 측정 · FHD 측정은 2026-10-22 · FEX 멈춤 수정 확인은 2026-10-19 · 프레임 기록은 별도 회차일 수 있습니다.</dd></div></dl><a class="compat-permalink" href="#game-stellar">이 게임 바로가기 ↗</a></div><figure class="compat-shot"><a href="assets/stellar.webp" target="_blank" rel="noopener"><img src="assets/stellar.webp" alt="Ember로 실행한 스텔라 블레이드 실제 화면" loading="lazy" width="1600" height="900"></a><figcaption>기존 테스트 화면 · 체험판 메뉴 · 누르면 원본 보기</figcaption></figure></div>
     </details>
-<details class="compat-game" id="game-overwatch" data-status="issues" data-search="Overwatch">
-      <summary><span class="compat-name"><strong>오버워치</strong><small>Steam</small></span><span class="compat-status issues">문제 있음</span><span class="compat-renderer">D3DMetal</span><span class="compat-scope">Steam판 · 실행 후 플레이</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
-      <div class="compat-detail"><div><p class="compat-result">실행 실패를 수정한 뒤 사용자가 게임 실행을 확인했습니다.</p><dl><div><dt>확인 환경</dt><dd>M4 Pro · Steam판 · 사용자 플레이 및 프레임 기록</dd></div><div><dt>프레임 기록</dt><dd>최근 20개 측정 구간: 게임 중앙값 47.4 fps · 최저 28.2 fps</dd></div><div><dt>주의할 점</dt><dd>플레이 중 심한 프레임 저하가 보고됐고 원인을 조사 중입니다. 한국 Battle.net판은 별도 기록이며 이 결과를 적용할 수 없습니다.</dd></div><div><dt>기록 확인일</dt><dd><time datetime="2026-10-10">2026-10-10</time> · 프레임 기록은 별도 회차일 수 있습니다.</dd></div></dl><a class="compat-permalink" href="#game-overwatch">이 게임 바로가기 ↗</a></div></div>
+<details class="compat-game" id="game-overwatch" data-status="play" data-search="Overwatch">
+      <summary><span class="compat-name"><strong>오버워치</strong><small>Steam</small></span><span class="compat-status play">플레이 확인</span><span class="compat-renderer">D3DMetal</span><span class="compat-scope">Steam판 · 실행 후 플레이</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
+      <div class="compat-detail"><div><p class="compat-result">실행 실패를 수정한 뒤 사용자가 Rosetta · D3DMetal에서 게임 실행을 확인했습니다.</p><dl><div><dt>확인 환경</dt><dd>M4 Pro · Steam판 · QHD · 사용자 플레이(10월 10일) 및 프레임 측정(10월 15일)</dd></div><div><dt>프레임 기록</dt><dd>QHD 측정(10월 15일): 게임 약 56–60 fps · GPU 사용률 94–100%</dd></div><div><dt>주의할 점</dt><dd>QHD에서는 GPU가 한계라 약 56–60 fps에서 멈추며, Ember 쪽 병목은 아니라는 측정 결과입니다. FEX 엔진은 10월 15일에 화면이 나오지 않아(GPU 약 1%) 미확정입니다. 한국 Battle.net판은 별도 기록이며 이 결과를 적용할 수 없습니다.</dd></div><div><dt>기록 확인일</dt><dd><time datetime="2026-10-15">2026-10-15</time> · 사용자 실행 확인은 2026-10-10 · 최근에는 다시 시험하지 않았습니다.</dd></div></dl><a class="compat-permalink" href="#game-overwatch">이 게임 바로가기 ↗</a></div></div>
     </details>
 <details class="compat-game" id="game-oncehuman" data-status="play" data-search="Once Human">
       <summary><span class="compat-name"><strong>원스 휴먼</strong><small>Steam</small></span><span class="compat-status play">플레이 확인</span><span class="compat-renderer">D3DMetal / DXMT</span><span class="compat-scope">필드 이동 · 보간 비교</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
-      <div class="compat-detail"><div><p class="compat-result">필드 플레이와 프레임 보간을 확인했습니다. DXMT에서는 보간 방식에 따른 고유 프레임과 반복 프레임도 비교했습니다.</p><dl><div><dt>확인 환경</dt><dd>M4 Pro · 그래픽 경로별 별도 측정</dd></div><div><dt>프레임 기록</dt><dd>기존 D3DMetal 측정: Ember Flow 사용 시 화면 출력 약 114 fps</dd></div><div><dt>주의할 점</dt><dd>아래 화면 출력 수치는 D3DMetal 측정입니다. DXMT 결과와 합쳐 비교하지 않습니다.</dd></div><div><dt>기록 확인일</dt><dd><time datetime="2026-10-07">2026-10-07</time> · 프레임 기록은 별도 회차일 수 있습니다.</dd></div></dl><a class="compat-permalink" href="#game-oncehuman">이 게임 바로가기 ↗</a></div><figure class="compat-shot"><a href="assets/oncehuman.webp" target="_blank" rel="noopener"><img src="assets/oncehuman.webp" alt="Ember로 실행한 원스 휴먼 실제 화면" loading="lazy" width="1600" height="900"></a><figcaption>기존 테스트 화면 · 누르면 원본 보기</figcaption></figure></div>
+      <div class="compat-detail"><div><p class="compat-result">필드 플레이와 프레임 보간을 확인했습니다. DXMT에서는 보간 방식에 따른 고유 프레임과 반복 프레임도 비교했습니다.</p><dl><div><dt>확인 환경</dt><dd>M4 Pro · 그래픽 경로별 별도 측정</dd></div><div><dt>프레임 기록</dt><dd>기존 D3DMetal 측정: Ember Flow 사용 시 화면 출력 약 114 fps · 10월 16일 Rosetta · D3DMetal FHD: 게임 약 53 → 화면 출력 약 78 fps · 10월 17일 FEX · DXMT FHD: 약 41 fps</dd></div><div><dt>주의할 점</dt><dd>아래 화면 출력 수치는 D3DMetal 측정입니다. DXMT 결과와 합쳐 비교하지 않습니다. FEX · DXMT 측정에서는 35.6초 멈춤이 1회 기록됐고 원인은 조사하지 않았습니다.</dd></div><div><dt>기록 확인일</dt><dd><time datetime="2026-10-07">2026-10-07</time> · 프레임 기록은 별도 회차일 수 있습니다.</dd></div></dl><a class="compat-permalink" href="#game-oncehuman">이 게임 바로가기 ↗</a></div><figure class="compat-shot"><a href="assets/oncehuman.webp" target="_blank" rel="noopener"><img src="assets/oncehuman.webp" alt="Ember로 실행한 원스 휴먼 실제 화면" loading="lazy" width="1600" height="900"></a><figcaption>10월 초 테스트 화면 · DXMT · 누르면 원본 보기</figcaption></figure></div>
     </details>
-<details class="compat-game" id="game-witcher3" data-status="blocked" data-search="The Witcher 3 Wild Hunt">
-      <summary><span class="compat-name"><strong>위쳐 3: 와일드 헌트</strong><small>Steam</small></span><span class="compat-status blocked">실행 실패</span><span class="compat-renderer">D3DMetal / DXMT</span><span class="compat-scope">DX12판 · 시작 단계</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
-      <div class="compat-detail"><div><p class="compat-result">REDlauncher를 건너뛰어 게임 실행 파일이 시작되는 단계까지 확인했습니다.</p><dl><div><dt>확인 환경</dt><dd>Steam 빌드 25646871 · Rosetta · DX12</dd></div><div><dt>프레임 기록</dt><dd>인게임 프레임 측정 없음 · 시작 실패 기록만 있음</dd></div><div><dt>주의할 점</dt><dd>검은 창 뒤 멈춤이 남아 있어 플레이할 수 없습니다. D3DMetal과 DXMT 모두 시작 단계에서 문제가 기록됐습니다.</dd></div><div><dt>기록 확인일</dt><dd><time datetime="2026-10-07">2026-10-07</time> · 프레임 기록은 별도 회차일 수 있습니다.</dd></div></dl><a class="compat-permalink" href="#game-witcher3">이 게임 바로가기 ↗</a></div></div>
+<details class="compat-game" id="game-witcher3" data-status="play" data-search="The Witcher 3 Wild Hunt 리마스터">
+      <summary><span class="compat-name"><strong>위쳐 3: 와일드 헌트</strong><small>Steam · 리마스터</small></span><span class="compat-status play">플레이 확인</span><span class="compat-renderer">Rosetta · D3DMetal</span><span class="compat-scope">DX12판 · 흰 과수원 13분</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
+      <div class="compat-detail"><div><p class="compat-result">앱 기본 경로로 월드 진입 후 13분 동안 걷기·카메라·물가·건물·전투 자세·메뉴를 확인했습니다. 이 회차에서 튕김·멈춤·화면 깨짐은 없었습니다. 10월 23일 새벽 실행 조합 자동 탐색에서도 D3DMetal 조합이 3번 모두 창을 30초 유지했습니다(플레이 확인은 아님).</p><dl><div><dt>확인 환경</dt><dd>이 맥(M4 Pro) · Rosetta · D3DMetal 3.0 · 셰이더 변환 가드 · 1080p · 중간</dd></div><div><dt>프레임 기록</dt><dd>중간 설정 게임 44–50 fps · FSR 업스케일 자동 · 수직동기 · 60 fps 상한</dd></div><div><dt>주의할 점</dt><dd>전체 구간·장시간 안정성은 미검증입니다. 이 플레이 기록은 Rosetta·D3DMetal 결과입니다. FEX·DXMT 플레이는 확인 범위에 포함하지 않습니다.</dd></div><div><dt>기록 확인일</dt><dd><time datetime="2026-10-20">2026-10-20</time> · 항목별 별도 회차 · 이 맥(M4 Pro)에서 잰 값</dd></div></dl><a class="compat-permalink" href="#game-witcher3">이 게임 바로가기 ↗</a></div></div>
     </details>
 <details class="compat-game" id="game-cs2" data-status="play" data-search="Counter-Strike 2 CS2">
-      <summary><span class="compat-name"><strong>카운터 스트라이크 2</strong><small>Steam</small></span><span class="compat-status play">플레이 확인</span><span class="compat-renderer">D3DMetal</span><span class="compat-scope">더스트 2 · 로컬 봇전</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
-      <div class="compat-detail"><div><p class="compat-result">메뉴·한글·소리와 봇전 플레이를 확인했습니다.</p><dl><div><dt>확인 환경</dt><dd>M4 Pro · 1920×1080 · 120Hz · 높음 · MSAA 4×</dd></div><div><dt>프레임 기록</dt><dd>게임 평균 95.8 fps · 보간 없음</dd></div><div><dt>주의할 점</dt><dd>독점 전체 화면에서는 창이 보이지 않습니다. 전체 화면 창 모드를 사용하세요. 공식 매치메이킹·VAC 서버는 시험하지 않았습니다.</dd></div><div><dt>기록 확인일</dt><dd><time datetime="2026-10-03">2026-10-03</time> · 프레임 기록은 별도 회차일 수 있습니다.</dd></div></dl><a class="compat-permalink" href="#game-cs2">이 게임 바로가기 ↗</a></div><figure class="compat-shot"><a href="assets/cs2.webp" target="_blank" rel="noopener"><img src="assets/cs2.webp" alt="Ember로 실행한 카운터 스트라이크 2 실제 화면" loading="lazy" width="1600" height="900"></a><figcaption>기존 테스트 화면 · 누르면 원본 보기</figcaption></figure></div>
+      <summary><span class="compat-name"><strong>카운터 스트라이크 2</strong><small>Steam</small></span><span class="compat-status play">플레이 확인</span><span class="compat-renderer">DXMT / D3DMetal</span><span class="compat-scope">더스트 2 · 로컬 봇전</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
+      <div class="compat-detail"><div><p class="compat-result">메뉴·한글·소리와 봇전을 확인했습니다. FPS 게임은 지연을 먼저 보도록 기본값을 정했습니다. 자동 변환기는 DXMT, Ember Flow는 끔, 저지연 모드와 Ember Spark는 켬입니다.</p><dl><div><dt>확인 환경</dt><dd>이 맥(M4 Pro) · Rosetta · FHD · 전체 화면 창 · 수직동기 끔 · 더스트2 오프라인 봇 0</dd></div><div><dt>프레임 기록</dt><dd>입력→화면 중앙값 DXMT 29.0 ms / D3DMetal 46.2 ms(약 17 ms 차이) · 변환기별 자동 화질이 달라 fps는 직접 비교하지 않습니다. · 최대 프레임 시간(FHD, 10월): FEX · DXMT 약 60 ms, Rosetta · DXMT 약 325 ms</dd></div><div><dt>주의할 점</dt><dd>독점 전체 화면에서는 창이 보이지 않습니다. 전체 화면 창 모드를 사용하세요. 공식 매치메이킹·VAC 서버는 시험하지 않았습니다.</dd></div><div><dt>기록 확인일</dt><dd><time datetime="2026-10-20">2026-10-20</time> · 항목별 별도 회차 · 이 맥(M4 Pro)에서 잰 값</dd></div></dl><a class="compat-permalink" href="#game-cs2">이 게임 바로가기 ↗</a></div><figure class="compat-shot"><a href="assets/cs2.webp" target="_blank" rel="noopener"><img src="assets/cs2.webp" alt="Ember로 실행한 카운터 스트라이크 2 실제 화면" loading="lazy" width="1600" height="900"></a><figcaption>9월 30일 테스트 화면 · D3DMetal 경로 · 누르면 원본 보기</figcaption></figure></div>
     </details>
 <details class="compat-game" id="game-tf2" data-status="play" data-search="Team Fortress 2 TF2">
       <summary><span class="compat-name"><strong>팀 포트리스 2</strong><small>Steam · 64비트판</small></span><span class="compat-status play">플레이 확인</span><span class="compat-renderer">DXVK</span><span class="compat-scope">2Fort · 로컬 봇전</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
-      <div class="compat-detail"><div><p class="compat-result">메뉴·한글·인트로 영상과 로컬 맵 플레이를 확인했습니다.</p><dl><div><dt>확인 환경</dt><dd>M4 Pro · 1920×1080 · 120Hz · VSync 끔 · 봇 8명</dd></div><div><dt>프레임 기록</dt><dd>게임 170–190 fps · 보간 없음</dd></div><div><dt>주의할 점</dt><dd>첫 맵 진입 때 셰이더 처리로 잠깐 멈출 수 있습니다. 공식 매치메이킹·VAC 서버는 시험하지 않았습니다.</dd></div><div><dt>기록 확인일</dt><dd><time datetime="2026-10-02">2026-10-02</time> · 프레임 기록은 별도 회차일 수 있습니다.</dd></div></dl><a class="compat-permalink" href="#game-tf2">이 게임 바로가기 ↗</a></div><figure class="compat-shot"><a href="assets/tf2.webp" target="_blank" rel="noopener"><img src="assets/tf2.webp" alt="Ember로 실행한 팀 포트리스 2 실제 화면" loading="lazy" width="1600" height="900"></a><figcaption>기존 테스트 화면 · 누르면 원본 보기</figcaption></figure></div>
+      <div class="compat-detail"><div><p class="compat-result">메뉴·한글·인트로 영상과 로컬 맵 플레이를 확인했습니다. FEX 엔진에서 소리를 준비하다 멈추던 문제를 고쳤습니다.</p><dl><div><dt>확인 환경</dt><dd>M4 Pro · 1920×1080 · 120Hz · VSync 끔 · 봇 8명</dd></div><div><dt>프레임 기록</dt><dd>게임 170–190 fps · 보간 없음 · 10월 22일 FHD: FEX 약 258 fps(최대 프레임 시간 23 ms), Rosetta 약 263 fps(54 ms)</dd></div><div><dt>주의할 점</dt><dd>첫 맵 진입 때 셰이더 처리로 잠깐 멈출 수 있습니다. 공식 매치메이킹·VAC 서버는 시험하지 않았습니다.</dd></div><div><dt>기록 확인일</dt><dd><time datetime="2026-10-22">2026-10-22</time> · 프레임 기록은 별도 회차일 수 있습니다.</dd></div></dl><a class="compat-permalink" href="#game-tf2">이 게임 바로가기 ↗</a></div><figure class="compat-shot"><a href="assets/tf2.webp" target="_blank" rel="noopener"><img src="assets/tf2.webp" alt="Ember로 실행한 팀 포트리스 2 실제 화면" loading="lazy" width="1600" height="900"></a><figcaption>기존 테스트 화면 · 누르면 원본 보기</figcaption></figure></div>
     </details>
 <details class="compat-game" id="game-pragmata" data-status="play" data-search="PRAGMATA">
       <summary><span class="compat-name"><strong>프라그마타</strong><small>Steam · 데모</small></span><span class="compat-status play">플레이 확인</span><span class="compat-renderer">D3DMetal</span><span class="compat-scope">데모 · 튜토리얼 전투</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
@@ -627,7 +629,15 @@ footer p{max-width:60em}
 
   <section class="sec wrap compat-guide" id="perf" aria-labelledby="perf-title">
     <div class="sec-head"><p class="eyebrow">프레임 기록 읽는 법</p><h2 id="perf-title">실행 조건까지 함께 보세요.</h2></div>
+    <p class="note">아래 수치는 이 맥(M4 Pro)에서 잰 값입니다. 10월 20일까지 설치된 변경을 반영했습니다(<span data-cfg="siteUpdated">2026-10-20</span> 기준). 장면·설정에 따라 달라지며 지연을 보장하는 값은 아닙니다.</p>
     <div class="compat-guide-grid"><div><h3>게임 fps</h3><p>게임이 실제로 그린 프레임 수입니다. 같은 게임도 맵, 해상도, 설정에 따라 달라집니다.</p></div><div><h3>화면 출력 fps</h3><p>프레임 생성을 켜면 중간 프레임까지 포함합니다. Ember Flow와 게임 자체 프레임 생성은 구분해 적었습니다.</p></div><div><h3>테스트 범위</h3><p>메뉴, 로컬 봇전, 체험판과 온라인 플레이를 구분합니다. 평균 fps가 높아도 끊김이나 멈춤이 있으면 함께 표시합니다.</p></div></div>
+    <div class="sec-head" style="margin-top:40px"><p class="eyebrow">10월 18–20일 측정</p><h3>반응과 끊김도 함께 살폈습니다.</h3></div>
+    <div class="compat-guide-grid">
+      <div><h3>Ember Flow · 프레임 보간</h3><p>Rosetta·D3DMetal의 부드러움 방식은 스텔라 블레이드 데모 FHD·MetalFX 끔에서 내부 표시 지연 24.2 → 14.1 ms를 기록했습니다.</p></div>
+      <div><h3>Ember Spark · 입력 지연 관리</h3><p>DXMT 저지연 모드는 게임이 프레임 상한을 따라오면 화면 대기열을 2장, 못 따라오면 3장으로 자동 조절합니다. GPU 부하 합성 시험은 입력→화면 중앙값 49.7 → 37.8 ms, 게임 fps +26%. 발헤임 FEX·FHD·60 fps 상한·보간 끔은 내부 지연 10.2 → 5.6 ms였습니다.</p></div>
+      <div><h3>로스트아크 · 프레임 개선</h3><p>GPU 결과를 더 빨리 받아 붐비는 장면의 게임 fps가 +7%(50.2 → 53.7) 올랐습니다. 별도 재정렬 비교에서는 1초마다 잰 최대 프레임 시간의 중앙값이 약 23–29 → 17–20 ms로 줄었습니다.</p></div>
+    </div>
+    <p class="foot-note">이 맥(M4 Pro)에서 잰 값. 근거: 10/18–19 smoothjob 표시 측정, 10/19 spinless, 10/20 fpslat·realign A/b16 비교. DXMT 내부 지연은 렌더 대기열+표시 계측이며 입력→화면 측정과 다릅니다. 입력→화면은 캡처 합성 경로 기준으로 모니터 자체 지연을 포함하지 않습니다. 서로 다른 회차의 개선율을 합산하지 않았습니다. <a href="license.html#measure">측정 조건 보기</a></p>
   </section>
 
   <!-- ===== 기능 ===== -->
@@ -641,17 +651,23 @@ footer p{max-width:60em}
     <article class="flow" aria-labelledby="f-flow">
       <div class="body">
         <div class="bname"><strong id="f-flow">Ember <span>Flow</span></strong><span class="kind">프레임 보간<button class="finfo" type="button" data-b="flow" aria-label="Ember Flow 설명" aria-expanded="false">i</button></span></div>
-        <h3>진짜 프레임 사이에 한 장을 더 넣고, 입력 지연은 줄입니다</h3>
-        <p>Ember가 직접 만든 보간 엔진이 두 프레임 사이에 새 프레임을 그려 넣습니다. 게임이 60~100fps로 흔들려도 화면은 120Hz에 맞춰 채웁니다.</p>
+        <h3>게임 프레임 사이를 채우고, 지연도 함께 관리합니다</h3>
+        <p>Ember가 직접 만든 보간 엔진이 두 프레임 사이에 새 프레임을 그려 넣습니다. 게임이 60~100fps로 흔들려도 화면은 내 모니터 주사율(120·144Hz 등) 안에서 고르게 채웁니다.</p>
         <ul class="pts">
           <li><b>보충형</b>모자란 만큼만 채워서 게임 자체를 늦추지 않습니다.</li>
           <li><b>움직임 보정</b>물체가 움직인 길을 따라 중간 장면을 만듭니다.</li>
           <li><b>글자 보호</b><span><span class="bn">Ember Guard</span><button class="finfo" type="button" data-b="guard" aria-label="Ember Guard 설명" aria-expanded="false">i</button> 이름표와 HUD 글자가 번지지 않게 지킵니다.</span></li>
-          <li><b>지연 관리</b>대기열을 비우고 저지연 모드로 입력 반응을 지킵니다.</li>
-          <li><b>보간 HUD</b><span><span class="bn">Ember Lens</span><button class="finfo" type="button" data-b="lens" aria-label="Ember Lens 설명" aria-expanded="false">i</button> 화면 구석에 FG ON과 LAT(지연)를 바로 띄웁니다.</span></li>
+          <li><b>지연 관리</b>대기열을 비우고 저지연 모드로 입력 반응을 지킵니다. 보간 때문에 화면이 늦어지면 잠깐 쉬어 반응을 먼저 지킵니다. 오버워치(D3DMetal)에서 보간을 켠 채 지연 44.5 → 25.2&nbsp;ms. 리썰 컴퍼니(Rosetta·DXMT, 4K)에서는 내부 지연 51.5 → 43.0&nbsp;ms를 기록했습니다.</li>
+          <li><b>고른 출력</b>지연이 잠깐 넘칠 때마다 보간이 멈추던 문제를 고쳤습니다. 스텔라 블레이드(D3DMetal, 144Hz) 화면 출력이 회차마다 72~117&nbsp;fps로 흔들리던 것이 평균 109.6 → 116.7&nbsp;fps, 지연은 1&nbsp;ms 안쪽으로만 늘었습니다. Rosetta D3DMetal 부드러움 방식은 표시 방식을 바꿔 스텔라 블레이드 FHD 지연 24.2 → 14.1&nbsp;ms, 출력 116.6 → 119.2&nbsp;fps(QHD 24.2 → 15.8&nbsp;ms, 114.0 → 118.8&nbsp;fps).</li>
+          <li><b>끊김 안정화</b>원스 휴먼(Rosetta·D3DMetal·4K) 비교에서 50 ms 넘는 끊김이 6회 → 0회였습니다. 한 세션의 결과이며, 전체 출력 편차의 개선은 확인하지 못했습니다.</li>
+          <li><b>HDR 색 보호</b>D3DMetal에서 HDR(PQ) 게임은 보간을 멈추고 원본 프레임을 표시해 색을 지킵니다. 위쳐3에서 색·밝기 이상 없이 표시되는 것을 확인했습니다.</li>
+          <li><b>보간 HUD</b><span><span class="bn">Ember Lens</span><button class="finfo" type="button" data-b="lens" aria-label="Ember Lens 설명" aria-expanded="false">i</button> 화면 구석에 FG ON과 LAT(지연)를 바로 띄웁니다. 보간이 멈추면 멈춘 실제 이유도 함께 보여 줍니다.</span></li>
           <li><b>Flow 신경망</b>Ember가 학습한 신경망이 움직임을 읽어 중간 장면을 만듭니다. 자동에서 기본으로 쓰고, 4K에서 드는 비용은 기존 방식의 약&nbsp;60%입니다.</li>
+          <li><b>보간 엔진 1.6</b>로스트아크(FEX·DXMT)에서 뉴럴 보간 건너뜀이 120초당 76~133회 → 0회로 줄었습니다.</li>
           <li><b>물결·풀숲</b>무늬가 잘게 흩어지는 장면에서도 원본 프레임을 반복하지 않고 보간합니다.</li>
           <li><b>확대 전 보간</b>MetalFX와 함께 쓰면 키우기 전 해상도에서 보간해 GPU 부담을 줄입니다. 로스트아크 게임 fps가 10% 올랐습니다.</li>
+          <li><b>가벼운 확대</b>보간 프레임은 MetalFX 대신 가벼운 한 번의 처리로 키웁니다. 로스트아크 게임 49.7 → 51.6&nbsp;fps, 글자·HUD는 그대로입니다.</li>
+          <li><b>Ember Prism</b>실험 기능이라 기본은 꺼져 있습니다. 켜면 Rosetta·D3DMetal 게임에서 애플 보간 엔진으로 화질을 먼저 챙기고, 지연은 조금 늘어납니다. macOS 26 이상에서 Ember Flow와 함께 씁니다.</li>
         </ul>
       </div>
       <div>
@@ -668,7 +684,7 @@ footer p{max-width:60em}
             <g id="cad-real"></g><g id="cad-out"></g>
             <rect id="cad-scan" x="0" y="32" width="2" height="128" fill="#efe6dc" opacity=".5"/>
           </svg>
-          <figcaption>작동 원리를 설명하는 예시입니다. 게임이 50 fps일 때, 진짜 프레임(금색) 사이마다 Ember Flow 프레임(라임)이 하나씩 들어가 화면은 정확히 두 배가 됩니다.</figcaption>
+          <figcaption>작동 원리를 설명하는 예시입니다. 게임이 50 fps일 때, 진짜 프레임(금색) 사이마다 Ember Flow 프레임(주황)이 하나씩 들어가 화면은 정확히 두 배가 됩니다.</figcaption>
           <p class="spec"><span><a href="#screens">게임별 실제 측정 기록 보기 ↗</a></span></p>
         </figure>
         <figure class="ba" data-key="flow" hidden>
@@ -704,7 +720,7 @@ footer p{max-width:60em}
       <article class="ix">
         <div class="ix-name"><strong>Ember <span>Flare</span></strong><span class="kind">진짜 HDR · AI 자동 HDR<button class="finfo" type="button" data-b="flare" aria-label="Ember Flare 설명" aria-expanded="false">i</button></span></div>
         <div class="ix-text"><p>HDR 게임은 HDR10(PQ) 10비트 출력을 그대로 맥의 HDR 화면에 보냅니다. SDR 게임도 밝은 곳만 살려 HDR로 보여 주고, 글자·메뉴는 그대로 둡니다.</p>
-          <details><summary>자세히</summary><ul class="pts"><li><b>정확한 밝기</b>SDR 흰색 100 nit는 100 nit 그대로 나옵니다.</li><li><b>밝기 조절</b>디스플레이의 최대 밝기를 넘는 부분은 BT.2390 방식으로 조절합니다.</li><li><b>두 경로 모두</b>DXMT와 D3DMetal에서 똑같이 동작합니다.</li><li><b>조건</b>HDR을 지원하는 디스플레이가 필요합니다. 자동 HDR은 기본 꺼짐이고, 게임이 HDR을 직접 켜면 자동 HDR은 꺼집니다.</li></ul></details></div>
+          <details><summary>자세히</summary><ul class="pts"><li><b>정확한 밝기</b>SDR 흰색 100 nit는 100 nit 그대로 나옵니다.</li><li><b>밝기 조절</b>디스플레이의 최대 밝기를 넘는 부분은 BT.2390 방식으로 조절합니다.</li><li><b>두 경로 모두</b>DXMT와 D3DMetal에서 똑같이 동작합니다.</li><li><b>보간과 HDR</b>D3DMetal의 HDR(PQ) 게임은 색을 지키기 위해 보간 대신 원본 프레임을 표시합니다. 위쳐3에서 확인했습니다.</li><li><b>조건</b>HDR을 지원하는 디스플레이가 필요합니다. 자동 HDR은 기본 꺼짐이고, 게임이 HDR을 직접 켜면 자동 HDR은 꺼집니다.</li></ul></details></div>
         <div class="ix-val"><p class="num">0.8<em>ms</em></p><p>4K 프레임당 GPU 시간 (1080p 0.3 ms)</p></div>
       </article>
       <article class="ix">
@@ -728,7 +744,7 @@ footer p{max-width:60em}
       <article class="ix">
         <div class="ix-name"><strong>Ember <span>Kiln</span></strong><span class="kind">셰이더 미리 준비<button class="finfo" type="button" data-b="kiln" aria-label="Ember Kiln 설명" aria-expanded="false">i</button></span></div>
         <div class="ix-text"><p>게임이 꺼져 있을 때 셰이더를 미리 준비합니다. 새 장면이나 첫 전투에서 셰이더를 처리하느라 생기는 끊김을 줄입니다.</p>
-          <details><summary>자세히</summary><ul class="pts"><li><b>원스 휴먼</b>Rosetta에서 첫 입장 때 멈춘 시간 11.8초 → 0.8초.</li><li><b>마을 첫 45초</b>로스트아크 게임 fps 50 → 59.</li><li><b>기본값</b>DXMT 게임에서 기본으로 켜집니다. 게임을 끈 뒤에 준비하므로 플레이 중에는 이 작업이 실행되지 않습니다.</li></ul></details></div>
+          <details><summary>자세히</summary><ul class="pts"><li><b>원스 휴먼</b>Rosetta에서 첫 입장 때 멈춘 시간 11.8초 → 0.8초.</li><li><b>마을 첫 45초</b>로스트아크 게임 fps 50 → 59.</li><li><b>셰이더 많은 게임</b>로스트아크처럼 셰이더가 1만 6천 개인 게임도 나눠서 준비합니다. 순간이동 뒤 0.6~1.3초 멈춤이 25초 동안 이어지던 것이 도착할 때 한 번으로 끝나고, 새 지역 처음 몇 분 동안 100 ms 넘는 멈춤은 0번이었습니다.</li><li><b>기본값</b>DXMT 게임에서 기본으로 켜집니다. 게임을 끈 뒤에 준비하므로 플레이 중에는 이 작업이 실행되지 않습니다.</li></ul></details></div>
         <div class="ix-val"><p class="num long">30.5<em>→</em>0.6</p><p>로스트아크 첫 실행 때 셰이더 때문에 멈춘 시간, 초</p></div>
       </article>
       <article class="ix">
@@ -749,7 +765,7 @@ footer p{max-width:60em}
       <article class="eg">
         <p class="num">27<em>→</em>5<small>ns</small></p>
         <div><p class="eyebrow">ARM 번역 엔진</p><h3>Rosetta 없이 도는 ARM 번역을 더 빠르게</h3><p>FEX가 x86 게임 코드를 ARM 명령으로 옮깁니다. Ember는 여기에 미리 번역과 빠른 호출 경로를 더했습니다.</p>
-          <ul class="pts"><li><b>빠른 API 전환</b>시스템 호출 한 번에 27 ns → 5 ns.</li><li><b>짧은 그리기 경로</b>D3D 그리기 호출 0.294 → 0.158 µs.</li><li><b>미리 번역</b><span><span class="bn">Ember Kindle</span><button class="finfo" type="button" data-b="kindle" aria-label="Ember Kindle 설명" aria-expanded="false">i</button> 쉬는 동안 번역해 두어 첫 실행 끊김을 줄입니다.</span></li><li><b>구조</b>x86-64 코드를 ARM64로 번역합니다. 엔진은 게임마다 고를 수 있습니다.</li></ul></div>
+          <ul class="pts"><li><b>빠른 API 전환</b>시스템 호출 한 번에 27 ns → 5 ns.</li><li><b>짧은 그리기 경로</b>D3D 그리기 호출 0.294 → 0.158 µs.</li><li><b>미리 번역</b><span><span class="bn">Ember Kindle</span><button class="finfo" type="button" data-b="kindle" aria-label="Ember Kindle 설명" aria-expanded="false">i</button> 쉬는 동안 번역해 두어 첫 실행 끊김을 줄입니다.</span></li><li><b>번역 저장</b>유니티(모노) 게임이 켤 때마다 처음부터 다시 번역하던 코드를 디스크에 저장해 둡니다. 발헤임 최대 프레임 27.8 → 18.9~20.4 ms로 Rosetta와 같은 수준입니다.</li><li><b>로스트아크</b>5초 구간 최대 프레임 중앙값 38 → 22 ms.</li><li><b>런처</b>에픽게임즈 런처도 FEX에서 로그인 화면까지 뜹니다. 반복 시험 8번 모두 정상. EA app과 GOG GALAXY도 FEX에서 로그인 화면까지 뜨고, GOG GALAXY는 창이 뜨기까지 16초입니다.</li><li><b>스팀 게임 시작</b>스팀 게임이 실행 전 공지 화면에서 멈추던 문제를 고쳤습니다. 위쳐 3에서 16번 중 6번 멈춤 → 23번 중 0번.</li><li><b>안정성</b>스레드가 잠금을 쥔 채 끝나면 게임이 멈추던 문제 등 FEX에서 멈추거나 튕기던 문제 여러 개를 고쳤습니다. 스텔라 블레이드 간헐 화면 멈춤 9판 중 3판 → 7판 중 0판, 팀 포트리스 2 소리 준비 중 멈춤도 해결했습니다.</li><li><b>구조</b>x86-64 코드를 ARM64로 번역합니다. 엔진은 게임마다 고를 수 있습니다.</li></ul></div>
       </article>
       <article class="eg">
         <p class="num">DX9–12</p>
@@ -785,13 +801,13 @@ footer p{max-width:60em}
       <div><dt>화면</dt><dd>게임 화면 번역·설명</dd></div>
       <div><dt>목소리</dt><dd>자연스러운 합성 음성</dd></div>
       <div><dt>듣기</dt><dd>게임 소리 속에서도 “엠버야”를 알아들음</dd></div>
-      <div><dt>문제 해결</dt><dd>원인 확인과 설정 변경</dd></div>
+      <div><dt>문제 해결</dt><dd>실행 기록을 근거로 원인과 조치를 안내하고, 근거가 없으면 확인 방법부터</dd></div>
       <div><dt>대화</dt><dd>“MetalFX도”, “반대로”처럼 이어 말하기</dd></div>
       <div><dt>먼저 알림</dt><dd>fps가 떨어지거나 뜨거워지면 먼저 말함</dd></div>
       <div><dt>왜 끊겨</dt><dd>잰 값으로 원인과 고칠 점을 알려 줌</dd></div>
       <div><dt>가벼움</dt><dd>5초마다 살피는 데 0.3&nbsp;ms</dd></div>
     </dl>
-    <p class="spec" style="margin-top:20px;border-top:0"><span><b>게임 소리 속 부름 32번 중 32번 알아들음</b></span><span>기기 안에서만 처리</span><span>호출어는 macOS 26 이상</span></p>
+    <p class="spec" style="margin-top:20px;border-top:0"><span><b>게임 소리 속 부름 32번 중 32번 알아들음</b></span><span>기기 안에서만 처리</span><span>호출어는 macOS 26 이상</span><span>문제 해결 답변 48문항 자체 채점 5.2 → 8.6점/10</span></p>
   </section>
 
   <!-- ===== 앱 안의 엠버 ===== -->
@@ -799,11 +815,11 @@ footer p{max-width:60em}
     <div class="sec-head">
       <p class="eyebrow">앱 안의 엠버 · 움직이는 배경</p>
       <h2 id="live-title">앱 안에서 움직이는 엠버</h2>
-      <p class="note">아래 영상은 Ember 앱을 그대로 녹화한 것입니다.</p>
+      <p class="note">아래 영상은 Ember 앱을 그대로 녹화한 것입니다. 녹화할 때만 나들이와 탭 이동 간격을 짧게 바꿨습니다.</p>
     </div>
     <div class="live">
       <figure class="vid">
-        <video muted loop playsinline preload="none" poster="assets/media/app-mascot-walk.webp" width="1120" height="782" aria-label="Ember 홈 화면에서 3D 엠버가 사이드바 아래 집을 나와 게임 카드 쪽으로 걸어가는 녹화">
+        <video muted loop playsinline preload="none" poster="assets/media/app-mascot-walk.webp" width="1120" height="782" aria-label="Ember 홈 화면에서 3D 엠버가 맨 위 게임 그림 위를 걸어 다니는 녹화">
           <source src="assets/media/app-mascot-walk.mp4" type="video/mp4"><source src="assets/media/app-mascot-walk.webm" type="video/webm">
         </video>
         <button class="play" type="button" hidden>재생</button>
@@ -834,13 +850,13 @@ footer p{max-width:60em}
     <div class="sec-head">
       <p class="eyebrow">앱 둘러보기</p>
       <h2 id="gal-title">많은 기능을 한 앱에 정리했습니다</h2>
-      <p class="note">게임, 설정, 문제 해결, 엠버가 모두 한 앱에 있습니다. 기능이 많아도 세부 설정은 접어 두어 화면이 복잡하지 않습니다.</p>
+      <p class="note">게임, 설정, 문제 해결, 엠버가 모두 한 앱에 있습니다. 기능이 많아도 세부 설정은 접어 두어 화면이 복잡하지 않습니다. 버튼은 주황 유리 캡슐이고, 선택 칸은 고른 쪽으로 물방울처럼 미끄러집니다.</p>
     </div>
     <div class="tour">
       <div class="tabs" role="tablist" aria-label="앱 화면">
         <button role="tab" id="tab-0" aria-controls="pane-0" aria-selected="true"><b>홈</b><span>최근 게임과 맥 상태를 한눈에</span></button>
         <button role="tab" id="tab-1" aria-controls="pane-1" aria-selected="false" tabindex="-1"><b>게임 상세</b><span>엔진과 변환기를 게임마다</span></button>
-        <button role="tab" id="tab-2" aria-controls="pane-2" aria-selected="false" tabindex="-1"><b>실행 옵션</b><span>Ember Flow·저지연·게임 모드</span></button>
+        <button role="tab" id="tab-2" aria-controls="pane-2" aria-selected="false" tabindex="-1"><b>실행 옵션</b><span>화면·Ember Flow 묶음</span></button>
         <button role="tab" id="tab-3" aria-controls="pane-3" aria-selected="false" tabindex="-1"><b>문제 해결</b><span>실시간 성능과 엠버 채팅</span></button>
         <button role="tab" id="tab-4" aria-controls="pane-4" aria-selected="false" tabindex="-1"><b>엠버 말풍선</b><span>듣고, 바꾸고, 알려 줍니다</span></button>
         <button role="tab" id="tab-5" aria-controls="pane-5" aria-selected="false" tabindex="-1"><b>보스 기믹 판</b><span>지금 기믹과 다음 기믹</span></button>
@@ -848,7 +864,7 @@ footer p{max-width:60em}
       <div class="panes">
         <figure role="tabpanel" id="pane-0" aria-labelledby="tab-0"><img src="assets/ui-home.webp" alt="Ember 홈 화면. 최근 실행한 로스트아크, 내 게임 목록, 시스템 상태" loading="lazy" width="1400" height="894"><figcaption>홈 · 최근 게임과 맥 상태를 한눈에</figcaption></figure>
         <figure role="tabpanel" id="pane-1" aria-labelledby="tab-1" hidden><img src="assets/ui-game.webp" alt="로스트아크 게임 화면. 엔진과 그래픽 변환기 선택" loading="lazy" width="1400" height="875"><figcaption>게임 상세 · 엔진과 변환기를 게임마다</figcaption></figure>
-        <figure role="tabpanel" id="pane-2" aria-labelledby="tab-2" hidden><img src="assets/ui-options.webp" alt="실행 옵션. 프레임 상한, 해상도, 화면 확대, Ember Flow, 저지연 모드, 프레임 표시" loading="lazy" width="1400" height="875"><figcaption>실행 옵션 · 프레임 상한, 해상도, 화면 확대, Ember Flow, 저지연</figcaption></figure>
+        <figure role="tabpanel" id="pane-2" aria-labelledby="tab-2" hidden><img src="assets/ui-options.webp" alt="실행 옵션. 화면 묶음의 해상도·화면 확대와 Ember Flow 묶음의 계산 방식·보간 방식" loading="lazy" width="1400" height="875"><figcaption>실행 옵션 · 해상도, 화면 확대, Ember Flow를 묶음별로</figcaption></figure>
         <figure role="tabpanel" id="pane-3" aria-labelledby="tab-3" hidden><img src="assets/ui-troubleshoot.webp" alt="문제 해결 화면. 실시간 성능과 엠버에게 물어보기" loading="lazy" width="1400" height="875"><figcaption>문제 해결 · 실시간 성능과 엠버 채팅</figcaption></figure>
         <figure role="tabpanel" id="pane-4" aria-labelledby="tab-4" class="tall" hidden><img src="assets/ui-coach.webp" alt="게임 위 엠버 말풍선. 듣는 중, 설정 변경 대답, 기믹 알림" loading="lazy" width="900" height="1047"><figcaption>엠버 말풍선 · 듣고, 바꾸고, 알려 줍니다</figcaption></figure>
         <figure role="tabpanel" id="pane-5" aria-labelledby="tab-5" class="wide" hidden><img src="assets/ui-boss.webp" alt="보스 기믹 판. 보스 이름, 체력 줄 수, 지금과 다음 기믹" loading="lazy" width="1200" height="448"><figcaption>보스 기믹 판 · 지금 기믹과 다음 기믹</figcaption></figure>
@@ -861,16 +877,20 @@ footer p{max-width:60em}
 
     <h3 class="sr" id="more-title">그 밖의 기능</h3>
     <dl class="more" aria-labelledby="more-title">
+      <div><dt>Ember Wayfinder</dt><dd>실행이 안 되는 게임의 실행 조합을 차례로 찾아 저장합니다. 게임별로 알려진 시작 옵션과 권장 변환기를 먼저 시도하고, 지원하는 다른 변환기와 엔진을 확인합니다. <details><summary>찾기·저장·되돌리기</summary><p>부가 기능을 끄고, 이미 설치된 보틀에서만 시도합니다. 게임이나 Wine 런처가 실행 중이면 시작하지 않으며, 안티치트 게임은 시도하지 않습니다. 시도가 띄운 게임·런처는 시도 뒤 닫고, 시험 중 바꾼 파일은 복원합니다.</p><p>발헤임·위쳐3에서 실행 성공 판정과 설정 저장·되돌리기를 확인했습니다. 위쳐3의 성공 판정은 D3DMetal 훅·게임 창·CPU 활동의 간접 근거이며, 실제 플레이나 장시간 안정성을 보장하지 않습니다.</p><p>찾은 실행 조합은 ‘이 설정으로 저장’을 눌러야 저장됩니다. 부가 기능은 유지하며, 원하면 함께 켜고 다시 확인할 수 있습니다. 저장한 설정은 ‘설정 되돌리기’로 되돌릴 수 있습니다.</p></details></dd></div>
       <div><dt>Frame Check</dt><dd>같은 장면을 설정만 바꿔 재고, 어느 쪽이 빠른지 숫자로 보여 줍니다.</dd></div>
       <div><dt>셰이더 보관</dt><dd>한 번 만든 셰이더를 보관해 두 번째 실행부터 끊김을 줄입니다.</dd></div>
       <div><dt>빠른 동기화(msync)</dt><dd>윈도우 프로그램의 동기화를 Ember 안에서 직접 처리해 22배 빨라졌습니다.</dd></div>
-      <div><dt>런처 지원</dt><dd>스팀·에픽·배틀넷·STOVE를 Ember 안에서 실행합니다. 스팀 로그인도 그대로 유지됩니다.</dd></div>
+      <div><dt>런처 지원</dt><dd>스팀·에픽·배틀넷·STOVE를 Ember 안에서 실행합니다. 스팀 로그인도 그대로 유지됩니다. EA app·GOG GALAXY는 로그인 화면까지 확인했습니다. 로그인 완료·게임 설치·실행은 별도 확인이 필요합니다. 설치된 게임은 홈에서 찾아 보여 줍니다. FEX 스팀 시작 단계에서 멈추던 문제도 고쳤습니다. 위쳐3 시작 시험에서 멈춤은 16회 중 6회 → 23회 중 0회였습니다(게임 플레이 성공 횟수와는 다릅니다).</dd></div>
+      <div><dt>게임 삭제</dt><dd>플레이 옆 ⋯ 메뉴에서 지웁니다. 스팀·STOVE·배틀넷은 런처의 정식 제거로, 그 밖은 휴지통으로 옮깁니다. 경로와 용량을 먼저 보여 줍니다.</dd></div>
       <div><dt>옛 게임 컷신</dt><dd>AVI 영상 코덱을 넣어 옛 게임의 컷신이 검은 화면으로 나오지 않습니다.</dd></div>
       <div><dt>옛 게임 소리</dt><dd>DirectSound를 쓰는 옛 게임의 소리도 그대로 납니다.</dd></div>
       <div><dt>한글 글꼴</dt><dd>윈도우 프로그램의 한글이 네모로 깨지지 않게 대체 글꼴을 자동으로 맞춥니다.</dd></div>
       <div><dt>호환 환경</dt><dd>Windows 11·10·7과 32비트 레거시 환경을 게임마다 골라 씁니다.</dd></div>
-      <div><dt>게임별 실행 옵션</dt><dd>프레임 상한, 해상도(FHD·QHD·4K), 화면 확대를 게임마다 따로 정합니다.</dd></div>
-      <div><dt>실행 기록</dt><dd>무엇이 잘못됐는지 기록을 바로 보고, 그 기록을 그대로 엠버에게 물어볼 수 있습니다.</dd></div>
+      <div><dt>게임별 실행 옵션</dt><dd>프레임 상한, 해상도(FHD·QHD·4K), 화면 확대를 게임마다 따로 정합니다. 옵션은 화면 · Ember Flow · 프레임·지연 · 화질 다듬기 · 실험 · 고급 묶음으로 나눠 보여 줍니다.</dd></div>
+      <div><dt>실행 기록</dt><dd>무엇이 잘못됐는지 기록을 바로 보고, 그 기록을 그대로 엠버에게 물어볼 수 있습니다. 엠버 AI는 게임과 최근 설정 변경에 맞춰 조치를 제안하고, 적용한 설정은 되돌릴 수 있게 남깁니다.</dd></div>
+      <div><dt>Ember 업데이트</dt><dd>새 버전 확인부터 다운로드·설치까지 자동 업데이트 막대로 진행 상황을 보여 줍니다.</dd></div>
+      <div><dt>문제 로그 보내기</dt><dd>보낼 항목을 고르고 개인 정보를 가린 미리 보기를 확인한 뒤, 동의할 때만 보냅니다. 파일로 저장하면 맥에만 남습니다. <a href="privacy.html">개인정보 처리방침</a>에서 보관·삭제 기준을 확인하세요.</dd></div>
       <div><dt>배터리·발열</dt><dd>배터리 모드는 원할 때만 켭니다. 기본은 성능 우선입니다.</dd></div>
       <div><dt>미리 준비</dt><dd>게임을 안 할 때 Ember Kindle이 번역을, Ember Kiln이 셰이더를 미리 준비해 둡니다.</dd></div>
     </dl>
@@ -952,7 +972,7 @@ document.querySelectorAll('.axis').forEach((ax) => {
   const mk = (g, x, y, w, h, fill) => { const r = document.createElementNS(NS, 'rect'); Object.entries({ x, y, width: w, height: h, rx: 2, fill }).forEach(([k, v]) => r.setAttribute(k, v)); g.appendChild(r); };
   const gr = document.getElementById('cad-real'), go = document.getElementById('cad-out');
   for (let i = 0; i < 10; i++) mk(gr, X(i * 20) + 1, 34, W / 10 - 4, 38, '#ffb547');
-  for (let i = 0; i < 20; i++) mk(go, X(i * 10) + 1, 114, W / 20 - 3, 38, i % 2 ? '#c6ff3d' : '#ffb547');
+  for (let i = 0; i < 20; i++) mk(go, X(i * 10) + 1, 114, W / 20 - 3, 38, i % 2 ? '#ff6a1f' : '#ffb547');
   const scan = document.getElementById('cad-scan');
   if (reduce) scan.remove();
   else { let t0 = performance.now(), on = false; const tick = (t) => { if (!on) return; const ms = ((t - t0) / 12) % 200; scan.setAttribute('x', X(ms)); requestAnimationFrame(tick); };
@@ -1001,14 +1021,14 @@ document.querySelectorAll('.vid').forEach((f) => {
 (() => {
 /* Ember 고유 기능 설명 판 — 앱의 FeatureInfo(EmberBrand.lines)와 같은 글. 수치는 실측만. */
 const D = {
-  flow:   ['Ember Flow','프레임 보간','중간 프레임을 만들어 화면 출력 fps를 최대 두 배로 늘립니다',['게임 프레임이 모자랄 때 프레임 사이를 채웁니다. 화면 프레임이 최대 두 배가 됩니다.','앞뒤 프레임에서 물체가 움직인 길을 GPU가 찾습니다. 그 길을 따라 중간 장면을 새로 그립니다.','로스트아크 QHD 47~54 → 94~107 fps. GPU 시간은 FHD에서 약 1 ms 듭니다.','기본은 꺼짐입니다. 게임 fps가 화면 주사율만큼 나오면 쉬고, 너무 느려지면 잠시 멈춥니다.']],
+  flow:   ['Ember Flow','프레임 보간','중간 프레임을 만들어 화면 출력 fps를 최대 두 배로 늘립니다',['게임 프레임이 모자랄 때 프레임 사이를 채웁니다. 화면 프레임이 최대 두 배가 됩니다.','앞뒤 프레임에서 물체가 움직인 길을 GPU가 찾습니다. 그 길을 따라 중간 장면을 새로 그립니다.','보간 엔진 1.6: 로스트아크(FEX·DXMT) 뉴럴 보간 건너뜀 120초당 76~133회 → 0회. 로스트아크 QHD 47~54 → 94~107 fps. GPU 시간은 FHD에서 약 1 ms 듭니다. 그래픽카드가 꽉 찬 오버워치 QHD도 부드러움 방식에서 60 → 116 fps. 스텔라 블레이드(144Hz) 화면 출력 평균 109.6 → 116.7 fps. 지연은 게임과 장면에 따라 달라집니다.','기본은 꺼짐입니다. 게임 fps가 화면 주사율만큼 나오면 쉬고, 너무 느려지면 잠시 멈춥니다. 멈추면 그 이유를 화면에 보여 줍니다. D3DMetal의 HDR(PQ) 게임은 색을 지키기 위해 원본 프레임을 표시합니다.']],
   forge:  ['Ember Forge','AI 디테일 복원','확대한 화면의 디테일을 더 선명하게 합니다',['MetalFX로 키운 화면의 잔디·글자·가장자리를 다시 또렷하게 합니다.','Ember가 학습한 작은 신경망이 키운 화면을 고쳐 그립니다. 원본 4K에 가깝게 다듬습니다.','원본과의 차이가 MetalFX만 쓸 때보다 33~57% 적습니다. FHD → 4K에서 GPU 1.4 ms를 더 씁니다.','기본은 꺼짐입니다. D3DMetal에서 FHD를 4K로 정확히 두 배 키울 때만 동작합니다.']],
   tone:   ['Ember Tone','AI 화질 다듬기','색과 대비를 자연스럽게 살립니다',['게임 화면의 색과 대비를 자연스럽게 다듬습니다.','게임을 켤 때 신경망이 색 보정표를 한 번 만들어 둡니다. 프레임마다 그 표만 읽습니다.','프레임당 GPU 0.3~0.4 ms(QHD). 원스 휴먼에서 Ember Flow와 같이 켜도 104 fps 그대로였습니다.','기본은 꺼짐입니다. 배터리 모드를 켜 두면 전원 없이 쓸 때 저절로 꺼집니다.']],
-  flare:  ['Ember Flare','AI 자동 HDR','SDR 게임의 밝은 곳을 HDR로 살립니다',['SDR 게임의 해·불꽃 같은 밝은 곳을 HDR 화면에서 더 밝게 보여 줍니다.','작은 신경망이 밝은 곳이 원래 얼마나 밝았을지 추정합니다. 그곳만 밝히고 글자·메뉴는 그대로 둡니다.','프레임당 GPU 1080p 0.3 ms, 4K 0.8 ms입니다.','기본은 꺼짐입니다. HDR을 켠 모니터에서만 동작하고, 게임이 HDR을 직접 켜면 자동 HDR은 꺼집니다.']],
+  flare:  ['Ember Flare','AI 자동 HDR','SDR 게임의 밝은 곳을 HDR로 살립니다',['SDR 게임의 해·불꽃 같은 밝은 곳을 HDR 화면에서 더 밝게 보여 줍니다.','작은 신경망이 밝은 곳이 원래 얼마나 밝았을지 추정합니다. 그곳만 밝히고 글자·메뉴는 그대로 둡니다.','프레임당 GPU 1080p 0.3 ms, 4K 0.8 ms입니다.','기본은 꺼짐입니다. HDR을 켠 모니터에서만 동작하고, 게임이 HDR을 직접 켜면 자동 HDR은 꺼집니다. D3DMetal의 HDR(PQ) 게임은 색을 지키기 위해 보간 대신 원본 프레임을 표시합니다. 위쳐3에서 확인했습니다.']],
   pulse:  ['Ember Pulse','프레임 페이싱','프레임을 화면 주기에 맞춰 고르게 보내고, 지연은 줄입니다',['프레임이 들쭉날쭉 나가서 생기는 끊김과 지연을 줄입니다.','화면이 다음 프레임을 받을 시각을 잽니다. 그 시각에 맞춰 프레임을 넘깁니다.','원스 휴먼에서 25 ms 넘게 끊긴 횟수 55~101번 → 4~10번. 지연은 12.6~15.3 → 4.5~6.4 ms였습니다.','DXMT(D3D11) 게임에서 자동으로 켜집니다. GPU 사용량이 높은 장면에서는 자동으로 꺼집니다.']],
   boost:  ['Ember Boost','게임 모드 부스트','게임은 성능 코어에, 다른 앱은 뒤로 보냅니다',['게임 스레드를 성능 코어에 먼저 올리고, 다른 앱은 뒤로 밉니다.','게임 모드가 켜지면 게임 스레드의 우선순위를 올립니다. Wine 서버도 높은 우선순위로 둡니다.','뒤에서 영상 인코딩이 도는 동안 로스트아크 61.2 → 64.0 fps. 게임이 성능 코어에 머문 비율 81 → 94%.','게임 모드가 켜져 있을 때만 동작합니다. 자동은 직접 재 보고 손해가 없을 때만 켭니다.']],
   kindle: ['Ember Kindle','미리 번역','게임을 켜기 전에 미리 번역해 첫 실행 버벅임을 줄입니다',['처음 켤 때 번역을 기다리느라 생기는 버벅임을 줄입니다.','지난 실행에서 모아 둔 코드 목록으로, 맥이 쉴 때 FEX 번역 캐시를 미리 채웁니다.','로스트아크 웹 화면이 뜨기까지 4.1~4.3초 → 2.3~2.4초. 50 ms 넘게 끊긴 횟수 4번 → 1번.','FEX 엔진 게임에서 저절로 동작합니다. 전원이 연결돼 있을 때만 하고, 게임을 켜면 바로 멈춥니다.']],
-  kiln:   ['Ember Kiln','셰이더 미리 준비','셰이더를 미리 준비해 첫 전투의 끊김을 줄입니다',['게임이 꺼져 있을 때 셰이더를 미리 준비해, 새 장면에서 생기는 끊김을 줄입니다.','게임이 만든 파이프라인 목록을 적어 둡니다. 게임을 끈 뒤 그 목록에 따라 이 맥에서 사용할 GPU 코드를 미리 만듭니다.','셰이더 때문에 멈춘 시간: 로스트아크(FEX) 30.5초 → 0.6초, 원스 휴먼(Rosetta) 11.8초 → 0.8초. 로스트아크 마을 첫 45초 게임 fps 50 → 59.','DXMT 게임에서 기본으로 켜집니다. 게임 중에는 셰이더를 미리 준비하는 작업이 실행되지 않습니다.']],
+  kiln:   ['Ember Kiln','셰이더 미리 준비','셰이더를 미리 준비해 첫 전투의 끊김을 줄입니다',['게임이 꺼져 있을 때 셰이더를 미리 준비해, 새 장면에서 생기는 끊김을 줄입니다.','게임이 만든 파이프라인 목록을 적어 둡니다. 게임을 끈 뒤 그 목록에 따라 이 맥에서 사용할 GPU 코드를 미리 만듭니다.','셰이더 때문에 멈춘 시간: 로스트아크(FEX) 30.5초 → 0.6초, 원스 휴먼(Rosetta) 11.8초 → 0.8초. 로스트아크 마을 첫 45초 게임 fps 50 → 59. 셰이더 1만 6천 개도 나눠 준비해 순간이동 뒤 멈춤이 도착 한 번으로 줄었습니다.','DXMT 게임에서 기본으로 켜집니다. 게임 중에는 셰이더를 미리 준비하는 작업이 실행되지 않습니다.']],
   spark:  ['Ember Spark','입력 지연 줄이기','조작 결과가 화면에 표시될 때까지의 시간을 줄입니다',['조작 결과가 화면에 표시되기까지의 시간을 줄입니다.','게임이 다음 프레임을 너무 일찍 시작하지 않게 잠깐 붙잡습니다. 최근 입력이 프레임에 반영되도록 합니다.','60 fps 상한에서 입력 지연 발헤임 35~39 → 26~28 ms, 리썰 컴퍼니 37~39 → 18~29 ms. fps와 화면 p99는 그대로였습니다.','DXMT 게임에서 기본으로 켜집니다. Ember Flow를 켜면 저절로 꺼집니다.']],
   lens:   ['Ember Lens','화면 안 HUD','fps·지연·보간 상태를 게임 화면 안에 띄웁니다',['fps·지연·보간 상태와 보스 판·말풍선을 게임 화면 안에 보여 줍니다.','따로 창을 띄우지 않고, 게임이 내보내는 마지막 프레임 위에 직접 그립니다.','판 2장에 GPU 0.03~0.06 ms(4K). 따로 띄운 창보다 1.5~1.8 fps 높고 지연은 1.3~1.7 ms 짧습니다.','기본은 게임 화면 안에 그립니다. 그릴 수 없는 게임(D3D12·DXVK 등)에서는 저절로 따로 띄운 창으로 바뀝니다.']],
   guard:  ['Ember Guard','글자·이름표 보호','글자와 이름표가 번지지 않게 지킵니다',['Ember Flow가 만든 중간 장면에서 글자와 이름표가 번지지 않게 지킵니다.','앞뒤 원본의 같은 자리에 날카로운 획이 있으면 원본 그대로 둡니다. 움직임으로 설명할 수 없는 장면은 통째로 원본을 씁니다.','원스 휴먼 8장면 화질(PSNR) 25.0 → 26.3 dB. 로스트아크 워터파크에서 보간을 포기하던 비율 95% → 0%.','Ember Flow를 켜면 늘 같이 켜집니다. 따로 끌 필요가 없습니다.']],
@@ -1121,12 +1141,12 @@ scene.fog = new THREE.FogExp2(0x0b0908, 0.03);
 const camera = new THREE.PerspectiveCamera(32, SZ()[0] / SZ()[1], 0.05, 200);
 scene.add(camera);
 
-/* environment: dark forge, warm and lime panels */
+/* environment: dark forge, orange and gold panels */
 {
   const env = new THREE.Scene(); env.background = new THREE.Color(0x050302);
   const box = (w, h, color, k, pos, rot) => { const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ color: new THREE.Color(color).multiplyScalar(k), side: THREE.DoubleSide })); m.position.set(...pos); if (rot) m.rotation.set(...rot); env.add(m); };
   box(6, 3, 0xff8a3d, 3.2, [-5, 2, 3], [0, Math.PI / 3, 0]);
-  box(2, 6, 0xc6ff3d, 1.6, [5, 1, -3], [0, -Math.PI / 2.5, 0]);
+  box(2, 6, 0xffb547, 1.6, [5, 1, -3], [0, -Math.PI / 2.5, 0]);
   box(8, 2, 0xfff1e0, 1.6, [0, 6, 0], [Math.PI / 2, 0, 0]);
   box(10, 1, 0xff6a1f, 1.2, [0, -3, -5]);
   box(3, 3, 0x9fd8ff, 0.8, [0, 2, -6]);
@@ -1237,7 +1257,7 @@ const pmat = new THREE.ShaderMaterial({
       vec2 dd = (nd - uMouse) * vec2(uAspect, 1.0); float fr = exp(-dot(dd, dd) * 22.0);
       mv.xy += normalize(dd + 1e-4) * fr * 0.05 * -mv.z; gl_Position = projectionMatrix * mv;
       float tint = mix(min(dA.w, 1.0), min(dB.w, 1.0), m);
-      vec3 ember = vec3(1.0, 0.36, 0.08), gold = vec3(1.0, 0.68, 0.28), lime = vec3(0.72, 1.0, 0.18);
+      vec3 ember = vec3(1.0, 0.36, 0.08), gold = vec3(1.0, 0.68, 0.28), lime = vec3(1.0, 0.68, 0.28);
       vec3 c = mix(ember, gold, aSeed.y); c = mix(c, lime, clamp(tint + uLime * step(0.8, aSeed.z), 0.0, 1.0));
       float tw = 0.7 + 0.3 * sin(uTime * (2.0 + aSeed.w * 4.0) + aSeed.x * 60.0);
       vA = mix(aA, aB, m) * tw * uBright * (1.0 + fr * 0.6); vCol = c * (1.35 + fr * 0.8);
@@ -1295,7 +1315,7 @@ function slabTexture([name, kind, big, small], k) {
   g.fillStyle = '#efe6dc'; g.font = '900 ' + (name.length > 5 ? 300 : 340) + 'px "Big Shoulders Display", Impact, sans-serif'; if ('letterSpacing' in g) g.letterSpacing = '6px';
   g.fillText(name, 62, 470); if ('letterSpacing' in g) g.letterSpacing = '0px';
   g.fillStyle = '#d9cbbd'; g.font = '500 58px "IBM Plex Sans KR", sans-serif'; g.fillText(kind, 70, 570);
-  g.fillStyle = k === 0 ? '#c6ff3d' : '#ffb547'; g.font = '900 300px "Big Shoulders Display", Impact, sans-serif'; g.fillText(big, 62, 1110);
+  g.fillStyle = k === 0 ? '#ffb547' : '#ffb547'; g.font = '900 300px "Big Shoulders Display", Impact, sans-serif'; g.fillText(big, 62, 1110);
   g.fillStyle = '#bfb2a6'; g.font = '400 44px "IBM Plex Sans KR", sans-serif'; g.fillText(small, 70, 1210);
   const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; return t;
 }
@@ -1383,7 +1403,7 @@ function loadGlb() {
                 totalEmissiveRadiance += bc * limeMask * uLimeGlow;
                 vec3 gn = nonPerturbedNormal * inversesqrt(max(dot(nonPerturbedNormal, nonPerturbedNormal), 1e-8)); vec3 vd = vViewPosition * inversesqrt(max(dot(vViewPosition, vViewPosition), 1e-8)); float ndv = clamp(abs(dot(gn, vd)), 0.0, 1.0);
                 float rimF = pow(1.0 - ndv, 4.0); float side = smoothstep(0.15, 0.75, gn.x);
-                totalEmissiveRadiance += mix(vec3(1.0, 0.4, 0.12), vec3(0.6, 1.0, 0.2), side) * rimF * 1.1;
+                totalEmissiveRadiance += mix(vec3(1.0, 0.4, 0.12), vec3(1.0, 0.68, 0.28), side) * rimF * 1.1;
                 totalEmissiveRadiance += vec3(1.0, 0.42, 0.1) * smoothstep(0.07, 0.0, dEdge) * 7.0 * step(0.002, uDiss); }`);
         };
         m.needsUpdate = true;
@@ -1552,7 +1572,7 @@ function frame() {
     const fps = frames / acc; if (debugFPS) lensFps.textContent = Math.round(fps); acc = 0; frames = 0;
     if (fps < 50 && t > 3) { if (++slowFor >= 4) { slowFor = 0; if (DPR > 1) { DPR = 1; renderer.setPixelRatio(1); composer.setPixelRatio(1); PU.uPR.value = 1; lastSz = [0, 0]; resize(); Object.assign(ST, { DPR: 1, degraded: 1 }); } else if (!degraded) { degraded = true; ST.degraded = 2; } else if (geo.drawRange.count === Infinity || geo.drawRange.count > N / 2) { geo.setDrawRange(0, Math.floor(N / 2)); ST.degraded = 3; } else if (fps < 20) toFallback('slow'); } } else slowFor = 0;
     if (lg) {
-    lg.clearRect(0, 0, 128, 48); lg.strokeStyle = '#c6ff3d'; lg.lineWidth = 2; lg.beginPath();
+    lg.clearRect(0, 0, 128, 48); lg.strokeStyle = '#ffb547'; lg.lineWidth = 2; lg.beginPath();
     ft.forEach((v, j) => { const x = j * 4, y = 46 - Math.min(44, v / 33.3 * 44); j ? lg.lineTo(x, y) : lg.moveTo(x, y); }); lg.stroke();
     lg.strokeStyle = 'rgba(255,181,71,.35)'; lg.lineWidth = 1; lg.beginPath(); lg.moveTo(0, 46 - 22); lg.lineTo(128, 46 - 22); lg.stroke();
     }
