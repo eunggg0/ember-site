@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b0908">
+<meta name="color-scheme" content="dark">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<link rel="canonical" href="https://eunggg0.github.io/ember-site/en/privacy.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Ember">
+<meta property="og:locale" content="en_US">
+<meta property="og:title" content="Ember Privacy Policy">
+<meta property="og:description" content="Information Ember processes for license and policy checks and optional log submissions, retention periods, hosting and international transfers to Railway (US), on-device processing and your rights.">
+<meta property="og:url" content="https://eunggg0.github.io/ember-site/en/privacy.html">
+<meta property="og:image" content="https://eunggg0.github.io/ember-site/assets/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Ember character and Windows game launcher for Mac. Game compatibility and launch settings.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Ember Privacy Policy">
+<meta name="twitter:description" content="Information Ember processes for license and policy checks and optional log submissions, retention periods, hosting and international transfers to Railway (US), on-device processing and your rights.">
+<meta name="twitter:image" content="https://eunggg0.github.io/ember-site/assets/og.jpg">
+<title>Ember Privacy Policy</title>
+<meta name="description" content="Information Ember processes for license and policy checks and optional log submissions, retention periods, hosting and international transfers to Railway (US), on-device processing and your rights.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Hahmlet:wght@500;700&family=IBM+Plex+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column over a quiet ember-spark backdrop; same tokens as the main page. Single committed dark look. */
+:root{
+  color-scheme:dark;
+  --ink:#0a0706; --ink-2:#14100d; --ash:#efe6dc; --ash-dim:#b2a79c; --ash-faint:#998d82;
+  --ember:#ff6a1f; --gold:#ffb547; --lime:#c6ff3d;
+  --glass:rgba(255,236,220,.05); --line:rgba(255,214,180,.14);
+  --f-display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
+  --f-body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+  --gutter:clamp(16px,5vw,72px);
+  --t-xs:12px; --t-sm:14px; --t-md:16.5px; --t-lg:clamp(21px,2.2vw,27px); --t-xl:clamp(32px,5vw,62px);
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box}
+html{background:var(--ink);scroll-behavior:smooth}
+body{margin:0;background:var(--ink);color:var(--ash);font-family:var(--f-body);font-size:var(--t-md);line-height:1.72;-webkit-font-smoothing:antialiased;overflow-x:hidden;word-break:keep-all;overflow-wrap:break-word}
+a{color:var(--gold);text-underline-offset:3px}
+a:hover{color:var(--ash)}
+:focus-visible{outline:2px solid var(--lime);outline-offset:3px;border-radius:6px}
+h1,h2,h3{margin:0;text-wrap:balance;font-weight:700;letter-spacing:-.01em}
+p{margin:0}
+[hidden]{display:none!important}
+#sparks{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.glow{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(60% 45% at 75% 0%,rgba(255,106,31,.16),transparent 70%),radial-gradient(40% 35% at 0% 100%,rgba(198,255,61,.05),transparent 70%)}
+.nav,main,footer{position:relative;z-index:2}
+.nav{position:sticky;top:0;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px var(--gutter);background:rgba(10,7,6,.96);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ash);font-family:var(--f-display);font-weight:900;font-size:21px;letter-spacing:.14em}
+.brand svg{width:19px;height:25px}
+.nav ul{display:flex;flex-wrap:wrap;gap:2px;list-style:none;margin:0;padding:0}
+.nav li a{display:block;padding:7px 12px;border-radius:999px;font-size:var(--t-sm);text-decoration:none;color:var(--ash-dim)}
+.nav li a:hover{color:var(--ash);background:var(--glass)}
+.nav li a[aria-current="page"]{color:var(--ash);background:rgba(255,181,71,.12)}
+.wrap{padding-inline:var(--gutter)}
+.col{max-width:820px;margin-inline:auto}
+.eyebrow{font-family:var(--f-mono);font-size:var(--t-xs);letter-spacing:.08em;color:var(--gold)}
+.page-head{padding-block:clamp(56px,10vh,110px) 40px}
+.page-head h1{font-size:var(--t-xl);line-height:1.16;margin-top:14px}
+.page-head .lead{margin-top:18px;color:var(--ash-dim);max-width:38em}
+.muted{color:var(--ash-dim)}
+footer{margin-top:80px;padding-block:28px 32px;border-top:1px solid var(--line);background:rgba(10,7,6,.85);display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px 24px;font-size:var(--t-xs);color:var(--ash-faint)}
+footer nav{display:flex;flex-wrap:wrap;gap:6px 18px}
+footer a{color:var(--ash-dim);text-decoration:none}
+footer a:hover{color:var(--ash)}
+@media (max-width:760px){ .nav{flex-wrap:wrap} .nav ul{width:100%;overflow-x:auto;flex-wrap:nowrap;margin-inline:-6px} .nav li a{white-space:nowrap} }
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto} *{animation:none!important;transition:none!important}}
+
+.toc{display:flex;flex-wrap:wrap;gap:8px;margin-top:26px}
+.toc a{display:inline-block;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--glass);color:var(--ash-dim);text-decoration:none;font-size:var(--t-sm)}
+.toc a:hover{color:var(--ash)}
+.sec{padding-block:44px 8px;border-top:1px solid var(--line);scroll-margin-top:80px}
+.sec h2{display:flex;align-items:baseline;gap:14px;font-size:var(--t-lg);line-height:1.35}
+.sec h2 .k{font-family:var(--f-display);font-weight:900;font-size:1.5em;color:var(--gold);min-width:1.4em}
+.sec .txt{margin-top:14px;display:grid;gap:12px;color:var(--ash-dim);max-width:44em}
+.sec .txt strong{color:var(--ash);font-weight:500}
+.tbl{margin-top:18px;overflow-x:auto;border:1px solid var(--line);border-radius:16px;background:rgba(20,16,13,.6);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+table{width:100%;border-collapse:collapse;font-size:var(--t-sm);min-width:560px}
+th,td{text-align:left;vertical-align:top;padding:10px 14px;border-bottom:1px solid var(--line)}
+thead th{font-family:var(--f-mono);font-size:var(--t-xs);font-weight:500;letter-spacing:.04em;color:var(--gold);background:rgba(255,181,71,.05)}
+tbody tr:last-child td{border-bottom:0}
+td b{color:var(--ash);font-weight:500}
+td{color:var(--ash-dim)}
+tr.grp th{font-size:var(--t-xs);color:var(--ash);background:rgba(255,236,220,.04);font-weight:500;letter-spacing:.02em}
+.ob{display:inline-block;padding:2px 8px;border-radius:999px;font-size:11px;font-family:var(--f-mono);white-space:nowrap}
+.ob.src{color:var(--lime);border:1px solid rgba(198,255,61,.35)}
+.ob.ntc{color:var(--ash-dim);border:1px solid var(--line)}
+.legend{margin-top:10px;font-size:var(--t-xs);color:var(--ash-faint)}
+ol.restr{margin:6px 0 0;padding-left:1.4em;display:grid;gap:4px;font-size:var(--t-sm)}
+.callout{margin-top:16px;padding:16px 18px;border-radius:16px;border:1px solid rgba(198,255,61,.25);background:rgba(198,255,61,.04);color:var(--ash-dim);font-size:var(--t-sm)}
+.btn{display:inline-flex;align-items:center;gap:8px;margin-top:6px;padding:10px 16px;border-radius:999px;border:1px solid rgba(198,255,61,.4);color:var(--lime);text-decoration:none;font-size:var(--t-sm);background:rgba(198,255,61,.06);width:max-content}
+
+.sum{margin-top:26px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:10px}
+.sum div{padding:16px 18px;border-radius:16px;background:var(--glass);border:1px solid var(--line)}
+.sum b{display:block;color:var(--ash);font-weight:500}
+.sum span{display:block;margin-top:4px;font-size:var(--t-sm);color:var(--ash-dim)}
+.na{display:inline-block;margin-left:8px;padding:2px 8px;border-radius:999px;font-family:var(--f-mono);font-size:11px;color:var(--ash-dim);border:1px solid var(--line);vertical-align:middle}
+
+
+/* 10-07 siteredesign: 첫 페이지와 같은 제목 서체(Hahmlet) */
+:root{--f-head:"Hahmlet","Noto Serif KR","AppleMyungjo",serif}
+.page-head h1,.chap h2,.sec h2{font-family:var(--f-head);letter-spacing:-.025em}
+
+/* 10-08 ghpages: 누름 자리 44px 이상(휴대폰), 좌우 안전 영역 */
+@media (pointer:coarse){.nav li a{padding-block:12px}footer a,footer nav a{display:inline-flex;align-items:center;min-height:44px}.brand{min-height:44px}}
+:root{--gutter:max(clamp(16px,5vw,72px),env(safe-area-inset-left,0px),env(safe-area-inset-right,0px))}
+
+.tbl.kv table{min-width:0}
+.tbl.kv th[scope="col"]:first-child,.tbl.kv td:first-child{width:8.5em}
+</style>
+<link rel="stylesheet" href="../assets/site-shell.css">
+<script src="../assets/site-shell.js" defer></script>
+
+<link rel="alternate" hreflang="ko" href="https://eunggg0.github.io/ember-site/ko/privacy.html">
+<link rel="alternate" hreflang="en" href="https://eunggg0.github.io/ember-site/en/privacy.html">
+<link rel="alternate" hreflang="ja" href="https://eunggg0.github.io/ember-site/ja/privacy.html">
+<link rel="alternate" hreflang="zh-Hans" href="https://eunggg0.github.io/ember-site/zh-Hans/privacy.html">
+<link rel="alternate" hreflang="zh-Hant" href="https://eunggg0.github.io/ember-site/zh-Hant/privacy.html">
+<link rel="alternate" hreflang="x-default" href="https://eunggg0.github.io/ember-site/privacy.html">
+<script src="../assets/language.js" defer></script>
+</head>
+<body>
+<canvas id="sparks" aria-hidden="true"></canvas><div class="glow" aria-hidden="true"></div>
+<header class="nav">
+  <a class="brand" href="index.html" aria-label="Ember home">
+    <svg viewBox="0 0 100 130" aria-hidden="true"><path fill="url(#fl)" fill-rule="evenodd" d="M50 4C62 30 88 52 88 82C88 108 70 126 50 126C30 126 12 108 12 84C12 64 24 52 32 40C34 54 40 60 46 62C42 44 44 24 50 4ZM50 71a17 17 0 1 0 0.01 0Z"/><defs><linearGradient id="fl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffb547"/><stop offset="1" stop-color="#ff6a1f"/></linearGradient></defs></svg>
+    EMBER
+  </a>
+  <ul>
+    <li><a href="index.html#perf">Performance</a></li>
+    <li><a href="index.html#features">Features</a></li>
+    <li><a href="why.html">Why Ember</a></li>
+    <li><a href="license.html">Licenses</a></li>
+    <li><a href="privacy.html" aria-current="page">Privacy</a></li>
+  </ul>
+</header>
+<main>
+
+<section class="page-head wrap"><div class="col"><span id="en" aria-hidden="true"></span><p class="legal-notice">The Korean original prevails. Translations are for reference only.</p>
+  <p class="eyebrow">Privacy Policy</p>
+  <h1>Ember processes only what it needs</h1>
+  <p class="lead">Ember has no sign-up, ads or analytics. Voice, screen and conversation processing for the Ember assistant stays on your Mac. Only device identification hashes, license information and the app version needed for license and usage policy checks, plus logs you choose and consent to send, leave your Mac. This policy explains what is processed, why, for how long and where.</p>
+  <div class="sum">
+    <div><b>Only what is needed</b><span>Names, emails and payment details are not received by Ember servers. Devices are identified only by hashes, not their original identifiers.</span></div>
+    <div><b>Logs only with consent</b><span>Send Logs shows everything to be sent, redacts personal information and sends only with your consent. Logs are deleted after 30 days.</span></div>
+    <div><b>On your Mac only</b><span>Speech recognition, responses, voice synthesis and screen analysis continue to run entirely on your device.</span></div>
+  </div>
+  <nav class="toc" aria-label="On this page">
+    <a href="#purpose">Purposes &amp; data</a><a href="#local">On-device information</a><a href="#keep">Retention &amp; deletion</a><a href="#third">Third-party disclosure</a><a href="#outsourcing">Processors &amp; international transfers</a>
+    <a href="#network">License server &amp; internet connections</a><a href="#perm">Permissions</a><a href="#rights">Your rights</a><a href="#safety">Security measures</a><a href="#web">This website</a><a href="#officer">Officer &amp; contact</a><a href="#date">Effective date</a>
+  </nav>
+</div></section>
+<div class="wrap"><div class="col">
+
+<section class="sec" id="purpose"><h2><span class="k">1</span>Purposes and categories of personal information processed</h2><div class="txt">
+  <p>The Ember developer processes only the information needed for the features below. This information alone does not reveal your name or contact details, but it may be linked to a license, so it is treated as personal information under this policy.</p>
+</div><div class="tbl "><table><thead><tr><th scope="col">When</th><th scope="col">Information processed</th><th scope="col">Purpose</th></tr></thead><tbody>
+  <tr><td><b>Trial registration</b><br>Automatically on first launch<br><span class="ob ntc">Required</span></td><td>Device identification hash, app version, trial start time</td><td>Calculate the trial period and prevent repeated trials on the same Mac</td></tr>
+  <tr><td><b>License activation &amp; device deactivation</b><br>When you enter a key or deactivate a device<br><span class="ob ntc">Required (licensed use)</span></td><td>License key, device identification hash, app version</td><td>Verify the license, enforce the limit of 2 Macs per key and free deactivated seats</td></tr>
+  <tr><td><b>License refresh</b><br>Every 6 hours<br><span class="ob ntc">Required (licensed use)</span></td><td>License number, device identification hash, app version</td><td>Apply refunds and cancellations; check the update period</td></tr>
+  <tr><td><b>Usage policy check</b><br>At launch and every 30 minutes<br><span class="ob ntc">Required</span></td><td>Device identification hash, license number (if any), app version and build number, first and last check times recorded by the server</td><td>Stop new game launches on affected versions or devices and explain the reason (<a href="#network">section 6</a>)</td></tr>
+  <tr><td><b>Send Logs</b><br>Only when you consent and press Send<br><span class="ob src">Optional</span></td><td>App and Mac details (Ember version and build, Mac model, chip and memory, macOS version, language); records you select (the end of the Ember run log, settings change history, Frame Check results, and exception types and crash locations from reports in the last 14 days); your note; device identification hash; and, for licensed users, license number, plan and the payment platform’s customer number</td><td>Find and fix problems; associate records submitted by the same person</td></tr>
+  <tr><td><b>Purchase</b><br>When you open the checkout page<br><span class="ob ntc">Required (purchase)</span></td><td>Polar handles payments directly as the seller. Payment details such as card information do not reach Ember servers. The Ember developer can view the order number, buyer’s name and email, product, amount and purchase date in Polar’s merchant dashboard, but does not copy or store that information on Ember servers.</td><td>Check orders, process refunds and answer purchase enquiries</td></tr>
+</tbody></table></div><div class="txt">
+  <p><strong>A device identification hash</strong>is the Mac’s hardware UUID combined with an Ember-specific string and transformed using SHA-256. The original UUID is neither sent nor stored. <strong>A license number</strong>is assigned by the server to each license key. A <strong>customer number</strong>is an identifier within the payment platform, not a name or email address.</p>
+  <p>Before logs are sent, Ember automatically redacts usernames, home paths, full names, emails, IP and MAC addresses, token, cookie and password values, license keys and tokens, Steam accounts, display names and SteamID, STOVE member numbers and nicknames, computer names, serial numbers and hardware UUIDs. Automatic redaction may miss items, so review the full preview before sending and deselect anything unwanted. You can also choose Save to File without sending.</p>
+  <p>Ember has no advertising identifiers, usage analytics or automatic crash reporting. Voice, screen and conversations from the Ember assistant are excluded from Send Logs too.</p>
+</div></section>
+
+<section class="sec" id="local"><h2><span class="k">2</span>Information processed only on your Mac</h2><div class="txt"><p>The information below is processed only on your Mac while you use these features and is not sent to the Ember developer. Run logs and measurements are the sole exception, and only when you select and submit them through Send Logs.</p></div><div class="tbl "><table><thead><tr><th scope="col">Information</th><th scope="col">Used for</th><th scope="col">How it is processed</th></tr></thead><tbody><tr><td><b>Microphone audio</b></td><td>Recognizing the Ember assistant wake phrase (“엠버야”) and voice commands</td><td>Processed using on-device speech recognition only. No audio recordings are stored.</td></tr><tr><td><b>Conversations and memories with the Ember assistant</b></td><td>Continue conversations and remember information you provide</td><td>Responses are generated by an on-device model (Apple Foundation Models or a Gemma model you download). Memories are stored only in Ember’s data folder (Coach) and can be deleted at any time.</td></tr><tr><td><b>Game screen</b></td><td>Boss HUD, game screen translation and explanation, stutter diagnostics</td><td>Uses Screen Recording permission to analyze the game window on your Mac, then discards it immediately. It is neither saved nor sent.</td></tr><tr><td><b>Voice synthesis</b></td><td>Read the Ember assistant’s answers aloud</td><td>Synthesized on your Mac.</td></tr><tr><td><b>Run logs, measurements and settings</b></td><td>Troubleshooting, Frame Check performance comparisons and per-game settings</td><td>Stored in Ember’s data folder (Logs, framecheck, etc.). Only items you select and consent to in Send Logs are redacted and sent.</td></tr><tr><td><b>Game and launcher accounts</b></td><td>Signing in to each launcher</td><td>Handled directly by each launcher, such as Steam. Ember does not store or send account information.</td></tr></tbody></table></div></section>
+
+<section class="sec" id="keep"><h2><span class="k">3</span>Retention and deletion</h2><div class="txt"><p>As a rule, information is deleted once its purpose is fulfilled. Server-side retention periods are as follows.</p></div><div class="tbl "><table><thead><tr><th scope="col">Information</th><th scope="col">Retention period</th><th scope="col">Deletion method</th></tr></thead><tbody>
+  <tr><td><b>Submitted logs</b></td><td>30 days from receipt; deleted sooner on request.</td><td>The server deletes expired records hourly (also applies to all rows below).</td></tr>
+  <tr><td><b>Paid license records</b><br>(License key, registered device identification hashes, plan, update deadline, payment platform order and customer numbers)</td><td>While the license is in use. When a license ends (refund, cancellation or expiry), records are deleted 5 years after it ends. Deactivating a device immediately removes its identification hash from this record.</td><td>Deleted from the server database.</td></tr>
+  <tr><td><b>Revocation list</b><br>(License number, refund or deactivation reason)</td><td>5 years from revocation</td><td>〃</td></tr>
+  <tr><td><b>Trial records</b><br>(Device identification hash, trial start time)</td><td>1 year after the last check (trial registration or usage policy check)</td><td>〃</td></tr>
+  <tr><td><b>Usage policy check records</b><br>(Device identification hash, license number, app version and build, first and last check times)</td><td>Only the most recent 1 record per device is retained (overwritten on each check). For devices with neither an active license registration nor a trial record, such as deactivated devices: 1 year after the last check.</td><td>〃</td></tr>
+  <tr><td><b>Suspension flags</b><br>(Target, reason, notice text and time of suspension)</td><td>Deleted immediately when the suspension is lifted. For deactivated devices, retained for 1 year with the check record above; for ended licenses, deleted with that license’s record.</td><td>〃</td></tr>
+  <tr><td><b>Period grants</b><br>(Trial extensions, temporary access or update deadline extensions: target device identification hash or license number, deadline date, reason entered by the administrator)</td><td>Deleted immediately if revoked; otherwise deleted with the target device or license record. The deadline is delivered in a signed response when the app connects to the server.</td><td>〃</td></tr>
+  <tr><td><b>Administration records</b><br>(When and why policies were changed, use was suspended or logs were deleted)</td><td>3 years from the record date</td><td>〃</td></tr>
+  <tr><td><b>Log submission counts</b><br>(Device identification hash or license number, date, count)</td><td>2 days</td><td>〃</td></tr>
+  <tr><td><b>Server access logs</b><br>(Request path, result, processing time; no IP addresses)</td><td>The period set by Railway for the plan (up to 30 days)</td><td>Deleted by Railway when the period expires.</td></tr>
+</tbody></table></div><div class="txt">
+  <p>Information is deleted promptly if you request deletion before the retention period ends. However, license records and revocation lists related to purchases and refunds are retained separately and used only for the statutory 5-year retention of contract, withdrawal and payment records under Korea’s Act on the Consumer Protection in Electronic Commerce, Etc.</p>
+  <p>Electronic records are deleted using methods that prevent recovery. Ember does not maintain separate backup copies of the server database.</p>
+  <p>Conversation memories, run logs, measurements and settings stay only on your Mac until you delete them. Deleting the files or Ember’s data folder removes them immediately. Audio recordings and screen captures are never stored.</p>
+</div></section>
+
+<section class="sec" id="third"><h2><span class="k">4</span>Disclosure of personal information to third parties<span class=na>Not applicable</span></h2><div class="txt"><p>Ember does not provide your personal information to third parties, except where specifically required by law or requested by investigating authorities through legally prescribed procedures.</p></div></section>
+
+<section class="sec" id="outsourcing"><h2><span class="k">5</span>Processing by service providers and international transfers</h2><div class="txt">
+  <p>Ember’s license server runs on Railway’s cloud. Railway is entrusted with server hosting and data storage, which transfers personal information to the United States for storage. This processing and storage are necessary to fulfill the contract with you (providing licenses and trials). The following is disclosed under Korea’s Personal Information Protection Act. Separate consent is obtained each time you send logs.</p>
+</div><div class="tbl kv"><table><thead><tr><th scope="col">Item</th><th scope="col">Details</th></tr></thead><tbody>
+  <tr><td><b>Recipient (processor)</b></td><td>Railway Corporation (United States, 548 Market St PMB 68956, San Francisco, CA 94104) · Contact <a href="mailto:privacy@railway.com">privacy@railway.com</a></td></tr>
+  <tr><td><b>Entrusted tasks</b></td><td>License server hosting and database storage</td></tr>
+  <tr><td><b>Destination country</b></td><td>United States (server region: California)</td></tr>
+  <tr><td><b>Information transferred</b></td><td><a href="#purpose">section 1</a>lists all items sent to the server (device identification hash, license key and number, app version and build, submitted logs and notes, and plan and customer number for licensed users), while <a href="#keep">section 3</a>lists server records.</td></tr>
+  <tr><td><b>Timing and method</b></td><td>Sent over the internet (HTTPS-encrypted connections) on each trial registration, license activation, license refresh or usage policy check, and when you consent to and send logs.</td></tr>
+  <tr><td><b>Purpose and retention period</b></td><td>Server hosting and storage as described above, for the periods in <a href="#keep">section 3</a>; deleted when the processing agreement ends.</td></tr>
+  <tr><td><b>How to decline and the consequences</b></td><td>You can choose not to send logs (Save to File keeps them only on your Mac). License and policy checks are necessary to provide the license and cannot be disabled separately. If you do not agree, you can stop using or delete Ember. To request deletion of information already sent, follow <a href="#rights">section 8</a>to request deletion. You can keep using Ember for 14 days without an internet connection.</td></tr>
+</tbody></table></div><div class="txt">
+  <p>The agreement restricts use of personal information to the entrusted purpose, and Ember monitors its safe management. Changes to the processor or entrusted tasks will be announced in this policy.</p>
+  <p>Polar handles payments on its own checkout page as the Merchant of Record, under Polar’s privacy policy. During activation, refresh and deactivation, the license server sends the license key and device identification hash (activation name) over HTTPS to Polar Software, Inc. (United States; contact <a href="mailto:privacy@polar.sh">privacy@polar.sh</a>) for verification. Polar processes this information for license management under its privacy policy.</p>
+</div></section>
+
+<section class="sec" id="network"><h2><span class="k">6</span>License server and internet connections</h2><div class="txt"><p>Ember connects to the internet only in the cases below. Receiving servers may obtain standard connection information such as IP address, access time and device or app type. Except for Ember’s license server, processing follows each service’s policy.</p></div><div class="tbl "><table><thead><tr><th scope="col">When</th><th scope="col">Destination</th><th scope="col">Data or activity</th></tr></thead><tbody>
+  <tr><td><b>Trial registration, license activation and license refresh (every 6 hours)</b></td><td>Ember license server (Railway, United States)</td><td>Device identification hash, license key or number, app version</td></tr>
+  <tr><td><b>Usage policy checks (at launch and every 30 minutes)</b></td><td>Ember license server (Railway, United States)</td><td>Device identification hash, license number, app version and build number</td></tr>
+  <tr><td><b>Send Logs (only when you consent and press Send)</b></td><td>Ember license server (Railway, United States)</td><td>Exactly the redacted records shown in the preview</td></tr>
+  <tr><td><b>License verification request</b></td><td>License server → Polar</td><td>License key and device identification hash (the app does not connect to Polar directly)</td></tr>
+  <tr><td><b>Download AI models (when you press Download)</b></td><td>Hugging Face</td><td>Gemma, Supertonic and Whisper model files</td></tr><tr><td><b>Install VC++ runtimes</b></td><td>Microsoft</td><td>Runtime installers required by games</td></tr><tr><td><b>Check for Ember runtime updates</b></td><td>GitHub API</td><td>Check whether a new runtime is available</td></tr><tr><td><b>Run launchers and games</b></td><td>Each launcher or game service</td><td>Each service’s own communications (under its privacy policy)</td></tr><tr><td><b>Open a boss guide source link</b></td><td>The linked website (opened in your browser)</td><td>The link you click</td></tr>
+</tbody></table></div><div class="txt">
+  <p><strong>What usage policy checks do.</strong> If a released version has a serious issue, or a device or license is refunded, misused or in breach of the terms, the Ember developer can use a server-signed policy to stop <strong>only new game launches</strong> for that version or device. The app explains why and how to update.</p>
+  <p>This policy <strong>does not delete your data</strong>including games, bottles, saves and settings, does not close games already running, and does not collect information beyond the table above. Offline, the last received signed policy applies; if none was ever received, nothing is blocked.</p>
+  <p><strong>Device management.</strong> One license key works on up to 2 Macs. Deactivating this Mac in the app frees its seat and immediately removes its identification hash from the server’s license record. The device’s policy check record is deleted within the retention period stated in <a href="#keep">section 3</a> .</p>
+</div></section>
+
+<section class="sec" id="perm"><h2><span class="k">7</span>Mac permissions and their uses</h2><div class="txt"><p>macOS asks for permission when you enable the relevant feature. You can revoke it at any time in <strong>System Settings › Privacy &amp; Security</strong>. Revoking permission disables only that feature; it does not affect game launches.</p></div><div class="tbl "><table><thead><tr><th scope="col">Permissions</th><th scope="col">Used for</th><th scope="col">When requested</th></tr></thead><tbody><tr><td><b>Microphone</b></td><td>The “엠버야” wake phrase and voice commands</td><td>Only when Ember assistant voice features are enabled</td></tr><tr><td><b>Speech recognition</b></td><td>Convert speech to text (on your Mac only)</td><td>〃</td></tr><tr><td><b>Screen Recording</b></td><td>Boss HUD, game screen translation and explanation</td><td>Only when the feature is enabled</td></tr><tr><td><b>Local Network</b></td><td>When launchers or games communicate with devices on the same network</td><td>macOS asks on first use</td></tr><tr><td><b>Notifications</b></td><td>Notifications such as Game Mode changes and completed installations</td><td>〃</td></tr></tbody></table></div></section>
+
+<section class="sec" id="rights"><h2><span class="k">8</span>Your rights and how to exercise them</h2><div class="txt">
+  <p>You may at any time ask the Ember developer to let you access, correct or delete your personal information, or stop processing it. You can withdraw consent, including consent to send logs, at any time.</p>
+  <p>Send your request through the <a href="#officer">contact channel</a>below. To help locate your records, include your license key or the <strong>receipt number</strong>shown in the app after sending logs. After verifying your identity, we will act without delay and inform you of the result. A legal representative or authorized agent may also submit a request.</p>
+  <p>If information must be retained by law, or deleting it would prevent us from providing the license, we will explain why. In that case, you can also choose to deactivate the license.</p>
+  <p>You can view and delete records left on your Mac yourself, and revoke permissions at any time.</p>
+</div></section>
+
+<section class="sec" id="safety"><h2><span class="k">9</span>Security measures</h2><div class="txt">
+  <p>Voice, screen and conversations are designed to stay on your Mac. Devices are identified only by hashes, not original identifiers. Communication with the server is encrypted with HTTPS; licenses and usage policies are applied only after their digital signatures are verified.</p>
+  <p>Personal information in logs is redacted on your Mac before sending. The server keeps the received logs compressed and deletes them after 30 days. Server access logs do not record IP addresses. Administration requires the Ember developer’s signing key, and administrative actions are logged.</p>
+  <p>Downloaded AI models are checked against fixed versions and file hashes before use. The Ember assistant’s advanced response engine listens only on this Mac (127.0.0.1) and cannot be accessed externally.</p>
+</div></section>
+
+<section class="sec" id="web"><h2><span class="k">10</span>This website</h2><div class="txt"><p>This website does not use cookies or analytics.</p><p>To display pages, it loads fonts from Google Fonts and scripts from jsDelivr, which sends standard connection information to those servers. The hosting service may also keep standard access logs. Each service’s policy applies.</p></div></section>
+
+<section class="sec" id="officer"><h2><span class="k">11</span>Privacy officer and contact</h2><div class="txt">
+  <p>Privacy officer: Eunghyun Kim (developer) · Contact <a href="mailto:realnoma@naver.com" data-link="contact">realnoma@naver.com</a></p>
+  <p>Use the contact above for privacy questions, access, correction, deletion or processing suspension requests, and complaints.</p>
+  <p>For advice or remedies concerning privacy infringements, you may contact these Korean authorities: Personal Information Dispute Mediation Committee, 1833-6972 (www.kopico.go.kr); Privacy Infringement Report Center, 118 (privacy.kisa.or.kr); Supreme Prosecutors’ Office, 1301 (www.spo.go.kr); National Police Agency, 182 (ecrm.police.go.kr).</p>
+</div><a class="btn" href="mailto:realnoma@naver.com" data-link="contact">Contact us</a></section>
+
+<section class="sec" id="date"><h2><span class="k">12</span>Effective date and changes</h2><div class="txt"><p>This policy takes effect on <span data-effective-date="privacyEffective">2026-10-20</span>. Changes will be announced on this page and in the app at least 7 days before taking effect; important changes to your rights will be announced at least 30 days in advance.</p><p>Previous policy: <a href="privacy-2026-10-01.html">Policy effective 2026-10-1</a></p></div></section>
+
+</div></div>
+</main>
+<footer class="wrap">
+  <p>Ember is an independent project, unaffiliated with Apple, Microsoft or any game publisher. Game names and images belong to their respective rights holders.</p>
+  <nav aria-label="Footer"><a href="index.html">Ember</a><a href="why.html">Why Ember</a><a href="license.html">Licenses &amp; Notices</a><a href="terms.html" data-link="terms">Terms of Use</a><a href="privacy.html">Privacy Policy</a></nav>
+</footer>
+<script>
+(() => {
+  const c = document.getElementById('sparks'); const g = c.getContext('2d');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let W, H, dpr, P = [];
+  function size() {
+    dpr = Math.min(devicePixelRatio || 1, 1.5); W = innerWidth; H = innerHeight; c.width = W * dpr; c.height = H * dpr; g.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const n = Math.round(Math.min(120, W * H / 14000)); P = Array.from({ length: n }, () => spawn(true));
+  }
+  function spawn(any) { return { x: Math.random() * W, y: any ? Math.random() * H : H + 10, r: 0.6 + Math.random() * 1.8, v: 8 + Math.random() * 26, s: Math.random() * 6.28, lime: Math.random() < 0.08, a: 0.25 + Math.random() * 0.6 }; }
+  let last = performance.now();
+  function draw(now) {
+    const dt = Math.min(0.05, (now - last) / 1000); last = now;
+    g.clearRect(0, 0, W, H); g.globalCompositeOperation = 'lighter';
+    for (const p of P) {
+      if (!reduce) { p.y -= p.v * dt; p.s += dt; p.x += Math.sin(p.s * 0.8) * 6 * dt; if (p.y < -10) Object.assign(p, spawn(false)); }
+      const fade = Math.min(1, p.y / (H * 0.35));
+      const col = p.lime ? '198,255,61' : (p.r > 1.6 ? '255,181,71' : '255,106,31');
+      const grd = g.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 5);
+      grd.addColorStop(0, `rgba(${col},${p.a * fade})`); grd.addColorStop(1, `rgba(${col},0)`);
+      g.fillStyle = grd; g.beginPath(); g.arc(p.x, p.y, p.r * 5, 0, 6.283); g.fill();
+    }
+    if (!reduce) requestAnimationFrame(draw);
+  }
+  size(); addEventListener('resize', () => { size(); if (reduce) draw(performance.now()); });
+  requestAnimationFrame(draw);
+})();
+</script>
+<script>
+/* 링크·값은 assets/site-config.json 한곳에서 읽는다 (출시 때 실제 주소로 교체). 못 읽으면 HTML 기본값을 그대로 둔다. */
+fetch('../assets/site-config.json').then((r) => { if (!r.ok) throw new Error('config'); return r.json(); }).then((c) => {
+  document.querySelectorAll('[data-link]').forEach((a) => { const v = c[a.dataset.link]; if (v) a.setAttribute('href', v.replace('https://eunggg0.github.io/ember-site/', './')); });
+  document.querySelectorAll('[data-cfg]').forEach((el) => { const v = c[el.dataset.cfg]; if (v) el.textContent = v; });
+}).catch(() => {});
+</script>
+</body>
+</html>

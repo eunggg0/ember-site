@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b0908">
+<meta name="color-scheme" content="dark">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<link rel="canonical" href="https://eunggg0.github.io/ember-site/ja/privacy.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Ember">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:title" content="Ember プライバシーポリシー">
+<meta property="og:description" content="ライセンス・利用ポリシーの確認や同意に基づくログ送信で Ember が扱う情報、保存期間、Railway（米国）への委託・国外移転、Mac 内だけで扱う情報、利用者の権利について説明します。">
+<meta property="og:url" content="https://eunggg0.github.io/ember-site/ja/privacy.html">
+<meta property="og:image" content="https://eunggg0.github.io/ember-site/assets/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="EmberのキャラクターとMac用Windowsゲームランチャー。ゲームの互換性と起動設定。">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Ember プライバシーポリシー">
+<meta name="twitter:description" content="ライセンス・利用ポリシーの確認や同意に基づくログ送信で Ember が扱う情報、保存期間、Railway（米国）への委託・国外移転、Mac 内だけで扱う情報、利用者の権利について説明します。">
+<meta name="twitter:image" content="https://eunggg0.github.io/ember-site/assets/og.jpg">
+<title>Ember プライバシーポリシー</title>
+<meta name="description" content="ライセンス・利用ポリシーの確認や同意に基づくログ送信で Ember が扱う情報、保存期間、Railway（米国）への委託・国外移転、Mac 内だけで扱う情報、利用者の権利について説明します。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Hahmlet:wght@500;700&family=IBM+Plex+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column over a quiet ember-spark backdrop; same tokens as the main page. Single committed dark look. */
+:root{
+  color-scheme:dark;
+  --ink:#0a0706; --ink-2:#14100d; --ash:#efe6dc; --ash-dim:#b2a79c; --ash-faint:#998d82;
+  --ember:#ff6a1f; --gold:#ffb547; --lime:#c6ff3d;
+  --glass:rgba(255,236,220,.05); --line:rgba(255,214,180,.14);
+  --f-display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
+  --f-body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+  --gutter:clamp(16px,5vw,72px);
+  --t-xs:12px; --t-sm:14px; --t-md:16.5px; --t-lg:clamp(21px,2.2vw,27px); --t-xl:clamp(32px,5vw,62px);
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box}
+html{background:var(--ink);scroll-behavior:smooth}
+body{margin:0;background:var(--ink);color:var(--ash);font-family:var(--f-body);font-size:var(--t-md);line-height:1.72;-webkit-font-smoothing:antialiased;overflow-x:hidden;word-break:keep-all;overflow-wrap:break-word}
+a{color:var(--gold);text-underline-offset:3px}
+a:hover{color:var(--ash)}
+:focus-visible{outline:2px solid var(--lime);outline-offset:3px;border-radius:6px}
+h1,h2,h3{margin:0;text-wrap:balance;font-weight:700;letter-spacing:-.01em}
+p{margin:0}
+[hidden]{display:none!important}
+#sparks{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.glow{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(60% 45% at 75% 0%,rgba(255,106,31,.16),transparent 70%),radial-gradient(40% 35% at 0% 100%,rgba(198,255,61,.05),transparent 70%)}
+.nav,main,footer{position:relative;z-index:2}
+.nav{position:sticky;top:0;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px var(--gutter);background:rgba(10,7,6,.96);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ash);font-family:var(--f-display);font-weight:900;font-size:21px;letter-spacing:.14em}
+.brand svg{width:19px;height:25px}
+.nav ul{display:flex;flex-wrap:wrap;gap:2px;list-style:none;margin:0;padding:0}
+.nav li a{display:block;padding:7px 12px;border-radius:999px;font-size:var(--t-sm);text-decoration:none;color:var(--ash-dim)}
+.nav li a:hover{color:var(--ash);background:var(--glass)}
+.nav li a[aria-current="page"]{color:var(--ash);background:rgba(255,181,71,.12)}
+.wrap{padding-inline:var(--gutter)}
+.col{max-width:820px;margin-inline:auto}
+.eyebrow{font-family:var(--f-mono);font-size:var(--t-xs);letter-spacing:.08em;color:var(--gold)}
+.page-head{padding-block:clamp(56px,10vh,110px) 40px}
+.page-head h1{font-size:var(--t-xl);line-height:1.16;margin-top:14px}
+.page-head .lead{margin-top:18px;color:var(--ash-dim);max-width:38em}
+.muted{color:var(--ash-dim)}
+footer{margin-top:80px;padding-block:28px 32px;border-top:1px solid var(--line);background:rgba(10,7,6,.85);display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px 24px;font-size:var(--t-xs);color:var(--ash-faint)}
+footer nav{display:flex;flex-wrap:wrap;gap:6px 18px}
+footer a{color:var(--ash-dim);text-decoration:none}
+footer a:hover{color:var(--ash)}
+@media (max-width:760px){ .nav{flex-wrap:wrap} .nav ul{width:100%;overflow-x:auto;flex-wrap:nowrap;margin-inline:-6px} .nav li a{white-space:nowrap} }
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto} *{animation:none!important;transition:none!important}}
+
+.toc{display:flex;flex-wrap:wrap;gap:8px;margin-top:26px}
+.toc a{display:inline-block;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--glass);color:var(--ash-dim);text-decoration:none;font-size:var(--t-sm)}
+.toc a:hover{color:var(--ash)}
+.sec{padding-block:44px 8px;border-top:1px solid var(--line);scroll-margin-top:80px}
+.sec h2{display:flex;align-items:baseline;gap:14px;font-size:var(--t-lg);line-height:1.35}
+.sec h2 .k{font-family:var(--f-display);font-weight:900;font-size:1.5em;color:var(--gold);min-width:1.4em}
+.sec .txt{margin-top:14px;display:grid;gap:12px;color:var(--ash-dim);max-width:44em}
+.sec .txt strong{color:var(--ash);font-weight:500}
+.tbl{margin-top:18px;overflow-x:auto;border:1px solid var(--line);border-radius:16px;background:rgba(20,16,13,.6);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+table{width:100%;border-collapse:collapse;font-size:var(--t-sm);min-width:560px}
+th,td{text-align:left;vertical-align:top;padding:10px 14px;border-bottom:1px solid var(--line)}
+thead th{font-family:var(--f-mono);font-size:var(--t-xs);font-weight:500;letter-spacing:.04em;color:var(--gold);background:rgba(255,181,71,.05)}
+tbody tr:last-child td{border-bottom:0}
+td b{color:var(--ash);font-weight:500}
+td{color:var(--ash-dim)}
+tr.grp th{font-size:var(--t-xs);color:var(--ash);background:rgba(255,236,220,.04);font-weight:500;letter-spacing:.02em}
+.ob{display:inline-block;padding:2px 8px;border-radius:999px;font-size:11px;font-family:var(--f-mono);white-space:nowrap}
+.ob.src{color:var(--lime);border:1px solid rgba(198,255,61,.35)}
+.ob.ntc{color:var(--ash-dim);border:1px solid var(--line)}
+.legend{margin-top:10px;font-size:var(--t-xs);color:var(--ash-faint)}
+ol.restr{margin:6px 0 0;padding-left:1.4em;display:grid;gap:4px;font-size:var(--t-sm)}
+.callout{margin-top:16px;padding:16px 18px;border-radius:16px;border:1px solid rgba(198,255,61,.25);background:rgba(198,255,61,.04);color:var(--ash-dim);font-size:var(--t-sm)}
+.btn{display:inline-flex;align-items:center;gap:8px;margin-top:6px;padding:10px 16px;border-radius:999px;border:1px solid rgba(198,255,61,.4);color:var(--lime);text-decoration:none;font-size:var(--t-sm);background:rgba(198,255,61,.06);width:max-content}
+
+.sum{margin-top:26px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:10px}
+.sum div{padding:16px 18px;border-radius:16px;background:var(--glass);border:1px solid var(--line)}
+.sum b{display:block;color:var(--ash);font-weight:500}
+.sum span{display:block;margin-top:4px;font-size:var(--t-sm);color:var(--ash-dim)}
+.na{display:inline-block;margin-left:8px;padding:2px 8px;border-radius:999px;font-family:var(--f-mono);font-size:11px;color:var(--ash-dim);border:1px solid var(--line);vertical-align:middle}
+
+
+/* 10-07 siteredesign: 첫 페이지와 같은 제목 서체(Hahmlet) */
+:root{--f-head:"Hahmlet","Noto Serif KR","AppleMyungjo",serif}
+.page-head h1,.chap h2,.sec h2{font-family:var(--f-head);letter-spacing:-.025em}
+
+/* 10-08 ghpages: 누름 자리 44px 이상(휴대폰), 좌우 안전 영역 */
+@media (pointer:coarse){.nav li a{padding-block:12px}footer a,footer nav a{display:inline-flex;align-items:center;min-height:44px}.brand{min-height:44px}}
+:root{--gutter:max(clamp(16px,5vw,72px),env(safe-area-inset-left,0px),env(safe-area-inset-right,0px))}
+
+.tbl.kv table{min-width:0}
+.tbl.kv th[scope="col"]:first-child,.tbl.kv td:first-child{width:8.5em}
+</style>
+<link rel="stylesheet" href="../assets/site-shell.css">
+<script src="../assets/site-shell.js" defer></script>
+
+<link rel="alternate" hreflang="ko" href="https://eunggg0.github.io/ember-site/ko/privacy.html">
+<link rel="alternate" hreflang="en" href="https://eunggg0.github.io/ember-site/en/privacy.html">
+<link rel="alternate" hreflang="ja" href="https://eunggg0.github.io/ember-site/ja/privacy.html">
+<link rel="alternate" hreflang="zh-Hans" href="https://eunggg0.github.io/ember-site/zh-Hans/privacy.html">
+<link rel="alternate" hreflang="zh-Hant" href="https://eunggg0.github.io/ember-site/zh-Hant/privacy.html">
+<link rel="alternate" hreflang="x-default" href="https://eunggg0.github.io/ember-site/privacy.html">
+<script src="../assets/language.js" defer></script>
+</head>
+<body>
+<canvas id="sparks" aria-hidden="true"></canvas><div class="glow" aria-hidden="true"></div>
+<header class="nav">
+  <a class="brand" href="index.html" aria-label="Ember ホームへ">
+    <svg viewBox="0 0 100 130" aria-hidden="true"><path fill="url(#fl)" fill-rule="evenodd" d="M50 4C62 30 88 52 88 82C88 108 70 126 50 126C30 126 12 108 12 84C12 64 24 52 32 40C34 54 40 60 46 62C42 44 44 24 50 4ZM50 71a17 17 0 1 0 0.01 0Z"/><defs><linearGradient id="fl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffb547"/><stop offset="1" stop-color="#ff6a1f"/></linearGradient></defs></svg>
+    EMBER
+  </a>
+  <ul>
+    <li><a href="index.html#perf">性能</a></li>
+    <li><a href="index.html#features">機能</a></li>
+    <li><a href="why.html">開発の理由</a></li>
+    <li><a href="license.html">ライセンス</a></li>
+    <li><a href="privacy.html" aria-current="page">プライバシー</a></li>
+  </ul>
+</header>
+<main>
+
+<section class="page-head wrap"><div class="col"><span id="en" aria-hidden="true"></span><p class="legal-notice">韓国語の原文が優先されます。翻訳は参考用です。</p>
+  <p class="eyebrow">プライバシーポリシー</p>
+  <h1>Ember が扱うのは必要な情報だけです</h1>
+  <p class="lead">Ember には会員登録、広告、アクセス解析がありません。Ember AI の音声・画面・会話の処理は、これまでどおりすべて Mac 内で行います。Mac の外に送るのは、ライセンスと利用ポリシーの確認に使う機器識別ハッシュ・ライセンス情報・アプリのバージョンと、利用者が同意して自ら送信したログだけです。何を、なぜ、どのくらいの期間、どこで扱うかを以下に説明します。</p>
+  <div class="sum">
+    <div><b>必要な情報だけ</b><span>氏名・メールアドレス・決済情報は Ember サーバーで受け取りません。機器は元の識別子ではなく、ハッシュだけで区別します。</span></div>
+    <div><b>ログは同意があるときだけ</b><span>「ログを送信」は送信内容をすべて表示し、個人情報を伏せたうえで、利用者が同意した場合にだけ送ります。30日後に削除します。</span></div>
+    <div><b>Mac の中だけで</b><span>音声認識、回答、音声合成、画面解析は、これまでどおりすべて機器内で処理します。</span></div>
+  </div>
+  <nav class="toc" aria-label="このページの目次">
+    <a href="#purpose">目的・項目</a><a href="#local">Mac 内で扱う情報</a><a href="#keep">保存・削除</a><a href="#third">第三者への提供</a><a href="#outsourcing">委託・国外移転</a>
+    <a href="#network">ライセンスサーバー・インターネット接続</a><a href="#perm">権限</a><a href="#rights">利用者の権利</a><a href="#safety">安全対策</a><a href="#web">このウェブサイト</a><a href="#officer">責任者・お問い合わせ</a><a href="#date">施行日</a>
+  </nav>
+</div></section>
+<div class="wrap"><div class="col">
+
+<section class="sec" id="purpose"><h2><span class="k">1</span>個人情報を扱う目的と項目</h2><div class="txt">
+  <p>Ember 開発者は、以下の機能に必要な情報だけを扱います。この情報だけでは氏名や連絡先は分かりませんが、ライセンスと結び付く可能性があるため、個人情報として本方針に従って扱います。</p>
+</div><div class="tbl "><table><thead><tr><th scope="col">タイミング</th><th scope="col">扱う項目</th><th scope="col">目的</th></tr></thead><tbody>
+  <tr><td><b>体験版の登録</b><br>初回起動時に自動で実施<br><span class="ob ntc">必須</span></td><td>機器識別ハッシュ、アプリのバージョン、体験開始時刻</td><td>体験期間の計算、同じ Mac での繰り返し利用の防止</td></tr>
+  <tr><td><b>ライセンス登録・機器の登録解除</b><br>キーを入力するとき、または登録を解除するとき<br><span class="ob ntc">必須（正規版）</span></td><td>ライセンスキー、機器識別ハッシュ、アプリのバージョン</td><td>正規ライセンスの確認、キー一つにつき Mac 2台の制限、登録解除した枠の解放</td></tr>
+  <tr><td><b>ライセンスの再確認</b><br>6時間ごと<br><span class="ob ntc">必須（正規版）</span></td><td>ライセンス番号、機器識別ハッシュ、アプリのバージョン</td><td>返金・取消の反映、更新期間の確認</td></tr>
+  <tr><td><b>利用ポリシーの確認</b><br>起動時と30分ごと<br><span class="ob ntc">必須</span></td><td>機器識別ハッシュ、ライセンス番号（ある場合）、アプリのバージョン・ビルド番号、サーバーが記録する初回・最終確認時刻</td><td>問題のあるバージョンや機器の新たなゲーム起動を停止し、案内を表示（<a href="#network">第6項</a>)</td></tr>
+  <tr><td><b>ログを送信</b><br>同意して「送信」を押したときだけ<br><span class="ob src">任意</span></td><td>アプリ・Mac の情報（Ember のバージョン・ビルド、Mac の機種・チップ・メモリ、macOS のバージョン、言語）、利用者が選んだ記録（Ember 実行ログの末尾、設定変更の記録、Frame Check の結果、直近14日間のクラッシュレポートの例外種別と停止位置）、利用者のメモ、機器識別ハッシュ、正規版ではライセンス番号・プランと決済プラットフォームの顧客番号</td><td>問題の原因調査・修正、同じ送信者の記録の関連付け</td></tr>
+  <tr><td><b>購入</b><br>決済ページを開いたとき<br><span class="ob ntc">必須（購入時）</span></td><td>決済は販売者である Polar が直接処理し、カードなどの決済情報は Ember サーバーに届きません。Ember 開発者は Polar の販売者向け管理画面で注文番号、購入者の氏名・メールアドレス、商品・金額・購入日を確認できますが、それらを Ember サーバーへ移して保存することはありません。</td><td>注文確認、返金、購入に関する問い合わせへの対応</td></tr>
+</tbody></table></div><div class="txt">
+  <p><strong>機器識別ハッシュ</strong>は、Mac のハードウェア UUID に Ember 固有の文字列を加え、SHA-256 で変換した値です。元の UUID は送信も保存もしません。 <strong>ライセンス番号</strong>は、サーバーがライセンスキーごとに割り当てる番号です。 <strong>顧客番号</strong>は決済プラットフォーム内の番号で、氏名やメールアドレスではありません。</p>
+  <p>ログ送信時には、ユーザー名・ホームパス・フルネーム、メールアドレス、IP・MAC アドレス、トークン・Cookie・パスワード類の値、ライセンスキーとトークン、Steam のアカウント・表示名・SteamID、STOVE の会員番号・ニックネーム、コンピュータ名・シリアル番号・ハードウェア UUID を自動で伏せます。自動処理には漏れが生じる場合があるため、送信前にプレビュー全体を確認し、不要な項目は外してください。送信せずに「ファイルに保存」だけを選ぶこともできます。</p>
+  <p>Ember には広告識別子、利用統計、エラーレポートの自動送信はありません。Ember AI の音声・画面・会話は「ログを送信」にも含まれません。</p>
+</div></section>
+
+<section class="sec" id="local"><h2><span class="k">2</span>Mac 内だけで扱う情報</h2><div class="txt"><p>以下の情報は機能の利用中に Mac 内だけで処理され、Ember 開発者に送られません。ただし、利用者が「ログを送信」で実行ログや測定記録を自ら選び、送信する場合に限り例外となります。</p></div><div class="tbl "><table><thead><tr><th scope="col">情報</th><th scope="col">用途</th><th scope="col">処理方法</th></tr></thead><tbody><tr><td><b>マイクの音声</b></td><td>Ember AI の呼びかけ（「엠버야」）と音声コマンドの認識</td><td>Mac 内の音声認識だけで処理します。録音ファイルは保存しません。</td></tr><tr><td><b>Ember AI との会話・記憶</b></td><td>会話の継続、利用者が伝えた内容の記憶</td><td>回答は Mac 内のモデル（Apple Foundation Models または利用者がダウンロードした Gemma）が生成します。記憶は Ember データフォルダ（Coach）だけに保存され、いつでも削除できます。</td></tr><tr><td><b>ゲーム画面</b></td><td>ボス HUD、ゲーム画面の翻訳・説明、カクつきの原因表示</td><td>画面収録の権限でゲームウィンドウを Mac 内で解析し、すぐに破棄します。保存も送信もしません。</td></tr><tr><td><b>音声合成</b></td><td>Ember AI の回答の読み上げ</td><td>Mac 内で合成します。</td></tr><tr><td><b>実行ログ・測定記録・設定</b></td><td>問題解決、Frame Check による性能比較、ゲームごとの設定の記憶</td><td>Ember データフォルダ（Logs、framecheck など）に保存します。「ログを送信」で利用者が選択し、同意したものだけ、情報を伏せて送信します。</td></tr><tr><td><b>ゲーム・ランチャーのアカウント</b></td><td>各ランチャーへのログイン</td><td>Steam など各ランチャーが直接扱います。Ember はアカウント情報を保存・送信しません。</td></tr></tbody></table></div></section>
+
+<section class="sec" id="keep"><h2><span class="k">3</span>保存期間と削除</h2><div class="txt"><p>目的を達成したら速やかに削除するのが原則です。サーバーで保存する情報の保存期間は次のとおりです。</p></div><div class="tbl "><table><thead><tr><th scope="col">情報</th><th scope="col">保存期間</th><th scope="col">削除方法</th></tr></thead><tbody>
+  <tr><td><b>受信したログ</b></td><td>受信日から30日間。それ以前でも請求があれば速やかに削除します。</td><td>サーバーが毎時間、期限を過ぎた記録を削除します（以下のすべての行も同様）。</td></tr>
+  <tr><td><b>正規ライセンスの記録</b><br>（ライセンスキー、登録した機器識別ハッシュ、プラン、更新期限、決済プラットフォームの注文・顧客番号）</td><td>ライセンスの利用中は保存します。返金・取消・失効により終了した場合は、終了日から5年後に削除します。機器の登録を解除すると、この記録からその機器の識別ハッシュを直ちに削除します。</td><td>サーバーのデータベースから削除します。</td></tr>
+  <tr><td><b>取消リスト</b><br>（ライセンス番号、返金・無効化の理由）</td><td>取消日から5年間</td><td>〃</td></tr>
+  <tr><td><b>体験版の記録</b><br>（機器識別ハッシュ、体験開始時刻）</td><td>最後の確認（体験版の登録または利用ポリシーの確認）から1年間</td><td>〃</td></tr>
+  <tr><td><b>利用ポリシー確認の記録</b><br>（機器識別ハッシュ、ライセンス番号、アプリのバージョン・ビルド、初回・最終確認時刻）</td><td>機器ごとに最新の1件だけを残し、確認のたびに上書きします。正規ライセンス登録も体験版の記録もない機器（登録解除した機器など）は、最終確認から1年間です。</td><td>〃</td></tr>
+  <tr><td><b>利用停止の設定</b><br>（停止対象、理由、案内文、時刻）</td><td>停止を解除したら直ちに削除します。登録解除した機器は上記の確認記録とともに1年間保存し、終了したライセンスはそのライセンス記録とともに削除します。</td><td>〃</td></tr>
+  <tr><td><b>利用期間の付与</b><br>（体験期間の延長・一時利用・更新期限の延長：対象機器の識別ハッシュまたはライセンス番号、期限日、管理者が記した理由）</td><td>付与を取り消したら直ちに削除し、それ以外は対象機器・ライセンスの記録とともに削除します。期限はアプリがサーバーへ接続するときに、署名済みの応答で伝えます。</td><td>〃</td></tr>
+  <tr><td><b>管理記録</b><br>（ポリシー変更・利用停止・ログ削除を行った日時と理由）</td><td>記録日から3年間</td><td>〃</td></tr>
+  <tr><td><b>ログ送信回数の記録</b><br>（機器識別ハッシュ・ライセンス番号、日付、回数）</td><td>2日間</td><td>〃</td></tr>
+  <tr><td><b>サーバーのアクセス記録</b><br>（リクエスト先、結果、処理時間。IP アドレスは記録しません）</td><td>Railway がプランごとに定める期間（最長30日）</td><td>期間を過ぎると Railway が削除します。</td></tr>
+</tbody></table></div><div class="txt">
+  <p>保存期間前でも、削除を請求すれば速やかに削除します。ただし、購入・返金に関わるライセンス記録と取消リストは、韓国の「電子商取引等における消費者保護に関する法律」が定める契約・申込みの撤回、代金決済の記録の保存期間（5年）に合わせて分離して保存し、その目的に限って使用します。</p>
+  <p>電子ファイルの情報は、復元できない方法で削除します。Ember はサーバーデータベースのバックアップを別途作成しません。</p>
+  <p>会話の記憶、実行ログ、測定記録、設定は、利用者が削除するまで Mac 内だけに残ります。該当ファイルや Ember データフォルダを削除すると、すぐに消えます。録音ファイルや画面キャプチャは最初から保存しません。</p>
+</div></section>
+
+<section class="sec" id="third"><h2><span class="k">4</span>個人情報の第三者提供<span class=na>該当なし</span></h2><div class="txt"><p>Ember は利用者の個人情報を第三者に提供しません。法令に特別な定めがある場合、または捜査機関から法令の手続きに従って求められた場合のみ例外とします。</p></div></section>
+
+<section class="sec" id="outsourcing"><h2><span class="k">5</span>個人情報の取扱いの委託と国外移転</h2><div class="txt">
+  <p>Ember ライセンスサーバーは Railway のクラウドで稼働します。サーバー運営とデータ保存を Railway に委託するため、個人情報は米国へ移転して保存されます。これは利用者との契約（ライセンス・体験版の提供）の履行に必要な委託・保存であり、韓国の個人情報保護法に従って以下をお知らせします。ログは送信のたびに別途同意を得ます。</p>
+</div><div class="tbl kv"><table><thead><tr><th scope="col">項目</th><th scope="col">内容</th></tr></thead><tbody>
+  <tr><td><b>移転先（委託先）</b></td><td>Railway Corporation（米国、548 Market St PMB 68956, San Francisco, CA 94104）・連絡先 <a href="mailto:privacy@railway.com">privacy@railway.com</a></td></tr>
+  <tr><td><b>委託する業務</b></td><td>ライセンスサーバーの運営（ホスティング）、データベースの保存</td></tr>
+  <tr><td><b>移転先の国</b></td><td>米国（サーバー地域：カリフォルニア）</td></tr>
+  <tr><td><b>移転する項目</b></td><td><a href="#purpose">第1項</a>でサーバーに送るすべての項目（機器識別ハッシュ、ライセンスキー・番号、アプリのバージョン・ビルド、受信したログとメモ、正規版ではプラン・顧客番号）、および <a href="#keep">第3項</a>のサーバー記録</td></tr>
+  <tr><td><b>移転の時期と方法</b></td><td>体験版の登録・ライセンス登録・ライセンスの再確認・利用ポリシーの確認のたびに、また利用者がログ送信に同意して送るときに、インターネット（HTTPS 暗号化接続）で送信します。</td></tr>
+  <tr><td><b>利用目的と保存期間</b></td><td>上記のサーバー運営・保存。 <a href="#keep">第3項</a>の期間中保存し、委託契約が終了したら削除します。</td></tr>
+  <tr><td><b>拒否の方法とその影響</b></td><td>ログは送信しなければ構いません（「ファイルに保存」では Mac 内だけに残ります）。ライセンスと利用ポリシーの確認はライセンスの提供に必要なため、個別には無効にできません。望まない場合は Ember の利用をやめるか削除できます。すでに送信した情報は、 <a href="#rights">第8項</a>に従って削除を請求できます。インターネットが切れても14日間はそのまま使用できます。</td></tr>
+</tbody></table></div><div class="txt">
+  <p>委託契約では、個人情報を委託目的以外に使うことを禁じ、Ember が安全に管理されているかを確認します。委託先や業務が変わる場合は本方針でお知らせします。</p>
+  <p>決済は販売者（Merchant of Record）である Polar が自社の決済ページで直接処理し、その情報には Polar のプライバシーポリシーが適用されます。ライセンス登録・再確認・登録解除の際、ライセンスサーバーは正規ライセンスの確認のため、ライセンスキーと機器識別ハッシュ（アクティベーション名）を Polar Software, Inc.（米国、お問い合わせ <a href="mailto:privacy@polar.sh">privacy@polar.sh</a>）へ HTTPS で送信して照会します。Polar はライセンス管理のため、自社のプライバシーポリシーに従ってこの情報を扱います。</p>
+</div></section>
+
+<section class="sec" id="network"><h2><span class="k">6</span>ライセンスサーバーとインターネット接続</h2><div class="txt"><p>Ember がインターネットへ接続するのは以下の場合だけです。接続先サーバーには IP アドレス、接続時刻、機器・アプリの種類などの一般的な接続情報が伝わることがあります。Ember ライセンスサーバー以外での取扱いは、各サービスの方針に従います。</p></div><div class="tbl "><table><thead><tr><th scope="col">タイミング</th><th scope="col">接続先</th><th scope="col">内容</th></tr></thead><tbody>
+  <tr><td><b>体験版の登録・ライセンス登録・ライセンスの再確認（6時間ごと）</b></td><td>Ember ライセンスサーバー（Railway、米国）</td><td>機器識別ハッシュ、ライセンスキーまたは番号、アプリのバージョン</td></tr>
+  <tr><td><b>利用ポリシーの確認（起動時と30分ごと）</b></td><td>Ember ライセンスサーバー（Railway、米国）</td><td>機器識別ハッシュ、ライセンス番号、アプリのバージョン・ビルド番号</td></tr>
+  <tr><td><b>ログを送信（同意して押したときだけ）</b></td><td>Ember ライセンスサーバー（Railway、米国）</td><td>プレビューに表示した、情報を伏せた記録そのもの</td></tr>
+  <tr><td><b>正規ライセンスの照会</b></td><td>ライセンスサーバー → Polar</td><td>ライセンスキー、機器識別ハッシュ（アプリは Polar へ直接接続しません）</td></tr>
+  <tr><td><b>AI モデルのダウンロード（「ダウンロード」を押したとき）</b></td><td>Hugging Face</td><td>Gemma、Supertonic、Whisper のモデルファイル</td></tr><tr><td><b>VC++ ランタイムのインストール</b></td><td>Microsoft</td><td>ゲームに必要なランタイムのインストーラ</td></tr><tr><td><b>Ember ランタイムの更新確認</b></td><td>GitHub API</td><td>新しいランタイムの有無を確認</td></tr><tr><td><b>ランチャー・ゲームの実行</b></td><td>各ランチャー・ゲームのサービス</td><td>各サービス自体の通信（そのサービスのプライバシーポリシーに従います）</td></tr><tr><td><b>ボスガイドの出典リンクを開く</b></td><td>リンク先のウェブサイト（ブラウザで開きます）</td><td>利用者が押したリンク</td></tr>
+</tbody></table></div><div class="txt">
+  <p><strong>利用ポリシーの確認で行うこと。</strong> 配布済みのバージョンに重大な問題がある場合や、特定の機器・ライセンスに返金・不正利用・規約違反がある場合、Ember 開発者はサーバーで署名した利用ポリシーにより、そのバージョンまたは機器で <strong>新たなゲームの起動だけを</strong> 停止できます。アプリは理由と更新方法を案内します。</p>
+  <p>このポリシーは、ゲーム、ボトル、セーブデータ、設定などの利用者データを <strong>削除せず</strong>、実行中のゲームも終了せず、上の表にない情報も収集しません。オフラインでは最後に受け取った署名済みポリシーに従い、一度も受け取っていなければ何も制限しません。</p>
+  <p><strong>機器の管理。</strong> ライセンスキー一つで Mac 2台まで使用できます。アプリでこの Mac の登録を解除すると枠が空き、サーバーのライセンス記録からその機器の識別ハッシュが直ちに消えます。機器の利用ポリシー確認記録は、 <a href="#keep">第3項</a> の保存期間に従って削除します。</p>
+</div></section>
+
+<section class="sec" id="perm"><h2><span class="k">7</span>Mac の権限と用途</h2><div class="txt"><p>権限は該当機能を有効にするときに macOS が確認します。 <strong>システム設定 › プライバシーとセキュリティ</strong>でいつでも無効にできます。無効にするとその機能だけが使えなくなり、ゲームの起動には影響しません。</p></div><div class="tbl "><table><thead><tr><th scope="col">権限</th><th scope="col">用途</th><th scope="col">確認するタイミング</th></tr></thead><tbody><tr><td><b>マイク</b></td><td>「엠버야」の呼びかけと音声コマンド</td><td>Ember AI の音声機能を有効にしたときだけ</td></tr><tr><td><b>音声認識</b></td><td>音声の文字起こし（Mac 内だけ）</td><td>〃</td></tr><tr><td><b>画面収録</b></td><td>ボス HUD、ゲーム画面の翻訳・説明</td><td>該当機能を有効にしたときだけ</td></tr><tr><td><b>ローカルネットワーク</b></td><td>ランチャー・ゲームが同じネットワーク上の機器と通信するとき</td><td>初回に macOS が確認</td></tr><tr><td><b>通知</b></td><td>ゲームモードの切り替えやインストール完了などの通知</td><td>〃</td></tr></tbody></table></div></section>
+
+<section class="sec" id="rights"><h2><span class="k">8</span>利用者の権利と行使方法</h2><div class="txt">
+  <p>利用者はいつでも、Ember 開発者が保有する自身の個人情報の開示・訂正・削除・取扱いの停止を請求できます。ログ送信などの同意も、いつでも撤回できます。</p>
+  <p>下記の <a href="#officer">お問い合わせ窓口</a>へご連絡ください。記録を特定できるよう、ライセンスキー、またはログ送信後にアプリで表示された <strong>受付番号</strong>を添えてください。本人確認後、遅滞なく対応し、結果をお知らせします。法定代理人や委任を受けた人も請求できます。</p>
+  <p>法令上保存が必要な情報や、削除するとライセンスを提供できなくなる情報については、その理由を説明します。その場合、ライセンスの解除をあわせて選ぶこともできます。</p>
+  <p>Mac 内に残る記録は、ご自身で確認・削除でき、権限もいつでも取り消せます。</p>
+</div></section>
+
+<section class="sec" id="safety"><h2><span class="k">9</span>安全性を確保するための措置</h2><div class="txt">
+  <p>音声・画面・会話を Mac の外へ送らない構造です。機器は元の識別子ではなくハッシュだけで区別します。アプリとサーバー間の通信は HTTPS で暗号化し、サーバーからのライセンスと利用ポリシーは電子署名を確認した後にだけ適用します。</p>
+  <p>ログは送信前に Mac 内で個人情報を伏せ、サーバーは受信した圧縮状態のまま保存し、30日後に削除します。サーバーのアクセス記録に IP アドレスは残しません。管理機能は Ember 開発者の署名キーがなければ使えず、管理操作は記録します。</p>
+  <p>ダウンロードする AI モデルは、指定のバージョンとファイルハッシュを確認してから使用します。Ember AI の高度な回答エンジンは、この Mac 内（127.0.0.1）だけで待ち受け、外部からは接続できません。</p>
+</div></section>
+
+<section class="sec" id="web"><h2><span class="k">10</span>このウェブサイト</h2><div class="txt"><p>このウェブサイトは Cookie やアクセス解析を使用しません。</p><p>ページ表示のため、Google Fonts からフォントを、jsDelivr からスクリプトを読み込み、その際に各サーバーへ一般的な接続情報が伝わります。ホスティングサービスも一般的なアクセス記録を残す場合があり、各サービスの方針に従います。</p></div></section>
+
+<section class="sec" id="officer"><h2><span class="k">11</span>個人情報保護責任者とお問い合わせ</h2><div class="txt">
+  <p>個人情報保護責任者：Eunghyun Kim（開発者）・連絡先 <a href="mailto:realnoma@naver.com" data-link="contact">realnoma@naver.com</a></p>
+  <p>個人情報の取扱いに関する質問、開示・訂正・削除・取扱い停止の請求、苦情は、上記の窓口で受け付けます。</p>
+  <p>個人情報の侵害に関する相談や救済が必要な場合は、韓国の以下の機関へ問い合わせることができます。個人情報紛争調停委員会 1833-6972（www.kopico.go.kr）、個人情報侵害申告センター 118（privacy.kisa.or.kr）、大検察庁 1301（www.spo.go.kr）、警察庁 182（ecrm.police.go.kr）。</p>
+</div><a class="btn" href="mailto:realnoma@naver.com" data-link="contact">お問い合わせ</a></section>
+
+<section class="sec" id="date"><h2><span class="k">12</span>施行日と変更</h2><div class="txt"><p>本方針は <span data-effective-date="privacyEffective">2026年10月20日</span>から施行します。変更時は施行の7日前までにこのページとアプリでお知らせし、利用者の権利に関わる重要な変更は30日前までにお知らせします。</p><p>以前の方針： <a href="privacy-2026-10-01.html">2026年10月1日施行版</a></p></div></section>
+
+</div></div>
+</main>
+<footer class="wrap">
+  <p>Ember は Apple、Microsoft、各ゲーム会社とは関係のない独立したプロジェクトです。ゲーム名や画面の権利は、それぞれの権利者に帰属します。</p>
+  <nav aria-label="フッター"><a href="index.html">Ember</a><a href="why.html">開発の理由</a><a href="license.html">ライセンスと告知</a><a href="terms.html" data-link="terms">利用規約</a><a href="privacy.html">プライバシーポリシー</a></nav>
+</footer>
+<script>
+(() => {
+  const c = document.getElementById('sparks'); const g = c.getContext('2d');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let W, H, dpr, P = [];
+  function size() {
+    dpr = Math.min(devicePixelRatio || 1, 1.5); W = innerWidth; H = innerHeight; c.width = W * dpr; c.height = H * dpr; g.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const n = Math.round(Math.min(120, W * H / 14000)); P = Array.from({ length: n }, () => spawn(true));
+  }
+  function spawn(any) { return { x: Math.random() * W, y: any ? Math.random() * H : H + 10, r: 0.6 + Math.random() * 1.8, v: 8 + Math.random() * 26, s: Math.random() * 6.28, lime: Math.random() < 0.08, a: 0.25 + Math.random() * 0.6 }; }
+  let last = performance.now();
+  function draw(now) {
+    const dt = Math.min(0.05, (now - last) / 1000); last = now;
+    g.clearRect(0, 0, W, H); g.globalCompositeOperation = 'lighter';
+    for (const p of P) {
+      if (!reduce) { p.y -= p.v * dt; p.s += dt; p.x += Math.sin(p.s * 0.8) * 6 * dt; if (p.y < -10) Object.assign(p, spawn(false)); }
+      const fade = Math.min(1, p.y / (H * 0.35));
+      const col = p.lime ? '198,255,61' : (p.r > 1.6 ? '255,181,71' : '255,106,31');
+      const grd = g.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 5);
+      grd.addColorStop(0, `rgba(${col},${p.a * fade})`); grd.addColorStop(1, `rgba(${col},0)`);
+      g.fillStyle = grd; g.beginPath(); g.arc(p.x, p.y, p.r * 5, 0, 6.283); g.fill();
+    }
+    if (!reduce) requestAnimationFrame(draw);
+  }
+  size(); addEventListener('resize', () => { size(); if (reduce) draw(performance.now()); });
+  requestAnimationFrame(draw);
+})();
+</script>
+<script>
+/* 링크·값은 assets/site-config.json 한곳에서 읽는다 (출시 때 실제 주소로 교체). 못 읽으면 HTML 기본값을 그대로 둔다. */
+fetch('../assets/site-config.json').then((r) => { if (!r.ok) throw new Error('config'); return r.json(); }).then((c) => {
+  document.querySelectorAll('[data-link]').forEach((a) => { const v = c[a.dataset.link]; if (v) a.setAttribute('href', v.replace('https://eunggg0.github.io/ember-site/', './')); });
+  document.querySelectorAll('[data-cfg]').forEach((el) => { const v = c[el.dataset.cfg]; if (v) el.textContent = v; });
+}).catch(() => {});
+</script>
+</body>
+</html>

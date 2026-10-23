@@ -1,0 +1,1662 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ember · Windows game launcher for Mac</title>
+<meta name="description" content="Ember, a Windows game launcher for Apple Silicon Macs. See compatibility, launch settings, and known issues from games we have tested.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" id="gf" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Hahmlet:wght@500;700&family=IBM+Plex+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" media="print">
+<script>/* 글꼴 CSS 가 늦어도 첫 화면을 막지 않게: 받는 동안은 대체 글꼴, 오면 바꿔 끼운다 */
+(() => { const l = document.getElementById('gf'); const on = () => { l.media = 'all'; }; if (l.sheet) on(); else l.addEventListener('load', on); })();</script>
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Hahmlet:wght@500;700&family=IBM+Plex+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap"></noscript>
+<style>
+/* Concept: "불 꺼진 대장간". 첫 막은 WebGL 한 장면(거대한 EMBER 글자 앞의 3D 엠버 → 궤도 → 불씨로 타서 흩어짐 → ×2 → 유리 고리),
+   그 아래는 숯빛 지면 위의 편집 지면(넓은 실제 화면 / 측정 장부 / 엔진 색인 / 인용 / 영상 / 앱 둘러보기).
+   주황과 금색으로 화면 출력·보간 프레임·실측을 강조한다. 단일 다크 룩. */
+:root{
+  color-scheme:dark;
+  --ink:#0b0908;          /* 숯 */
+  --ink-2:#14110f;        /* 한 단 높은 면 */
+  --ink-3:#1c1815;        /* 선 위 채움 */
+  --ash:#efe6dc;          /* 본문 */
+  --ash-dim:#b2a79c;      /* 보조 */
+  --ash-faint:#857a70;    /* 캡션 (숯 위 4.6:1) */
+  --ember:#ff6a1f;        /* 불씨 주황 */
+  --gold:#ffb547;         /* 불씨 금 */
+  --lime:#ffb547;         /* Ember가 더한 것 */
+  --line:rgba(255,214,180,.13);
+  --line-2:rgba(255,214,180,.24);
+  --f-display:"Big Shoulders Display","Arial Narrow","Helvetica Neue Condensed",Impact,sans-serif;
+  --f-head:"Hahmlet","Noto Serif KR","AppleMyungjo",serif;
+  --f-body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+  --gutter:max(clamp(16px,5vw,80px),env(safe-area-inset-left,0px),env(safe-area-inset-right,0px));
+  --t-xs:12px; --t-sm:14px; --t-md:17px; --t-lg:clamp(21px,2.1vw,28px); --t-xl:clamp(32px,4.6vw,64px); --t-num:clamp(52px,7vw,112px);
+}
+*{box-sizing:border-box}
+html{background:var(--ink);scroll-behavior:smooth}
+body{margin:0;background:var(--ink);color:var(--ash);font-family:var(--f-body);font-size:var(--t-md);line-height:1.68;-webkit-font-smoothing:antialiased;overflow-x:hidden;word-break:keep-all;overflow-wrap:break-word}
+img,video{max-width:100%;display:block}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--lime);outline-offset:3px;border-radius:4px}
+h1,h2,h3{margin:0;text-wrap:balance;font-weight:700}
+p,ul,ol,dl,figure{margin:0}
+ul,ol{padding:0;list-style:none}
+[hidden]{display:none!important}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.wrap{padding-inline:var(--gutter)}
+.eyebrow{font-family:var(--f-mono);font-size:var(--t-xs);letter-spacing:.1em;text-transform:uppercase;color:var(--gold)}
+.eyebrow.lime{color:var(--lime)}
+.h-serif{font-family:var(--f-head);font-weight:700;letter-spacing:-.02em;line-height:1.22}
+.mono{font-family:var(--f-mono)}
+.num{font-family:var(--f-display);font-weight:900;font-variant-numeric:tabular-nums;letter-spacing:.005em;line-height:.86}
+
+/* ---------- stage (WebGL) ---------- */
+/* iOS: 주소창이 접혔다 펴져도 무대 크기가 안 바뀌게 큰 뷰포트(lvh) 높이로 고정 — 다시 그리기·튐 없음 */
+#stage{position:fixed;top:0;left:0;width:100%;height:100vh;height:100lvh;z-index:0;display:block;background:var(--ink);touch-action:pan-y}
+#stage-fallback{position:fixed;inset:0;z-index:0;display:grid;place-items:end center;background:var(--ink);overflow:hidden}
+#stage-fallback .fw{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--f-display);font-weight:900;font-size:29vw;letter-spacing:.04em;color:#2a211b;line-height:1}
+#stage-fallback img{position:relative;height:84vh;width:auto;max-width:90vw;object-fit:contain}
+.grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.035;mix-blend-mode:overlay;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+main{position:relative;z-index:2}
+
+/* ---------- nav ---------- */
+.nav{position:fixed;z-index:20;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:calc(16px + env(safe-area-inset-top,0px)) var(--gutter) 16px;transition:background .3s,border-color .3s;border-bottom:1px solid transparent}
+.nav:not(.solid){background:linear-gradient(180deg,rgba(11,9,8,.92),rgba(11,9,8,.6) 70%,rgba(11,9,8,0))}
+.nav.solid{background:rgba(11,9,8,.92);border-bottom-color:var(--line)}
+.brand{display:flex;align-items:center;gap:10px;min-height:44px;text-decoration:none;font-family:var(--f-display);font-weight:900;font-size:22px;letter-spacing:.16em}
+.brand svg{width:18px;height:24px}
+.nav ul{display:flex;gap:22px}
+.nav li a{font-size:var(--t-sm);text-decoration:none;color:var(--ash-dim);transition:color .2s}
+.nav li a:hover{color:var(--ash)}
+.get{display:inline-flex;align-items:center;justify-content:center;min-height:44px;gap:8px;transition:background .18s ease;padding:9px 16px;border-radius:6px;font-size:var(--t-sm);font-weight:700;text-decoration:none;color:#170b04;background:var(--gold);white-space:nowrap}
+.get:hover{background:#ffc66e}
+.get svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.get.lg{padding:16px 26px;font-size:18px;border-radius:8px}
+
+/* frame meter (Ember Lens 흉내 — 이 페이지의 실제 fps) */
+.lens{position:fixed;z-index:20;right:var(--gutter);bottom:calc(16px + env(safe-area-inset-bottom,0px));display:grid;grid-template-columns:auto auto;gap:2px 10px;padding:8px 10px;font-family:var(--f-mono);font-size:11px;line-height:1.3;color:var(--ash-dim);background:rgba(11,9,8,.7);border:1px solid var(--line);border-radius:6px;font-variant-numeric:tabular-nums;transition:opacity .3s}
+.lens b{color:var(--lime);font-weight:500}
+.lens canvas{grid-row:1/3;width:64px;height:24px}
+.lens.off{opacity:0;pointer-events:none}
+
+/* ---------- act 1 (3D) ---------- */
+.act{position:relative;height:880vh}
+.stop{position:absolute;left:0;width:1px;height:1px;pointer-events:none}
+.hero{position:relative;height:100vh;height:100svh;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:24px 48px;padding-block:0 clamp(28px,6vh,64px)}
+.hero-copy{max-width:min(31em,calc(50vw - 18vh - var(--gutter) - 16px));display:grid;gap:14px}
+.hero h1{font-family:var(--f-head);font-weight:700;font-size:min(clamp(28px,3vw,44px),calc((50vw - 18vh - var(--gutter) - 16px) / 11.8));line-height:1.24;letter-spacing:-.025em;text-shadow:0 2px 24px rgba(11,9,8,.9)}
+.hero h1 em{font-style:normal;color:var(--gold)}
+.hero .lead{color:var(--ash-dim);max-width:30em;text-shadow:0 1px 14px rgba(11,9,8,.95)}
+.hero-row{display:flex;flex-wrap:wrap;align-items:center;gap:12px 18px;margin-top:6px}
+.hero-meta{font-family:var(--f-mono);font-size:var(--t-xs);color:var(--ash-dim)}
+.hero-proof{max-width:calc(50vw - 18vh - var(--gutter) - 16px);display:grid;gap:6px;justify-items:end;text-align:right;font-family:var(--f-mono);font-size:var(--t-xs);color:var(--ash-dim);text-shadow:0 1px 12px rgba(11,9,8,.95)}
+.hero-proof .num{font-size:min(clamp(34px,3.6vw,54px),calc((50vw - 18vh - var(--gutter) - 16px) / 7.4));color:var(--ash);white-space:nowrap}
+.hero-proof .num span{color:var(--ash-faint)}
+.hero-proof .num i{font-style:normal;color:var(--gold)}
+.hint{display:flex;align-items:center;gap:10px;margin-top:10px;color:var(--ash-faint);letter-spacing:.12em}
+.hint span{display:block;width:1px;height:34px;background:var(--gold);transform-origin:top;animation:drip 2.4s ease-in-out infinite}
+@keyframes drip{0%{transform:scaleY(0)}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+.cap{position:absolute;top:var(--t);left:var(--gutter);max-width:min(25em,44vw);display:grid;gap:12px;text-shadow:0 2px 20px rgba(11,9,8,.95),0 0 2px rgba(11,9,8,.8)}
+.cap.r{left:auto;right:var(--gutter)}
+.cap h2{font-family:var(--f-head);font-size:var(--t-lg);line-height:1.34;letter-spacing:-.02em}
+.cap p{color:var(--ash-dim)}
+.cap .bnums{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px;font-family:var(--f-mono);font-size:var(--t-sm);color:var(--ash)}
+.cap .bnums .nw{white-space:nowrap}
+.cap .bnums b{font-family:var(--f-display);font-weight:900;font-size:40px;line-height:1;color:var(--gold);font-variant-numeric:tabular-nums}
+.ring-hold{position:absolute;left:0;right:0;top:520vh;height:280vh}
+.ring-cap{position:sticky;top:calc(100vh - 40px);top:calc(100svh - 40px - env(safe-area-inset-bottom,0px));transform:translateY(-100%);padding-inline:var(--gutter);display:grid;gap:10px;max-width:calc(min(28em,40vw) + 2*var(--gutter));text-shadow:0 2px 20px rgba(11,9,8,.95)}
+.ring-cap h2{font-family:var(--f-head);font-size:var(--t-lg);line-height:1.34}
+.ring-cap p{color:var(--ash-dim);font-size:var(--t-sm)}
+
+/* ---------- manifesto ---------- */
+.mani{position:relative;height:230vh;background:var(--ink)}
+/* 3D 장면 → 숯 바탕: 경계선 대신 길게 어두워지며 넘어간다 */
+.mani::before{content:"";position:absolute;left:0;right:0;bottom:100%;height:60vh;pointer-events:none;background:linear-gradient(180deg,rgba(11,9,8,0),rgba(11,9,8,.35) 35%,rgba(11,9,8,.8) 70%,var(--ink))}
+.mani-in{position:sticky;top:0;min-height:100vh;min-height:100svh;display:grid;align-content:center;gap:clamp(24px,5vh,48px);padding-block:96px 64px}
+.mani .slogan{font-family:var(--f-display);font-weight:900;font-size:clamp(54px,10.5vw,172px);line-height:.84;letter-spacing:.005em;text-transform:uppercase}
+.mani .slogan span{display:block}
+.mani .slogan span:last-child{color:var(--gold)}
+.mani .prose{max-width:34em;margin-left:auto;font-family:var(--f-head);font-weight:500;font-size:clamp(20px,2vw,27px);line-height:1.6;letter-spacing:-.015em}
+.mani .prose .w{transition:opacity .35s ease,color .35s ease}
+.mani.js .prose .w{opacity:.16}
+.mani.js .prose .w.on{opacity:1}
+
+/* ---------- editorial ground ---------- */
+.sheet{position:relative;background:var(--ink)}
+.sec{padding-block:clamp(88px,15vh,170px) 0}
+.sec-head{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:16px clamp(24px,5vw,80px);align-items:end}
+.sec-head h2{font-family:var(--f-head);font-size:var(--t-xl);line-height:1.14;letter-spacing:-.03em}
+.sec-head .note{color:var(--ash-dim);font-size:var(--t-sm);max-width:34em}
+.sec-head .eyebrow{grid-column:1/-1}
+.rule{border:0;border-top:1px solid var(--line);margin:0}
+
+/* real screen, full bleed */
+.bleed{position:relative;margin-top:clamp(36px,6vh,64px)}
+.bleed img{width:100%;height:auto;aspect-ratio:16/9;object-fit:cover}
+.bleed .hudzoom{position:absolute;left:var(--gutter);top:clamp(16px,10%,120px);width:min(400px,44vw);background:var(--ink);border:1px solid var(--line-2);padding:6px}
+.bleed .hudzoom img{aspect-ratio:auto;image-rendering:auto}
+.bleed .hudzoom figcaption{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;padding:10px 6px 4px;font-family:var(--f-mono);font-size:var(--t-xs);color:var(--ash-dim);font-variant-numeric:tabular-nums}
+.bleed .hudzoom figcaption b{color:var(--ash);font-weight:500}
+.bleed .hudzoom figcaption .l{color:var(--lime)}
+.bleed-cap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 24px;padding:14px var(--gutter) 0;font-size:var(--t-sm);color:var(--ash-dim)}
+.bleed-cap b{color:var(--ash);font-weight:500}
+.loa-grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(24px,4vw,64px);margin-top:clamp(48px,8vh,96px)}
+.loa-stat .num{font-size:var(--t-num);color:var(--ash);margin-top:14px;white-space:nowrap}
+.loa-stat .num small{font-family:var(--f-mono);font-weight:400;font-size:14px;letter-spacing:.04em;color:var(--ash-dim);margin-left:8px}
+.loa-stat .sub{margin-top:8px;color:var(--ash-dim);font-size:var(--t-sm)}
+.facts{margin-top:28px;display:grid;font-size:var(--t-sm)}
+.facts li{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:11px 0;border-top:1px solid var(--line);color:var(--ash-dim)}
+.facts li b{font-family:var(--f-mono);font-weight:500;color:var(--ash);white-space:nowrap;font-variant-numeric:tabular-nums}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:18px}
+.chips span{font-family:var(--f-mono);font-size:11px;letter-spacing:.04em;padding:3px 8px;border:1px solid var(--line-2);border-radius:4px;color:var(--ash-dim);white-space:nowrap}
+.loa-shots{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(14px,2vw,24px);align-content:start}
+.loa-shots figure:first-child{grid-column:1/-1}
+.loa-shots figure:nth-child(3){margin-top:clamp(0px,6vh,64px)}
+.loa-shots img{width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;background:var(--ink-2)}
+.loa-shots figcaption{padding-top:10px;font-size:var(--t-sm);color:var(--ash-dim);display:grid;gap:2px}
+.loa-shots figcaption b{color:var(--ash);font-weight:500}
+.foot-note{margin-top:28px;font-family:var(--f-mono);font-size:var(--t-xs);color:var(--ash-faint);max-width:72em}
+
+/* ledger */
+.ledger{margin-top:clamp(36px,6vh,64px);border-bottom:1px solid var(--line)}
+.lg-head,.lg-row{display:grid;grid-template-columns:minmax(0,21em) minmax(0,1fr) minmax(0,12em);grid-template-areas:"game axis val";gap:12px clamp(16px,3vw,40px);align-items:center}
+.lg-game,.lg-head>:nth-child(1){grid-area:game}.axis-wrap,.lg-head .ax{grid-area:axis}.lg-val,.lg-head .r{grid-area:val}
+.lg-row.scale{border-top:0;padding-top:0}
+.lg-head{padding-bottom:12px;font-family:var(--f-mono);font-size:var(--t-xs);color:var(--ash-faint)}
+.lg-key{display:flex;flex-wrap:wrap;gap:6px 18px}
+.lg-key span{display:inline-flex;align-items:center;gap:8px}
+.lg-key i{display:inline-block;width:18px;height:6px;border-radius:3px;background:var(--ash-dim)}
+.lg-key i.o{background:var(--ember)}
+.lg-head .r{text-align:right}
+.lg-row{padding-block:18px;border-top:1px solid var(--line);position:relative}
+.lg-row:hover{background:linear-gradient(90deg,transparent,rgba(255,214,180,.035) 20%,rgba(255,214,180,.035) 80%,transparent)}
+.lg-game{display:grid;grid-template-columns:96px minmax(0,1fr);gap:14px;align-items:center}
+.lg-game img{width:96px;height:54px;object-fit:cover;background:var(--ink-2)}
+.lg-game h3{font-size:var(--t-md);font-weight:700;line-height:1.3}
+.lg-game p{font-family:var(--f-mono);font-size:11px;color:var(--ash-faint);line-height:1.5;margin-top:2px}
+.axis{position:relative;height:30px}
+.axis .bar{position:absolute;height:8px;border-radius:4px;background:var(--ash-dim)}
+.axis .bar.o{background:var(--ember)}
+.axis .bar.g{top:4px}.axis .bar.o{top:18px}
+.axis .bar.solo{top:11px}
+.axis .tick{position:absolute;top:-6px;bottom:-6px;width:1px;background:var(--line)}
+.lg-scale{position:relative;height:16px;font-family:var(--f-mono);font-size:11px;color:var(--ash-faint)}
+.lg-scale span{position:absolute;transform:translateX(-50%)}
+.lg-scale span:first-child{transform:none}
+.lg-val{text-align:right;min-width:0}
+.lg-val .num{font-size:clamp(30px,3vw,46px);color:var(--ash);white-space:nowrap;font-variant-numeric:tabular-nums}
+.lg-val .num em{font-style:normal;color:var(--ash-faint);font-size:.6em;margin:0 .1em}
+.lg-val p{font-family:var(--f-mono);font-size:11px;color:var(--ash-faint);margin-top:4px}
+
+/* features */
+.flow{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(28px,5vw,88px);margin-top:clamp(40px,7vh,80px);align-items:start}
+.bname{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px}
+.bname strong{font-family:var(--f-display);font-weight:900;font-size:clamp(46px,6vw,92px);line-height:.86;letter-spacing:.01em;text-transform:uppercase}
+.bname strong span{color:var(--gold)}
+.bname .kind{font-size:var(--t-sm);color:var(--ash-dim)}
+.flow h3{font-family:var(--f-head);font-size:var(--t-lg);line-height:1.34;margin-top:22px;letter-spacing:-.02em}
+.flow .body>p{margin-top:14px;color:var(--ash-dim);max-width:34em}
+.pts{margin-top:20px;display:grid;font-size:var(--t-sm);color:var(--ash-dim)}
+.pts li{display:grid;grid-template-columns:7.4em minmax(0,1fr);gap:12px;padding:10px 0;border-top:1px solid var(--line)}
+.pts li b{color:var(--ash);font-weight:500}
+.cad{margin-top:4px}
+.cad svg{width:100%;height:auto;display:block}
+.cad figcaption{margin-top:10px;font-size:var(--t-sm);color:var(--ash-dim)}
+.cad .spec{margin-top:24px}
+.spec{display:flex;flex-wrap:wrap;gap:8px 20px;padding-top:14px;border-top:1px solid var(--line);font-family:var(--f-mono);font-size:var(--t-xs);color:var(--ash-dim)}
+.spec b{color:var(--lime);font-weight:500}
+
+/* before/after */
+.ba{margin-top:28px}
+.ba-view{--p:50%;position:relative;aspect-ratio:16/9;max-width:100%;overflow:hidden;background:var(--ink-2);touch-action:pan-y}
+.ba-view img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ba-view .ba-b{clip-path:inset(0 0 0 var(--p))}
+.ba-view .ba-line{position:absolute;top:0;bottom:0;left:var(--p);width:2px;margin-left:-1px;background:var(--ash);pointer-events:none}
+.ba-view .ba-line::after{content:"";position:absolute;top:50%;left:50%;width:30px;height:30px;margin:-15px 0 0 -15px;border-radius:50%;background:var(--ink);border:2px solid var(--ash)}
+.ba-view input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:ew-resize}
+.ba-view .lab{position:absolute;top:10px;font-family:var(--f-mono);font-size:11px;padding:4px 8px;background:rgba(11,9,8,.8);color:var(--ash)}
+.ba-view .lab.a{left:10px}.ba-view .lab.b{right:10px;color:var(--lime)}
+.ba-view:has(input:focus-visible){outline:2px solid var(--lime);outline-offset:3px}
+.ba figcaption{margin-top:10px;font-size:var(--t-sm);color:var(--ash-dim)}
+
+.index{margin-top:clamp(56px,10vh,120px);border-bottom:1px solid var(--line)}
+.ix{display:grid;grid-template-columns:minmax(0,15em) minmax(0,1fr) minmax(0,17em);gap:10px clamp(16px,3vw,48px);padding-block:26px;border-top:1px solid var(--line);align-items:start}
+.ix-name strong{display:block;font-family:var(--f-display);font-weight:900;font-size:clamp(34px,3.4vw,52px);line-height:.9;letter-spacing:.01em;text-transform:uppercase}
+.ix-name strong span{color:var(--gold)}
+.ix-name .kind{display:flex;align-items:center;gap:4px;margin-top:8px;font-size:var(--t-sm);color:var(--ash-dim)}
+.ix-text p{color:var(--ash-dim);max-width:36em}
+.ix-text details{margin-top:12px}
+.ix-text summary{display:inline-flex;align-items:center;gap:8px;min-height:44px;cursor:pointer;font-family:var(--f-mono);font-size:var(--t-xs);color:var(--ash-faint);letter-spacing:.06em;list-style:none}
+.ix-text summary::-webkit-details-marker{display:none}
+.ix-text summary::before{content:"+";display:inline-grid;place-items:center;width:16px;height:16px;border:1px solid currentColor;border-radius:3px;font-size:12px;line-height:1}
+.ix-text details[open] summary::before{content:"−"}
+.ix-text summary:hover{color:var(--ash)}
+.ix-text .pts{margin-top:10px}
+.ix-val{text-align:right}
+.ix-val .num{font-size:clamp(30px,3vw,46px);color:var(--ash);white-space:nowrap;font-variant-numeric:tabular-nums}
+.ix-val .num.long{font-size:clamp(24px,2.2vw,34px)}
+.ix-val .num em{font-style:normal;font-size:.55em;color:var(--ash-faint);margin:0 .08em}
+.ix-val p{margin-top:6px;font-size:var(--t-xs);color:var(--ash-faint);line-height:1.5}
+
+/* engine room */
+.engine{margin-top:clamp(56px,10vh,120px);display:grid}
+.eg{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:12px clamp(24px,5vw,80px);padding-block:clamp(28px,5vh,48px);border-top:1px solid var(--line)}
+.eg .num{font-size:var(--t-num);color:var(--ash);white-space:nowrap}
+.eg .num em{font-style:normal;color:var(--ash-faint);font-size:.5em;margin:0 .12em}
+.eg .num small{font-family:var(--f-mono);font-weight:400;font-size:14px;color:var(--ash-dim);margin-left:8px;letter-spacing:.04em}
+.eg h3{font-family:var(--f-head);font-size:var(--t-lg);line-height:1.34}
+.eg p{margin-top:10px;color:var(--ash-dim);max-width:36em}
+.eg .pts{margin-top:14px}
+
+/* ember AI quote */
+.quote{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:clamp(28px,5vw,88px);align-items:end;margin-top:clamp(28px,5vh,48px)}
+.quote blockquote{margin:0;font-family:var(--f-head);font-weight:700;font-size:clamp(34px,5.4vw,84px);line-height:1.16;letter-spacing:-.035em}
+.quote blockquote span{color:var(--lime)}
+.quote .side img{width:100%;max-width:400px;height:auto;margin-left:auto}
+.quote .side figcaption{margin-top:10px;font-size:var(--t-sm);color:var(--ash-dim);text-align:right}
+.ai-lead{margin-top:28px;max-width:34em;color:var(--ash-dim)}
+.caps{margin-top:clamp(36px,6vh,64px);display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--line)}
+.caps div{padding:16px 16px 18px 0;border-bottom:1px solid var(--line)}
+.caps dt{font-weight:700;font-size:var(--t-sm)}
+.caps dd{margin:4px 0 0;color:var(--ash-dim);font-size:var(--t-sm)}
+
+/* living ember */
+#living{max-width:1440px;margin-inline:auto}
+#living .sec-head{grid-template-columns:minmax(0,1fr);gap:12px}
+#living .sec-head h2{font-size:clamp(30px,3.4vw,48px);text-wrap:balance}
+#living .sec-head .note{max-width:none}
+.live{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:clamp(24px,3vw,40px);margin-top:28px;align-items:start}
+.vid{position:relative;background:#000}
+.vid video{width:100%;height:auto;aspect-ratio:1120/782;object-fit:cover}
+.vid .play{position:absolute;left:12px;bottom:12px;display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:7px 14px;font:500 var(--t-xs)/1 var(--f-mono);color:var(--ash);background:rgba(11,9,8,.82);border:1px solid var(--line-2);border-radius:4px;cursor:pointer}
+.vid figcaption,.live .small figcaption{margin-top:10px;font-size:var(--t-sm);color:var(--ash-dim)}
+.live .small{margin-top:24px;display:grid;grid-template-columns:minmax(100px,.8fr) minmax(0,1fr);gap:14px;align-items:start;background:transparent}
+.live .small figcaption{margin-top:0}
+.live .vid .play{top:12px;bottom:auto}
+.live video{display:block;object-fit:contain;border:1px solid var(--line);border-radius:10px}
+.live>.vid{background:transparent}
+.live-text h3{font-family:var(--f-head);font-size:var(--t-lg);line-height:1.34}
+.live-text p{margin-top:12px;color:var(--ash-dim)}
+.live-text .facts{margin-top:22px}
+
+/* app tour */
+.tour{display:grid;grid-template-columns:minmax(0,15em) minmax(0,1fr);gap:clamp(24px,4vw,64px);margin-top:clamp(36px,6vh,64px);align-items:start}
+.tabs{display:grid;border-top:1px solid var(--line)}
+.tabs button{display:grid;gap:2px;text-align:left;padding:14px 0 14px 14px;border:0;border-bottom:1px solid var(--line);border-left:2px solid transparent;background:none;color:var(--ash-dim);font:inherit;font-size:var(--t-sm);cursor:pointer}
+.tabs button b{color:var(--ash);font-weight:500;font-size:var(--t-md)}
+.tabs button[aria-selected="true"]{border-left-color:var(--gold);color:var(--ash)}
+.tabs button:hover b{color:var(--gold)}
+.panes{position:relative}
+.panes figure img{width:100%;height:auto;background:var(--ink-2);border:1px solid var(--line)}
+.panes figure.tall img{max-width:440px}
+.panes figure.wide img{max-width:760px}
+.panes figcaption{margin-top:10px;font-size:var(--t-sm);color:var(--ash-dim)}
+.lic{margin-top:clamp(36px,6vh,56px);display:grid;grid-template-columns:minmax(0,15em) minmax(0,1fr);gap:8px clamp(24px,4vw,64px);padding-top:20px;border-top:1px solid var(--line)}
+.lic h3{font-size:var(--t-md)}
+.lic p{color:var(--ash-dim);font-size:var(--t-sm);max-width:44em}
+.lic a{color:var(--gold)}
+
+/* more */
+.more{margin-top:clamp(36px,6vh,64px);display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:clamp(24px,5vw,80px)}
+.more div{display:grid;grid-template-columns:minmax(0,11em) minmax(0,1fr);gap:12px;padding:14px 0;border-top:1px solid var(--line)}
+.more dt{font-weight:700;font-size:var(--t-sm)}
+.more dd{margin:0;color:var(--ash-dim);font-size:var(--t-sm)}
+
+/* end (WebGL again) */
+.end{position:relative;min-height:170vh;display:grid;align-content:end;padding-block:0 clamp(40px,8vh,80px);background:linear-gradient(180deg,var(--ink) 0,rgba(11,9,8,0) 34vh)}
+.end-in{display:grid;gap:22px;max-width:min(36em,52vw);text-shadow:0 2px 20px rgba(11,9,8,.95)}
+.end h2{font-family:var(--f-head);font-size:var(--t-xl);line-height:1.14;letter-spacing:-.03em}
+.req{display:grid;font-size:var(--t-sm);color:var(--ash-dim);max-width:30em}
+.req li{display:flex;justify-content:space-between;gap:16px;padding:9px 0;border-top:1px solid var(--line)}
+.req li b{color:var(--ash);font-weight:500;text-align:right}
+.end-links{display:flex;flex-wrap:wrap;gap:8px 20px;font-size:var(--t-sm)}
+.end-links a{color:var(--ash-dim);text-underline-offset:3px}
+.end-links a:hover{color:var(--ash)}
+footer{position:relative;z-index:2;padding-block:28px calc(28px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line);background:var(--ink);display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px 24px;font-size:var(--t-xs);color:var(--ash-faint)}
+footer p{max-width:60em}
+.foot-links{display:flex;flex-wrap:wrap;gap:6px 18px}
+.foot-links a{color:var(--ash-dim);text-decoration:none}
+.foot-links a:hover{color:var(--ash)}
+
+/* ⓘ brand info (10-07 brandnames) */
+.finfo{position:relative;display:inline-grid;place-items:center;flex:none;width:18px;height:18px;margin:0 2px 0 4px;padding:0;border:1px solid currentColor;border-radius:50%;background:transparent;color:var(--ash-dim);font:600 11px/1 var(--f-mono);font-style:italic;letter-spacing:0;text-transform:none;vertical-align:-3px;cursor:help;transition:color .15s,background .15s}
+.finfo::after{content:"";position:absolute;inset:-13px}
+.finfo:hover,.finfo[aria-expanded="true"]{color:var(--ink);background:var(--gold);border-color:var(--gold)}
+.finfo-demo{display:inline-grid;place-items:center;width:16px;height:16px;border:1px solid currentColor;border-radius:50%;font:600 10px/1 var(--f-mono);font-style:italic;vertical-align:-2px}
+.ftip{position:fixed;z-index:40;left:16px;top:0;width:min(25em,calc(100vw - 32px));padding:14px 16px 12px;border-radius:8px;background:#17130f;border:1px solid var(--line-2);box-shadow:0 24px 60px -20px rgba(0,0,0,.85);color:var(--ash);font-size:var(--t-sm);line-height:1.55;opacity:0;visibility:hidden;transform:translateY(4px);transition:opacity .15s,transform .15s,visibility 0s .15s}
+.ftip.on{opacity:1;visibility:visible;transform:none;transition:opacity .15s,transform .15s}
+.ftip .fh{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px}
+.ftip .fh b{font-size:var(--t-md);font-weight:700}
+.ftip .fh span{color:var(--ash-faint);font-size:var(--t-xs)}
+.ftip .tl{margin-top:4px;color:var(--lime);font-size:var(--t-sm)}
+.ftip dl{margin:10px 0 0;padding-top:10px;border-top:1px solid var(--line);display:grid;grid-template-columns:3.6em minmax(0,1fr);gap:6px 10px}
+.ftip dt{font-family:var(--f-mono);font-size:var(--t-xs);color:var(--ash-faint);padding-top:2px}
+.ftip dd{margin:0;color:var(--ash-dim)}
+.bn{color:var(--ash);font-weight:500;white-space:nowrap}
+
+@media (max-width:1100px){
+  .nav ul{gap:16px}
+  .caps{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .ix{grid-template-columns:minmax(0,13em) minmax(0,1fr)}
+  .ix-val{grid-column:2;text-align:left}
+}
+.menu{display:none}
+@media (max-width:900px){
+  .nav ul{display:none}
+  .menu{display:inline-flex;align-items:center;gap:8px;min-height:44px;margin-left:auto;padding:0 12px;border:1px solid var(--line-2);border-radius:6px;background:rgba(11,9,8,.6);color:var(--ash);font:500 var(--t-sm)/1 var(--f-body);cursor:pointer}
+  .menu i{position:relative;display:block;width:14px;height:2px;background:currentColor;border-radius:1px}
+  .menu i::before,.menu i::after{content:"";position:absolute;left:0;width:14px;height:2px;background:currentColor;border-radius:1px}
+  .menu i::before{top:-5px}.menu i::after{top:5px}
+  .nav.open{background:rgba(11,9,8,.97);border-bottom-color:var(--line)}
+  .nav.open ul{position:absolute;top:100%;left:0;right:0;display:grid;padding:4px var(--gutter) 12px;background:rgba(11,9,8,.97);border-bottom:1px solid var(--line)}
+  .nav.open li a{display:flex;align-items:center;min-height:48px;border-top:1px solid var(--line);font-size:var(--t-md);color:var(--ash)}
+  .get{min-height:44px}
+  .end-links a,.foot-links a{display:inline-flex;align-items:center;min-height:44px}
+  .end-links,.foot-links{gap:0 18px}
+  .tabs button{min-height:48px}
+  .lg-game p,.lg-val p,.chips span,.ba-view .lab,.lg-scale,.hero-meta{font-size:12px}
+  .hint{display:none}
+  .hero .lead{font-size:15px}
+  .sec-head{grid-template-columns:minmax(0,1fr)}
+  .loa-grid,.flow,.quote,.live,.tour,.lic,.eg{grid-template-columns:minmax(0,1fr)}
+  .lg-head,.lg-row{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"game val" "axis axis"}
+  .lg-head .ax{display:none}
+  .lg-row.scale{grid-template-areas:"axis axis"}
+  .caps{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .more{grid-template-columns:minmax(0,1fr)}
+  .quote .side img{margin-left:0}
+  .quote .side figcaption{text-align:left}
+  .tabs{grid-template-columns:repeat(3,minmax(0,1fr));border-top:0;gap:0}
+  .tabs button{border-left:0;border-top:2px solid var(--line);border-bottom:0;padding:10px 8px 10px 0}
+  .tabs button[aria-selected="true"]{border-top-color:var(--gold)}
+  .tabs button span{display:none}
+  .lens{display:none}
+}
+@media (max-aspect-ratio:17/20){
+  /* 세로 화면(JS portrait 와 같은 기준 0.85): 주인공은 화면 위쪽 12~48%, 글은 멈춤 지점 아래 8vh(화면 58%)부터 */
+  .cap,.cap.r{top:calc(var(--t) + 30vh);left:var(--gutter);right:var(--gutter);max-width:none;padding:16px 0}
+  /* 글 뒤 어둠: 화면 끝까지 넓게, 위아래는 길게 녹여 상자 경계가 안 보이게 */
+  .cap::before{content:"";position:absolute;z-index:-1;pointer-events:none;left:calc(-1 * var(--gutter));right:calc(-1 * var(--gutter));top:-16vh;bottom:-18vh;background:linear-gradient(180deg,rgba(11,9,8,0),rgba(11,9,8,.5) 22%,rgba(11,9,8,.8) 40%,rgba(11,9,8,.8) 64%,rgba(11,9,8,.45) 82%,rgba(11,9,8,0))}
+  .hero{grid-template-columns:minmax(0,1fr);align-content:end}
+  /* 첫 화면 아래 어둠은 다음 장면까지 이어서 녹인다(띠 경계 없이) */
+  .hero::before{content:"";position:absolute;z-index:-1;pointer-events:none;left:0;right:0;top:0;bottom:-40vh;background:linear-gradient(180deg,rgba(11,9,8,0) 30%,rgba(11,9,8,.6) 42%,rgba(11,9,8,.86) 52%,rgba(11,9,8,.86) 64%,rgba(11,9,8,.5) 80%,rgba(11,9,8,0))}
+  .hero-copy,.hero-proof{max-width:none}
+  .hero h1{font-size:clamp(28px,3vw,44px)}
+  .hero-proof{justify-items:start;text-align:left}
+  .hero-proof .num{font-size:clamp(34px,9vw,54px)}
+  .ring-hold{top:545vh}
+  .ring-cap{max-width:none;padding-top:24px;background:linear-gradient(180deg,transparent,rgba(11,9,8,.86) 22%)}
+  .end-in{max-width:none}
+  .end{background:linear-gradient(180deg,var(--ink) 0,rgba(11,9,8,0) 34vh,rgba(11,9,8,0) 60%,rgba(11,9,8,.86) 76%)}
+}
+@media (max-aspect-ratio:17/20) and (max-height:700px){
+  /* 작은 휴대폰(iPhone SE 등): 첫 화면 글을 줄여 캐릭터 다리와 겹치지 않게 */
+  .hero .eyebrow{display:none}
+  .hero h1{font-size:clamp(22px,6.6vw,26px)}
+  .hero-copy{gap:10px}
+}
+@media (max-width:400px){
+  .lg-head,.lg-row{grid-template-columns:minmax(0,1fr);grid-template-areas:"game" "val" "axis"}
+  .lg-head .r{display:none}
+  .lg-row.scale{grid-template-areas:"axis"}
+  .lg-val{text-align:left}
+  .nav .opt{display:none}
+  .menu{width:44px;justify-content:center;padding:0}
+  .nav{gap:10px}
+}
+@media (pointer:coarse),(max-height:560px){.lens{display:none}}
+@media (max-width:560px){
+  .hero .lead{display:none}
+  .cad .cad-t{font-size:21px}
+  .ix{grid-template-columns:minmax(0,1fr)}
+  .ix-val{grid-column:auto}
+  .pts li{grid-template-columns:minmax(0,1fr);gap:2px}
+  .loa-shots{grid-template-columns:minmax(0,1fr)}
+  .loa-shots figure:nth-child(3){margin-top:0}
+  .lg-game{grid-template-columns:72px minmax(0,1fr)}
+  .lg-game img{width:72px;height:40px}
+  .more div{grid-template-columns:minmax(0,1fr);gap:2px}
+  .caps{grid-template-columns:minmax(0,1fr)}
+  .bleed .hudzoom{position:relative;left:auto;top:auto;width:auto;margin:12px var(--gutter) 0}
+  .brand{font-size:19px}
+  .get{padding:8px 12px}
+}
+@media (max-height:560px) and (min-aspect-ratio:17/20){
+  /* 가로로 눕힌 휴대폰: 높이 340~430px. 머리말·첫 화면 글을 줄여 화면 안에 들어오게 */
+  .nav{padding-block:calc(6px + env(safe-area-inset-top,0px)) 6px}
+  .hero{gap:12px 32px;padding-block:72px 16px}
+  .hero-copy{gap:8px}
+  .hero .eyebrow{display:none}
+  .hero h1{font-size:clamp(20px,5.4vh,26px)}
+  .hero .lead,.hint{display:none}
+  .hero-proof .num{font-size:min(clamp(28px,9vh,40px),calc((50vw - 18vh - var(--gutter) - 16px) / 7.4))}
+  .cap{gap:8px}
+  .cap h2{font-size:clamp(18px,5vh,22px)}
+  .cap p{font-size:var(--t-sm)}
+  .cap .bnums b{font-size:30px}
+  .mani-in{padding-block:64px 32px;gap:16px}
+  .mani .slogan{font-size:min(10.5vw,18vh)}
+  .mani .prose{font-size:min(20px,5vh)}
+  .ring-cap h2{font-size:clamp(18px,5vh,22px)}
+  .ring-cap p{display:none}
+  .end-in{max-width:min(36em,56vw);padding:16px 20px 16px 0;background:linear-gradient(90deg,rgba(11,9,8,.9) 80%,rgba(11,9,8,0))}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+</style>
+<link rel="stylesheet" href="../assets/site-shell.css">
+<link rel="stylesheet" href="../assets/compatibility.css">
+<script src="../assets/compatibility.js" defer></script>
+<script src="../assets/site-shell.js" defer></script>
+<meta name="theme-color" content="#0b0908">
+<meta name="color-scheme" content="dark">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<link rel="canonical" href="https://eunggg0.github.io/ember-site/en/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Ember">
+<meta property="og:locale" content="en_US">
+<meta property="og:title" content="Ember · Windows game launcher for Mac">
+<meta property="og:description" content="Ember, a Windows game launcher for Apple Silicon Macs. See compatibility, launch settings, and known issues from games we have tested.">
+<meta property="og:url" content="https://eunggg0.github.io/ember-site/en/">
+<meta property="og:image" content="https://eunggg0.github.io/ember-site/assets/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Ember character and Windows game launcher for Mac. Game compatibility and launch settings.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Ember · Windows game launcher for Mac">
+<meta name="twitter:description" content="Ember, a Windows game launcher for Apple Silicon Macs. See compatibility, launch settings, and known issues from games we have tested.">
+<meta name="twitter:image" content="https://eunggg0.github.io/ember-site/assets/og.jpg">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<link rel="alternate" hreflang="ko" href="https://eunggg0.github.io/ember-site/ko/">
+<link rel="alternate" hreflang="en" href="https://eunggg0.github.io/ember-site/en/">
+<link rel="alternate" hreflang="ja" href="https://eunggg0.github.io/ember-site/ja/">
+<link rel="alternate" hreflang="zh-Hans" href="https://eunggg0.github.io/ember-site/zh-Hans/">
+<link rel="alternate" hreflang="zh-Hant" href="https://eunggg0.github.io/ember-site/zh-Hant/">
+<link rel="alternate" hreflang="x-default" href="https://eunggg0.github.io/ember-site/">
+<script src="../assets/language.js" defer></script>
+</head>
+<body>
+<canvas id="stage" aria-hidden="true"></canvas>
+<div id="stage-fallback" aria-hidden="true"><span class="fw">EMBER</span><img src="../assets/ember-cutout.webp" alt="" width="871" height="1600"></div>
+<div class="grain" aria-hidden="true"></div>
+
+<header class="nav" id="nav">
+  <a class="brand" href="#top" aria-label="Ember home">
+    <svg viewBox="0 0 100 130" aria-hidden="true"><path fill="#ff8a3a" fill-rule="evenodd" d="M50 4C62 30 88 52 88 82C88 108 70 126 50 126C30 126 12 108 12 84C12 64 24 52 32 40C34 54 40 60 46 62C42 44 44 24 50 4ZM50 71a17 17 0 1 0 0.01 0Z"/></svg>
+    EMBER
+  </a>
+  <button class="menu" type="button" id="menubtn" aria-expanded="false" aria-controls="navlist" aria-label="Menu"><i aria-hidden="true"></i><span class="opt">Menu</span></button>
+  <ul id="navlist">
+    <li><a href="#screens">Game compatibility</a></li>
+    <li><a href="#perf">About the measurements</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#ember">Ember</a></li>
+    <li><a href="#app">App</a></li>
+    <li><a href="why.html">Why we build Ember</a></li>
+  </ul>
+  <a class="get" href="https://eunggg0.github.io/ember-releases/download/" data-link="download"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M6 10l6 6 6-6M4 20h16"/></svg><span class="opt">for Mac </span>Download</a>
+</header>
+
+<div class="lens off" id="lens" hidden aria-hidden="true"><canvas id="lensg" width="128" height="48"></canvas><span>On this page</span><span><b id="lensfps">--</b> fps</span></div>
+
+<main id="top">
+  <section class="act" id="act" aria-labelledby="hero-title">
+    <div class="stop" data-stop="hero" style="top:50vh"></div>
+    <div class="stop" data-stop="side" style="top:130vh"></div>
+    <div class="stop" data-stop="back" style="top:210vh"></div>
+    <div class="stop" data-stop="front" style="top:290vh"></div>
+    <div class="stop" data-stop="sil" style="top:370vh"></div>
+    <div class="stop" data-stop="num" style="top:460vh"></div>
+    <div class="stop" data-stop="ring0" style="top:550vh"></div>
+    <div class="stop" data-stop="ring1" style="top:760vh"></div>
+    <div class="stop" data-stop="out" style="top:830vh"></div>
+
+    <div class="hero wrap">
+      <div class="hero-copy">
+        <p class="eyebrow">A Windows game launcher for Apple Silicon Macs</p>
+        <h1 id="hero-title"><span class="sr">Ember. </span>Start playing Windows games<br><em>on your Mac.</em></h1>
+        <p class="lead">Launch settings tailored to each game, with Ember Flow frame generation. If something goes wrong, ask the AI assistant running on your Mac.</p>
+        <div class="hero-row">
+          <a class="get" href="https://eunggg0.github.io/ember-releases/download/" data-link="download"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M6 10l6 6 6-6M4 20h16"/></svg>Download for Mac</a>
+          <span class="hero-meta">Version <span data-cfg="version">1.0</span> · Apple Silicon · macOS 14 or later</span>
+        </div>
+      </div>
+      <div class="hero-proof">
+        <span>Games we have tested</span>
+        <a class="compat-hero-link" href="#screens">Game compatibility <span aria-hidden="true">↗</span></a>
+        <span>Launch settings · Test scope · Known issues</span>
+        <span class="hint"><span></span>Scroll down to see Ember turn around</span>
+      </div>
+    </div>
+
+    <div class="cap" style="--t:108vh">
+      <p class="eyebrow">A simple way to launch games</p>
+      <h2>Install, pick a game, and play.</h2>
+      <p>Ember launches Windows games on Apple Silicon Macs. It picks suitable engine and graphics settings for each game. You can change them yourself at any time.</p>
+    </div>
+    <div class="cap r" style="--t:188vh">
+      <p class="eyebrow">Make the most of your Mac</p>
+      <h2>Give your game the GPU and performance cores.</h2>
+      <p>Graphics run through Metal, with games set to favor performance cores.</p>
+    </div>
+    <div class="cap" style="--t:268vh">
+      <p class="eyebrow">Built by Ember</p>
+      <h2>From frame generation to image enhancement.</h2>
+      <p>Ember Flow creates intermediate frames, Ember Forge sharpens image detail, and Ember Pulse keeps frames arriving at even intervals.</p>
+    </div>
+    <div class="cap r" style="--t:432vh">
+      <p class="eyebrow lime">Ember Flow · Frame generation</p>
+      <h2>Add an extra&nbsp;frame between game frames&nbsp;for twice the output fps.</h2>
+      <p class="bnums"><span>Display output</span><span class="nw"><b>Up to 2×</b></span></p>
+      <p>Results depend on the game and settings. Each game record shows both game fps before frame generation and display output fps after it.</p>
+    </div>
+    <div class="ring-hold">
+      <div class="ring-cap">
+        <p class="eyebrow">11 features built by Ember</p>
+        <h2>Eleven engines developed by Ember.</h2>
+        <p>Flow · Guard · Forge · Tone · Flare · Pulse · Boost · Kindle · Kiln · Spark · Lens. Third-party technologies such as MetalFX, DXMT, and D3DMetal keep their own names. The Ember name is reserved for what we build on top of them.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="mani wrap" id="mani" aria-label="Ember at a glance">
+    <div class="mani-in">
+      <p class="slogan"><span>Windows games,</span><span>on your Mac.</span></p>
+      <p class="prose" id="prose">Ember launches Windows games on Apple Silicon Macs. It selects an engine and graphics translator for each game, and retries with another translator if a game crashes during launch. It also includes Ember's own frame generation, image enhancement, and frame pacing. See the test scope and performance measured on an M4 Pro for each game below.</p>
+    </div>
+  </section>
+
+  <div class="sheet">
+  <!-- ===== 게임 호환성 ===== -->
+  <section class="sec wrap" id="screens" aria-labelledby="compat-title">
+    <div class="sec-head"><p class="eyebrow">Game compatibility · Test records</p><h2 id="compat-title">What can you play?</h2><p class="note">These are games we have run and documented. Select one to see the scenes tested, launch settings, frame rates, and remaining issues.</p></div>
+    <form class="compat-tools" role="search" aria-label="Search game compatibility" hidden><div><label for="compat-query">Find a game</label><input id="compat-query" type="search" placeholder="Search game names · Korean / English" autocomplete="off" aria-controls="compat-list"></div><div><label for="compat-filter">Test result</label><select id="compat-filter" aria-controls="compat-list"><option value="all">All results</option><option value="play">Gameplay tested</option><option value="issues">Has issues</option><option value="menu">Menu tested</option><option value="blocked">Launch failed</option></select></div><button type="reset">Reset</button></form>
+    <div class="compat-meta"><p id="compat-count" role="status" aria-live="polite" aria-atomic="true">21 games · Sorted by name</p><span>Site updated <span data-cfg="siteUpdated">2026-10-23</span></span></div>
+    <div class="compat-head" aria-hidden="true"><span>Game</span><span>Test result</span><span>Launch settings</span><span>Test scope</span><span></span></div>
+    <div id="compat-list"><details class="compat-game" id="game-l4d2" data-status="play" data-search="Left 4 Dead 2 L4D2 레프트 4 데드 2">
+      <summary><span class="compat-name"><strong>Left 4 Dead 2</strong><small>Steam</small></span><span class="compat-status play">Gameplay tested</span><span class="compat-renderer">DXVK</span><span class="compat-scope">Dead Center · Local campaign</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
+      <div class="compat-detail"><div><p class="compat-result">Gameplay was tested while moving around the rooftop in the first map.</p><dl><div><dt>Test environment</dt><dd>M4 Pro · 1600×900 · 120Hz · Playing with bots</dd></div><div><dt>Frame-rate record</dt><dd>Game 128–146 fps · Average about 138 fps</dd></div><div><dt>Things to know</dt><dd>Tested with Ember's modified DXVK. Results may differ with other DXVK builds.</dd></div><div><dt>Record checked</dt><dd><time datetime="2026-09-28">2026-09-28</time> · Frame-rate records may come from separate runs.</dd></div></dl><a class="compat-permalink" href="#game-l4d2">Link to this game ↗</a></div></div>
+    </details>
+<details class="compat-game" id="game-lostark" data-status="play" data-search="Lost Ark 로스트아크">
+      <summary><span class="compat-name"><strong>Lost Ark</strong><small>STOVE</small></span><span class="compat-status play">Gameplay tested</span><span class="compat-renderer">FEX · DXMT</span><span class="compat-scope">Town traversal · Waterpark</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
+      <div class="compat-detail"><div><p class="compat-result">Town traversal and gameplay were tested. On October 22, FEX ran continuously for 3 hours 9 minutes with no crashes recorded.</p><dl><div><dt>Test environment</dt><dd>This Mac (M4 Pro) · FEX · DXMT · QHD · MetalFX · Ember Flow · Game Mode · Separate runs for each item</dd></div><div><dt>Frame-rate record</dt><dd>Earlier town measurement: game 47–54 → display 94–107 fps · Crowded scene game fps +7% (50.2 → 53.7) · Separate realignment comparison: median of 1-second maximum frame times about 23–29 → 17–20 ms</dd></div><div><dt>Things to know</dt><dd>The first launch may take longer while FEX creates its cache. Intermittent errors remain in the game's web views.</dd></div><div><dt>Record checked</dt><dd><time datetime="2026-10-22">2026-10-22</time> · Continuous run: 3 hours 9 minutes · Frame rates from separate runs · Measured on this Mac (M4 Pro)</dd></div></dl><a class="compat-permalink" href="#game-lostark">Link to this game ↗</a></div><figure class="compat-shot"><a href="../assets/loa-town-fg.webp" target="_blank" rel="noopener"><img src="../assets/loa-town-fg.webp" alt="Lost Ark running in Ember" loading="lazy" width="1600" height="900"></a><figcaption>October 23 capture · Ember Lens at top left · Click for original</figcaption></figure></div>
+    </details>
+<details class="compat-game" id="game-lethal" data-status="play" data-search="Lethal Company 리썰 컴퍼니">
+      <summary><span class="compat-name"><strong>Lethal Company</strong><small>Steam</small></span><span class="compat-status play">Gameplay tested</span><span class="compat-renderer">D3DMetal / DXMT</span><span class="compat-scope">LAN host · Inside the ship</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
+      <div class="compat-detail"><div><p class="compat-result">Visuals and performance were tested inside the ship as a LAN host.</p><dl><div><dt>Test environment</dt><dd>M4 Pro · 60Hz · 30 seconds after entering the ship</dd></div><div><dt>Frame-rate record</dt><dd>Game 60 fps · GPU usage about 51% in this scene · Separate measurement (Rosetta · DXMT · 4K · Ember Flow): total latency 51.5 → 43.0 ms · October 21, Rosetta · D3DMetal FHD: game about 120 → display about 139 fps · October 17, FEX · DXMT FHD: display about 155 fps (maximum frame time 19.8 ms)</dd></div><div><dt>Things to know</dt><dd>Internet lobbies and online co-op are outside the scope of this record. Korean characters in microphone names may appear as boxes in the game's font.</dd></div><div><dt>Record checked</dt><dd><time datetime="2026-10-19">2026-10-19</time> · DXMT latency measurement · Ship gameplay tested on 2026-09-28 · Frame rates may come from separate runs.</dd></div></dl><a class="compat-permalink" href="#game-lethal">Link to this game ↗</a></div></div>
+    </details>
+<details class="compat-game" id="game-requiem" data-status="play" data-search="RESIDENT EVIL requiem 바이오하자드 레퀴엠">
+      <summary><span class="compat-name"><strong>Resident Evil Requiem</strong><small>Steam · Trial</small></span><span class="compat-status play">Gameplay tested</span><span class="compat-renderer">D3DMetal</span><span class="compat-scope">Trial · First room</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
+      <div class="compat-detail"><div><p class="compat-result">The title screen, menus, and gameplay in the first room were tested with D3DMetal. It also launched normally with D3DMetal on October 21, when frame rates were measured.</p><dl><div><dt>Test environment</dt><dd>M4 Pro · October 4: 120Hz 4K display · October 21: FHD</dd></div><div><dt>Frame-rate record</dt><dd>October 4: about 83 fps stationary · About 70 fps moving · Moving p99 about 50 ms · October 21, FHD Ember Flow: game about 115 → display about 137 fps</dd></div><div><dt>Things to know</dt><dd>Movement stutter was recorded on October 4; maximum frame time was not recorded separately on October 21. DXMT shows a black screen, so this game uses Rosetta · D3DMetal. The FEX engine is not supported.</dd></div><div><dt>Record checked</dt><dd><time datetime="2026-10-21">2026-10-21</time> · FHD frame-rate measurement · First-room gameplay on 2026-10-04 · Frame rates may come from separate runs.</dd></div></dl><a class="compat-permalink" href="#game-requiem">Link to this game ↗</a></div></div>
+    </details>
+<details class="compat-game" id="game-valheim" data-status="play" data-search="Valheim 발헤임">
+      <summary><span class="compat-name"><strong>Valheim</strong><small>Steam</small></span><span class="compat-status play">Gameplay tested</span><span class="compat-renderer">DXMT / D3DMetal</span><span class="compat-scope">Launch · 60-second frame-rate measurement</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
+      <div class="compat-detail"><div><p class="compat-result">The intro video and menus were tested, and 60-second frame-rate measurements were taken with both FEX · DXMT and Rosetta · DXMT. A hang at the Steam notice dialog was fixed.</p><dl><div><dt>Test environment</dt><dd>This Mac (M4 Pro) · FEX · DXMT · FHD · 60 fps cap · Frame generation off</dd></div><div><dt>Frame-rate record</dt><dd>60 fps · Automatic low-latency display queue: internal latency 10.2 → 5.6 ms · October 21, FEX · DXMT FHD: game 60 → display 120 fps (Ember Flow, maximum frame time 28.9 ms) · October 17, Rosetta · DXMT: also 120 fps (maximum 18.6 ms)</dd></div><div><dt>Things to know</dt><dd>FEX translates new code, making its maximum frame time about 10 ms longer than Rosetta's. The recorded scene (menu or world) was not specified, so this does not guarantee stability throughout the world or in multiplayer.</dd></div><div><dt>Record checked</dt><dd><time datetime="2026-10-23">2026-10-23</time> · Includes Steam notice-dialog fix</dd></div></dl><a class="compat-permalink" href="#game-valheim">Link to this game ↗</a></div></div>
+    </details>
+<details class="compat-game" id="game-stellar" data-status="play" data-search="Stellar Blade 스텔라 블레이드">
+      <summary><span class="compat-name"><strong>Stellar Blade</strong><small>Steam · Trial</small></span><span class="compat-status play">Gameplay tested</span><span class="compat-renderer">D3DMetal / DXMT · FEX</span><span class="compat-scope">Trial · Camp and gameplay</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
+      <div class="compat-detail"><div><p class="compat-result">Gameplay was tested with D3DMetal. FEX · DXMT and Rosetta · DXMT also ran and measured about 60 fps at FHD (October 22). An intermittent FEX screen freeze was fixed (3 of 9 runs → 0 of 7).</p><dl><div><dt>Test environment</dt><dd>M4 Pro · Demo · Separate measurements for each graphics path</dd></div><div><dt>Frame-rate record</dt><dd>D3DMetal · Ember Flow · 144Hz: game 60 → average display 116.7 fps · 4K D3DMetal (October 23): game about 34 → display about 55 fps · FHD DXMT (October 22): both FEX and Rosetta about 60 fps · Rosetta D3DMetal smooth mode presentation update: FHD latency 24.2 → 14.1 ms · Output 116.6 → 119.2 fps; QHD latency 24.2 → 15.8 ms · Output 114.0 → 118.8 fps · These figures do not guarantee stability</dd></div><div><dt>Things to know</dt><dd>Earlier DXMT runs recorded GPU hangs and visual corruption with FSR3; these were not rechecked in recent measurements. FEX maximum frame times of about 290–307 ms were traced to bringing the window to the front at measurement start (Rosetta also exceeded 600 ms). Treat these separately from D3DMetal results.</dd></div><div><dt>Record checked</dt><dd><time datetime="2026-10-23">2026-10-23</time> · 4K measurement · FHD measured on 2026-10-22 · FEX freeze fix checked on 2026-10-19 · Frame rates may come from separate runs.</dd></div></dl><a class="compat-permalink" href="#game-stellar">Link to this game ↗</a></div><figure class="compat-shot"><a href="../assets/stellar.webp" target="_blank" rel="noopener"><img src="../assets/stellar.webp" alt="Stellar Blade running in Ember" loading="lazy" width="1600" height="900"></a><figcaption>Earlier test capture · Trial menu · Click for original</figcaption></figure></div>
+    </details>
+<details class="compat-game" id="game-overwatch" data-status="play" data-search="Overwatch 오버워치">
+      <summary><span class="compat-name"><strong>Overwatch</strong><small>Steam</small></span><span class="compat-status play">Gameplay tested</span><span class="compat-renderer">D3DMetal</span><span class="compat-scope">Steam version · Gameplay after launch</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
+      <div class="compat-detail"><div><p class="compat-result">After a launch failure was fixed, the user confirmed that the game ran with Rosetta · D3DMetal.</p><dl><div><dt>Test environment</dt><dd>M4 Pro · Steam version · QHD · User gameplay (October 10) and frame-rate measurement (October 15)</dd></div><div><dt>Frame-rate record</dt><dd>QHD measurement (October 15): game about 56–60 fps · GPU usage 94–100%</dd></div><div><dt>Things to know</dt><dd>Measurements indicate a GPU limit at QHD, holding performance at about 56–60 fps rather than an Ember bottleneck. FEX remains unconfirmed: it produced no image on October 15 (GPU about 1%). The Korean Battle.net release has separate records; these results do not apply to it.</dd></div><div><dt>Record checked</dt><dd><time datetime="2026-10-15">2026-10-15</time> · User confirmed launch on 2026-10-10 · Not retested recently.</dd></div></dl><a class="compat-permalink" href="#game-overwatch">Link to this game ↗</a></div></div>
+    </details>
+<details class="compat-game" id="game-oncehuman" data-status="play" data-search="Once Human 원스 휴먼">
+      <summary><span class="compat-name"><strong>Once Human</strong><small>Steam</small></span><span class="compat-status play">Gameplay tested</span><span class="compat-renderer">D3DMetal / DXMT</span><span class="compat-scope">World traversal · Frame generation comparison</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
+      <div class="compat-detail"><div><p class="compat-result">World gameplay and frame generation were tested. DXMT tests also compared unique and repeated frames across frame generation modes. A fix keeps the game responsive while the microphone permission dialog is open.</p><dl><div><dt>Test environment</dt><dd>M4 Pro · Separate measurements for each graphics path</dd></div><div><dt>Frame-rate record</dt><dd>Earlier D3DMetal measurement: display about 114 fps with Ember Flow · October 16, Rosetta · D3DMetal FHD: game about 53 → display about 78 fps · October 17, FEX · DXMT FHD: about 41 fps</dd></div><div><dt>Things to know</dt><dd>The display output figures below were measured with D3DMetal and should not be combined with DXMT results. In the October 23 menu run, no pause over 9 seconds occurred while the microphone permission dialog was open. World performance after login was not tested.</dd></div><div><dt>Record checked</dt><dd><time datetime="2026-10-23">2026-10-23</time> · Permission-dialog run tested only as far as the menu</dd></div></dl><a class="compat-permalink" href="#game-oncehuman">Link to this game ↗</a></div><figure class="compat-shot"><a href="../assets/oncehuman.webp" target="_blank" rel="noopener"><img src="../assets/oncehuman.webp" alt="Once Human running in Ember" loading="lazy" width="1600" height="900"></a><figcaption>Early October capture · DXMT · Click for original</figcaption></figure></div>
+    </details>
+<details class="compat-game" id="game-witcher3" data-status="play" data-search="The Witcher 3 Wild Hunt 리마스터 위쳐 3: 와일드 헌트">
+      <summary><span class="compat-name"><strong>The Witcher 3: Wild Hunt</strong><small>Steam · Remastered</small></span><span class="compat-status play">Gameplay tested</span><span class="compat-renderer">Rosetta · D3DMetal</span><span class="compat-scope">DX12 version · 13 minutes in White Orchard</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
+      <div class="compat-detail"><div><p class="compat-result">After entering the world using the app's default path, we tested walking, camera movement, water, buildings, combat stances, and menus for 13 minutes. No crashes, hangs, or visual corruption occurred in this run. On October 23, FEX · DXMT with tessellation enabled rendered terrain, water, mud, and a wolf fight correctly.</p><dl><div><dt>Test environment</dt><dd>Rosetta · D3DMetal 3.0 record: 1080p · Medium · Shader translation guard · 13 minutes of gameplay. Separate FEX · DXMT tessellation test</dd></div><div><dt>Frame-rate record</dt><dd>Rosetta · D3DMetal: 44–50 fps (60 fps cap) · FEX · DXMT tessellation on: 33–35 fps, off: 37–40 fps</dd></div><div><dt>Things to know</dt><dd>Tessellation restores correct terrain and water rendering, with about 12% lower frame rates in this scene. Tested only with FEX; the Rosetta path was not measured.</dd></div><div><dt>Record checked</dt><dd><time datetime="2026-10-23">2026-10-23</time> · Tessellation visuals and fps tested with FEX</dd></div></dl><a class="compat-permalink" href="#game-witcher3">Link to this game ↗</a></div></div>
+    </details>
+<details class="compat-game" id="game-cs2" data-status="play" data-search="Counter-Strike 2 CS2 카운터 스트라이크 2">
+      <summary><span class="compat-name"><strong>Counter-Strike 2</strong><small>Steam</small></span><span class="compat-status play">Gameplay tested</span><span class="compat-renderer">DXMT / D3DMetal</span><span class="compat-scope">Dust 2 · Local bot match</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
+      <div class="compat-detail"><div><p class="compat-result">Menus, Korean text, audio, and bot matches were tested. FPS defaults prioritize latency: automatic translator DXMT, Ember Flow off, low-latency mode and Ember Spark on.</p><dl><div><dt>Test environment</dt><dd>This Mac (M4 Pro) · Rosetta · FHD · Borderless fullscreen · VSync off · Dust 2 offline, 0 bots</dd></div><div><dt>Frame-rate record</dt><dd>Median input-to-display latency: DXMT 29.0 ms / D3DMetal 46.2 ms (about 17 ms apart) · Automatic image settings differ by translator, so fps is not directly compared. · Maximum frame time (FHD, October): FEX · DXMT about 60 ms, Rosetta · DXMT about 325 ms</dd></div><div><dt>Things to know</dt><dd>The window is invisible in exclusive fullscreen. Use borderless fullscreen. Official matchmaking and VAC servers were not tested.</dd></div><div><dt>Record checked</dt><dd><time datetime="2026-10-20">2026-10-20</time> · Separate runs for each item · Measured on this Mac (M4 Pro)</dd></div></dl><a class="compat-permalink" href="#game-cs2">Link to this game ↗</a></div><figure class="compat-shot"><a href="../assets/cs2.webp" target="_blank" rel="noopener"><img src="../assets/cs2.webp" alt="Counter-Strike 2 running in Ember" loading="lazy" width="1600" height="900"></a><figcaption>September 30 capture · D3DMetal path · Click for original</figcaption></figure></div>
+    </details>
+<details class="compat-game" id="game-tf2" data-status="play" data-search="Team Fortress 2 TF2 팀 포트리스 2">
+      <summary><span class="compat-name"><strong>Team Fortress 2</strong><small>Steam · 64-bit version</small></span><span class="compat-status play">Gameplay tested</span><span class="compat-renderer">DXVK</span><span class="compat-scope">2Fort · Local bot match</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
+      <div class="compat-detail"><div><p class="compat-result">Menus, Korean text, the intro video, and local-map gameplay were tested. An FEX hang during audio initialization was fixed.</p><dl><div><dt>Test environment</dt><dd>M4 Pro · 1920×1080 · 120Hz · VSync off · 8 bots</dd></div><div><dt>Frame-rate record</dt><dd>Game 170–190 fps · No frame generation · October 22 FHD: FEX about 258 fps (maximum frame time 23 ms), Rosetta about 263 fps (54 ms)</dd></div><div><dt>Things to know</dt><dd>Shader processing may cause a brief pause when first entering a map. Official matchmaking and VAC servers were not tested.</dd></div><div><dt>Record checked</dt><dd><time datetime="2026-10-22">2026-10-22</time> · Frame-rate records may come from separate runs.</dd></div></dl><a class="compat-permalink" href="#game-tf2">Link to this game ↗</a></div><figure class="compat-shot"><a href="../assets/tf2.webp" target="_blank" rel="noopener"><img src="../assets/tf2.webp" alt="Team Fortress 2 running in Ember" loading="lazy" width="1600" height="900"></a><figcaption>Earlier test capture · Click for original</figcaption></figure></div>
+    </details>
+<details class="compat-game" id="game-pragmata" data-status="play" data-search="PRAGMATA 프라그마타">
+      <summary><span class="compat-name"><strong>PRAGMATA</strong><small>Steam · Demo</small></span><span class="compat-status play">Gameplay tested</span><span class="compat-renderer">D3DMetal</span><span class="compat-scope">Demo · Tutorial combat</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
+      <div class="compat-detail"><div><p class="compat-result">Korean text, cutscenes, and tutorial combat were tested with D3DMetal.</p><dl><div><dt>Test environment</dt><dd>M4 Pro 24GB · 1080p · FSR3 Performance · In-game FSR frame generation</dd></div><div><dt>Frame-rate record</dt><dd>Tutorial measurement: display 105–115 fps · In-game FSR frame generation</dd></div><div><dt>Things to know</dt><dd>The DXMT path still has a black-screen issue. Recorded with a configuration that avoids enabling in-game frame generation and Ember Flow together.</dd></div><div><dt>Record checked</dt><dd><time datetime="2026-10-04">2026-10-04</time> · Frame-rate records may come from separate runs.</dd></div></dl><a class="compat-permalink" href="#game-pragmata">Link to this game ↗</a></div></div>
+    </details>
+<details class="compat-game" id="game-muck" data-status="play" data-search="Muck Muck">
+      <summary><span class="compat-name"><strong>Muck</strong><small>Steam · Free / Trial</small></span><span class="compat-status play">Gameplay tested</span><span class="compat-renderer">Rosetta · DXMT</span><span class="compat-scope">First launch · Main menu</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
+      <div class="compat-detail"><div><p class="compat-result">The main menu appeared in 39 seconds. A 60-second DXMT FHD measurement reached the display limit of 144 fps, with a maximum frame time of 14.6 ms.</p><dl><div><dt>Test environment</dt><dd>M4 Pro · First-launch test</dd></div><div><dt>Things to know</dt><dd>Results apply only to the scenes and settings tested. Full gameplay and long-term stability were not tested.</dd></div><div><dt>Record checked</dt><dd><time datetime="2026-10-23">2026-10-23</time></dd></div></dl><a class="compat-permalink" href="#game-muck">Link to this game ↗</a></div></div>
+    </details>
+<details class="compat-game" id="game-deltarune" data-status="play" data-search="DELTARUNE Demo DELTARUNE Demo">
+      <summary><span class="compat-name"><strong>DELTARUNE Demo</strong><small>Steam · Free / Trial</small></span><span class="compat-status play">Gameplay tested</span><span class="compat-renderer">Rosetta · DXMT</span><span class="compat-scope">Trial · First screen · 32-bit</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
+      <div class="compat-detail"><div><p class="compat-result">Tested with the 32-bit executable. It launched normally to the first screen, recording the game's own 30 fps cap and a maximum frame time of 34.3 ms.</p><dl><div><dt>Test environment</dt><dd>M4 Pro · First-launch test</dd></div><div><dt>Things to know</dt><dd>Results apply only to the scenes and settings tested. Full gameplay and long-term stability were not tested.</dd></div><div><dt>Record checked</dt><dd><time datetime="2026-10-23">2026-10-23</time></dd></div></dl><a class="compat-permalink" href="#game-deltarune">Link to this game ↗</a></div></div>
+    </details>
+<details class="compat-game" id="game-yumenikki" data-status="play" data-search="Yume Nikki Yume Nikki">
+      <summary><span class="compat-name"><strong>Yume Nikki</strong><small>Steam · Free / Trial</small></span><span class="compat-status play">Gameplay tested</span><span class="compat-renderer">Rosetta · Wine</span><span class="compat-scope">Title screen · 32-bit</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
+      <div class="compat-detail"><div><p class="compat-result">The title screen of this 32-bit RPG Maker 2003 game was tested. No frame-rate measurement was taken because it uses the GDI 2D path.</p><dl><div><dt>Test environment</dt><dd>M4 Pro · First-launch test</dd></div><div><dt>Things to know</dt><dd>Results apply only to the scenes and settings tested. Full gameplay and long-term stability were not tested.</dd></div><div><dt>Record checked</dt><dd><time datetime="2026-10-23">2026-10-23</time></dd></div></dl><a class="compat-permalink" href="#game-yumenikki">Link to this game ↗</a></div></div>
+    </details>
+<details class="compat-game" id="game-ddlc" data-status="play" data-search="Doki Doki Literature Club Doki Doki Literature Club">
+      <summary><span class="compat-name"><strong>Doki Doki Literature Club</strong><small>Steam · Free / Trial</small></span><span class="compat-status play">Gameplay tested</span><span class="compat-renderer">Rosetta · Wine</span><span class="compat-scope">First screen · 32-bit</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
+      <div class="compat-detail"><div><p class="compat-result">The initial warning screen displayed correctly. Frame rates were not measured.</p><dl><div><dt>Test environment</dt><dd>M4 Pro · First-launch test</dd></div><div><dt>Things to know</dt><dd>Results apply only to the scenes and settings tested. Full gameplay and long-term stability were not tested.</dd></div><div><dt>Record checked</dt><dd><time datetime="2026-10-23">2026-10-23</time></dd></div></dl><a class="compat-permalink" href="#game-ddlc">Link to this game ↗</a></div></div>
+    </details>
+<details class="compat-game" id="game-deskjob" data-status="issues" data-search="Aperture Desk Job Aperture Desk Job">
+      <summary><span class="compat-name"><strong>Aperture Desk Job</strong><small>Steam · Free / Trial</small></span><span class="compat-status issues">Has issues</span><span class="compat-renderer">Rosetta · DXMT</span><span class="compat-scope">First scene · Controller notice</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
+      <div class="compat-detail"><div><p class="compat-result">It waited at Steam's controller connection notice. The first scene displayed correctly after the notice was acknowledged. You need to provide the controller required by the game.</p><dl><div><dt>Test environment</dt><dd>M4 Pro · First-launch test</dd></div><div><dt>Things to know</dt><dd>Results apply only to the scenes and settings tested. Full gameplay and long-term stability were not tested.</dd></div><div><dt>Record checked</dt><dd><time datetime="2026-10-23">2026-10-23</time></dd></div></dl><a class="compat-permalink" href="#game-deskjob">Link to this game ↗</a></div></div>
+    </details>
+<details class="compat-game" id="game-ghostrunner" data-status="menu" data-search="Ghostrunner Demo Ghostrunner Demo">
+      <summary><span class="compat-name"><strong>Ghostrunner Demo</strong><small>Steam · Free / Trial</small></span><span class="compat-status menu">Menu tested</span><span class="compat-renderer">Rosetta · DXMT</span><span class="compat-scope">Trial · Intro video</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
+      <div class="compat-detail"><div><p class="compat-result">The intro video played correctly. We did not check whether the game reached the menu after the video.</p><dl><div><dt>Test environment</dt><dd>M4 Pro · First-launch test</dd></div><div><dt>Things to know</dt><dd>Results apply only to the scenes and settings tested. Full gameplay and long-term stability were not tested.</dd></div><div><dt>Record checked</dt><dd><time datetime="2026-10-23">2026-10-23</time></dd></div></dl><a class="compat-permalink" href="#game-ghostrunner">Link to this game ↗</a></div></div>
+    </details>
+<details class="compat-game" id="game-domekeeper" data-status="issues" data-search="Dome Keeper Demo Dome Keeper Demo">
+      <summary><span class="compat-name"><strong>Dome Keeper Demo</strong><small>Steam · Free / Trial</small></span><span class="compat-status issues">Has issues</span><span class="compat-renderer">Rosetta · Wine / FEX · Wine</span><span class="compat-scope">Trial · Title screen</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
+      <div class="compat-detail"><div><p class="compat-result">The first combination, Rosetta · Wine, crashed after 15 seconds. FEX · Wine kept the game window open and recorded 93 fps, but Korean glyphs appeared as boxes. The combination was found through automatic discovery and was not saved.</p><dl><div><dt>Test environment</dt><dd>M4 Pro · First-launch test</dd></div><div><dt>Things to know</dt><dd>Results apply only to the scenes and settings tested. Full gameplay and long-term stability were not tested.</dd></div><div><dt>Record checked</dt><dd><time datetime="2026-10-23">2026-10-23</time></dd></div></dl><a class="compat-permalink" href="#game-domekeeper">Link to this game ↗</a></div></div>
+    </details>
+<details class="compat-game" id="game-warzone2100" data-status="issues" data-search="Warzone 2100 Warzone 2100">
+      <summary><span class="compat-name"><strong>Warzone 2100</strong><small>Steam · Free / Trial</small></span><span class="compat-status issues">Has issues</span><span class="compat-renderer">Rosetta · Wine</span><span class="compat-scope">Waiting at startup notice</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
+      <div class="compat-detail"><div><p class="compat-result">The game displayed a notice that it was running under Wine and waited for confirmation. The actual game screen after closing the notice was not tested.</p><dl><div><dt>Test environment</dt><dd>M4 Pro · First-launch test</dd></div><div><dt>Things to know</dt><dd>Results apply only to the scenes and settings tested. Full gameplay and long-term stability were not tested.</dd></div><div><dt>Record checked</dt><dd><time datetime="2026-10-23">2026-10-23</time></dd></div></dl><a class="compat-permalink" href="#game-warzone2100">Link to this game ↗</a></div></div>
+    </details>
+<details class="compat-game" id="game-wukongbench" data-status="issues" data-search="Black Myth: Wukong Benchmark Tool Black Myth: Wukong Benchmark Tool">
+      <summary><span class="compat-name"><strong>Black Myth: Wukong Benchmark Tool</strong><small>Steam · Free / Trial</small></span><span class="compat-status issues">Has issues</span><span class="compat-renderer">Rosetta · D3DMetal</span><span class="compat-scope">Benchmark launch · Driver warning</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
+      <div class="compat-detail"><div><p class="compat-result">The benchmark executable launched but waited at Unreal Engine's AMD graphics driver warning. The benchmark scene and performance were not tested.</p><dl><div><dt>Test environment</dt><dd>M4 Pro · First-launch test</dd></div><div><dt>Things to know</dt><dd>Results apply only to the scenes and settings tested. Full gameplay and long-term stability were not tested.</dd></div><div><dt>Record checked</dt><dd><time datetime="2026-10-23">2026-10-23</time></dd></div></dl><a class="compat-permalink" href="#game-wukongbench">Link to this game ↗</a></div></div>
+    </details></div>
+    <p class="compat-empty" hidden>No games match. Try another search or test-result filter.</p>
+    <p class="foot-note">Gameplay results apply to the scenes and settings listed. They do not guarantee every part of a game or online matchmaking will work. Games without records are not listed. Game names and images belong to their respective developers and publishers.</p>
+  </section>
+
+  <section class="sec wrap compat-guide" id="perf" aria-labelledby="perf-title">
+    <div class="sec-head"><p class="eyebrow">Reading the frame-rate records</p><h2 id="perf-title">Check the conditions, too.</h2></div>
+    <p class="note">These figures were measured on this Mac (M4 Pro). They include earlier measurements and changes through October 23. Results vary with the scene and settings and are not latency guarantees.</p>
+    <div class="compat-guide-grid"><div><h3>Game fps</h3><p>Frames actually rendered by the game. Rates vary by map, resolution, and settings, even within the same game.</p></div><div><h3>Display output fps</h3><p>With frame generation enabled, this includes intermediate frames. Ember Flow and in-game frame generation are listed separately.</p></div><div><h3>Test scope</h3><p>Menus, local bot matches, trials, and online play are distinguished. Stutter and hangs are noted even when average fps is high.</p></div></div>
+    <div class="sec-head" style="margin-top:40px"><p class="eyebrow">Measurements from October 18–20</p><h3>Responsiveness and stutter matter, too.</h3></div>
+    <div class="compat-guide-grid">
+      <div><h3>Ember Flow · Frame generation</h3><p>Rosetta · D3DMetal smooth mode recorded internal presentation latency of 24.2 → 14.1 ms in the Stellar Blade demo at FHD with MetalFX off.</p></div>
+      <div><h3>Ember Spark · Input latency management</h3><p>DXMT low-latency mode automatically sets the display queue to 2 frames when the game keeps up with its fps cap, or 3 when it cannot. A synthetic GPU-load test measured median input-to-display latency of 49.7 → 37.8 ms and game fps +26%. Valheim with FEX, FHD, a 60 fps cap, and frame generation off measured internal latency of 10.2 → 5.6 ms.</p></div>
+      <div><h3>Lost Ark · Frame-rate improvement</h3><p>Retrieving GPU results sooner raised game fps by +7% (50.2 → 53.7) in a crowded scene. A separate realignment comparison reduced the median of per-second maximum frame times from about 23–29 → 17–20 ms.</p></div>
+    </div>
+    <p class="foot-note">Measured on this Mac (M4 Pro). Evidence: 10/18–19 smoothjob presentation measurements, 10/19 spinless, and 10/20 fpslat · realign A/b16 comparisons. DXMT internal latency measures render queue plus presentation, and differs from input-to-display latency. Input-to-display uses the capture/compositing path and excludes the monitor's own latency. Improvements from separate runs were not added together. <a href="license.html#measure">View measurement conditions</a></p>
+  </section>
+
+  <!-- ===== 기능 ===== -->
+  <section class="sec wrap" id="features" aria-labelledby="feat-title">
+    <div class="sec-head">
+      <p class="eyebrow">Features built by Ember</p>
+      <h2 id="feat-title">More than getting games to run on a Mac</h2>
+      <p class="note">Once a game is running, Ember's own engines get to work: Ember Flow · Forge · Tone · Flare · Pulse · Boost · Kindle · Kiln · Spark · Lens · Guard. Select <span class="finfo-demo" aria-hidden="true">i</span>beside a name to see how it works and its measurements.</p>
+    </div>
+
+    <article class="flow" aria-labelledby="f-flow">
+      <div class="body">
+        <div class="bname"><strong id="f-flow">Ember <span>Flow</span></strong><span class="kind">Frame generation<button class="finfo" type="button" data-b="flow" aria-label="About Ember Flow" aria-expanded="false">i</button></span></div>
+        <h3>Fill the gaps between frames while managing latency</h3>
+        <p>Ember's own frame generation engine draws a new frame between two game frames. Even as a game fluctuates around 60~100fps, it fills the display evenly within your monitor's refresh rate (such as 120 or 144Hz).</p>
+        <ul class="pts">
+          <li><b>Fill as needed</b>Fills only the gaps, without slowing the game itself.</li>
+          <li><b>Motion compensation</b>Builds intermediate scenes along the paths objects move.</li>
+          <li><b>Text protection</b><span><span class="bn">Ember Guard</span><button class="finfo" type="button" data-b="guard" aria-label="About Ember Guard" aria-expanded="false">i</button> Keeps nameplates and HUD text from smearing.</span></li>
+          <li><b>Latency management</b>Drains the queue and uses low-latency mode to keep input responsive. If frame generation delays the display, it pauses briefly to prioritize response. Overwatch (D3DMetal), with frame generation on: latency 44.5 → 25.2&nbsp;ms. Lethal Company (Rosetta · DXMT, 4K) recorded internal latency of 51.5 → 43.0&nbsp;ms.</li>
+          <li><b>Even output</b>Fixed frame generation stopping whenever latency briefly exceeded its limit. Stellar Blade (D3DMetal, 144Hz) display output used to vary between runs from 72~117&nbsp;fps; the average rose from 109.6 → 116.7&nbsp;fps, with latency increasing by less than 1&nbsp;ms. Rosetta D3DMetal smooth mode changed its presentation method, taking Stellar Blade FHD latency from 24.2 → 14.1&nbsp;ms, output 116.6 → 119.2&nbsp;fps(QHD 24.2 → 15.8&nbsp;ms, 114.0 → 118.8&nbsp;fps).</li>
+          <li><b>Fewer long pauses</b>In one Once Human session (Rosetta · D3DMetal · 4K), pauses over 50 ms fell from 6 → 0. This is a single-session result; an improvement in overall output variation was not confirmed.</li>
+          <li><b>HDR color protection</b>For HDR (PQ) games in D3DMetal, frame generation stops and original frames are displayed to preserve color. The Witcher 3 displayed without color or brightness errors in our test.</li>
+          <li><b>Frame generation HUD</b><span><span class="bn">Ember Lens</span><button class="finfo" type="button" data-b="lens" aria-label="About Ember Lens" aria-expanded="false">i</button> Shows FG ON and LAT (latency) in the corner of the game. If frame generation pauses, it also shows the actual reason.</span></li>
+          <li><b>Flow neural network</b>A neural network trained by Ember reads motion to create intermediate scenes. It is the default in Auto mode, and at 4K its cost is about&nbsp;60% of the previous method.</li>
+          <li><b>Frame generation engine 1.6</b>In Lost Ark (FEX · DXMT), skipped neural frame generation frames fell from 76~133 per 120 seconds → 0.</li>
+          <li><b>Ripples and foliage</b>Generates frames even in scenes with scattered fine detail, without repeating original frames.</li>
+          <li><b>Generate frames before upscaling</b>With MetalFX, frame generation runs at the pre-upscale resolution to reduce GPU load. Lost Ark game fps rose by 10%.</li>
+          <li><b>Lightweight upscaling</b>Generated frames use a lightweight single-pass upscale instead of MetalFX. Lost Ark game 49.7 → 51.6&nbsp;fps, with text and HUD unchanged.</li>
+          <li><b>Ember Prism</b>Experimental and off by default. When enabled, it uses Apple's frame generation engine in Rosetta · D3DMetal games to prioritize image quality, with a small latency increase. Works with Ember Flow on macOS 26 or later.</li>
+        </ul>
+      </div>
+      <div>
+        <figure class="cad">
+          <svg viewBox="0 0 560 202" role="img" aria-labelledby="cad-t">
+            <title id="cad-t">Frames over 200 ms: 10 game frames, one every 20 ms; 20 display frames, one every 10 ms. Even display slots are real frames; odd slots are drawn by Ember Flow.</title>
+            <g class="cad-t" font-family="IBM Plex Mono, monospace" font-size="13" fill="#a89c91">
+              <text x="0" y="24">Game 50 fps</text>
+              <text x="0" y="104">Display 100 fps</text>
+              <text x="0" y="196">0</text><text x="280" y="196" text-anchor="middle">100</text><text x="560" y="196" text-anchor="end">200 ms</text>
+            </g>
+            <line x1="0" y1="172" x2="560" y2="172" stroke="rgba(255,214,180,.24)" stroke-width="1"/>
+            <line x1="280" y1="168" x2="280" y2="176" stroke="rgba(255,214,180,.24)" stroke-width="1"/>
+            <g id="cad-real"></g><g id="cad-out"></g>
+            <rect id="cad-scan" x="0" y="32" width="2" height="128" fill="#efe6dc" opacity=".5"/>
+          </svg>
+          <figcaption>An example of how it works. At 50 game fps, an Ember Flow frame (orange) is inserted between each pair of real frames (gold), doubling display output exactly.</figcaption>
+          <p class="spec"><span><a href="#screens">See real measurements by game ↗</a></span></p>
+        </figure>
+        <figure class="ba" data-key="flow" hidden>
+          <div class="ba-view"><img class="ba-a" alt="Intermediate frame from standard frame generation (blending adjacent frames). Bow and arm appear doubled."><img class="ba-b" alt="The same intermediate frame generated by the Ember Flow neural network. Bow and arm are clear, without doubling."><span class="ba-line"></span><span class="lab a">Standard frame generation</span><span class="lab b">Ember Flow neural network</span><input type="range" id="ba-flow" min="0" max="100" value="50" aria-label="Standard frame generation / Ember Flow neural network comparison position"></div>
+          <figcaption>Generated frames from the same moment while walking and turning the camera in Once Human. Compared with the real frame: standard frame generation 24.6 dB, Ember Flow neural network 26.8 dB. Drag the handle to compare.</figcaption>
+        </figure>
+      </div>
+    </article>
+
+    <!-- 비교 슬라이더 자리(.ba[data-key]): assets/cmp/<이름>-a.webp(전)·<이름>-b.webp(후), 같은 장면 16:9 약 1600px. list.json 에 이름을 넣으면 나타남. flow=일반 보간(MC)/Ember Flow, guard=가드 없음/Ember Guard, forge=MetalFX만/+Ember Forge, tone=끔/켬. 개인정보는 가린 것만. -->
+    <div class="index">
+      <article class="ix">
+        <div class="ix-name"><strong>Ember <span>Guard</span></strong><span class="kind">Text and nameplate protection<button class="finfo" type="button" data-b="guard" aria-label="About Ember Guard" aria-expanded="false">i</button></span></div>
+        <div class="ix-text"><p>Keeps text and nameplates from smearing in Ember Flow's intermediate frames. If sharp strokes occupy the same position in the original frames on either side, they are preserved unchanged.</p>
+          <details><summary>Details</summary><ul class="pts"><li><b>Image quality</b>Once Human, 8 scenes: PSNR 25.0 → 26.3 dB.</li><li><b>Default</b>Always enabled alongside Ember Flow.</li></ul>
+          <figure class="ba" data-key="guard" hidden><div class="ba-view"><img class="ba-a" alt="Generated text without Guard"><img class="ba-b" alt="Text protected by Ember Guard"><span class="ba-line"></span><span class="lab a">Without Guard</span><span class="lab b">Ember Guard</span><input type="range" id="ba-guard" min="0" max="100" value="50" aria-label="Without Guard / Ember Guard comparison position"></div></figure></details></div>
+        <div class="ix-val"><p class="num">95<em>→</em>0%</p><p>Frame generation skip rate in Lost Ark's waterpark</p></div>
+      </article>
+      <article class="ix">
+        <div class="ix-name"><strong>Ember <span>Forge</span></strong><span class="kind">AI detail restoration<button class="finfo" type="button" data-b="forge" aria-label="About Ember Forge" aria-expanded="false">i</button></span></div>
+        <div class="ix-text"><p>After MetalFX doubles the image dimensions, an AI model built by Ember refines blurred detail and overly sharp edges, restoring detail lost when running at a lower resolution.</p>
+          <details><summary>Details</summary><ul class="pts"><li><b>Overhead</b>About 1.4 ms extra GPU time for FHD → 4K (M4 Pro).</li><li><b>In game</b>Once Human stayed at 60 fps with it both on and off.</li><li><b>Default</b>Off. Enable it in game settings. Works in D3DMetal when scaling FHD to exactly twice its dimensions at 4K.</li></ul>
+          <figure class="ba" data-key="forge" hidden><div class="ba-view"><img class="ba-a" alt="Image upscaled with MetalFX alone"><img class="ba-b" alt="Image upscaled with MetalFX and Ember Forge"><span class="ba-line"></span><span class="lab a">MetalFX only</span><span class="lab b">+ Ember Forge</span><input type="range" id="ba-forge" min="0" max="100" value="50" aria-label="MetalFX only / Ember Forge comparison position"></div></figure></details></div>
+        <div class="ix-val"><p class="num">−33~57%</p><p>Difference from original (LPIPS), compared with MetalFX alone</p></div>
+      </article>
+      <article class="ix">
+        <div class="ix-name"><strong>Ember <span>Tone</span></strong><span class="kind">AI image refinement<button class="finfo" type="button" data-b="tone" aria-label="About Ember Tone" aria-expanded="false">i</button></span></div>
+        <div class="ix-text"><p>Naturally refines color and contrast. A color lookup table is created once at launch, then each frame simply reads that table.</p>
+          <details><summary>Details</summary><ul class="pts"><li><b>Using together</b>Once Human stayed at 104 fps even with Ember Flow enabled alongside it.</li><li><b>Default</b>Off. With Battery Mode enabled, it switches off automatically when unplugged.</li></ul>
+          <figure class="ba" data-key="tone" hidden><div class="ba-view"><img class="ba-a" alt="Ember Tone off"><img class="ba-b" alt="Ember Tone on"><span class="ba-line"></span><span class="lab a">Tone off</span><span class="lab b">Tone on</span><input type="range" id="ba-tone" min="0" max="100" value="50" aria-label="Ember Tone off / on comparison position"></div></figure></details></div>
+        <div class="ix-val"><p class="num">0.3<em>ms</em></p><p>GPU time per frame (QHD 0.3~0.4 ms)</p></div>
+      </article>
+      <article class="ix">
+        <div class="ix-name"><strong>Ember <span>Flare</span></strong><span class="kind">Native HDR · AI Auto HDR<button class="finfo" type="button" data-b="flare" aria-label="About Ember Flare" aria-expanded="false">i</button></span></div>
+        <div class="ix-text"><p>HDR games send their HDR10 (PQ) 10-bit output directly to the Mac's HDR display. SDR games can also show brighter highlights in HDR while leaving text and menus unchanged.</p>
+          <details><summary>Details</summary><ul class="pts"><li><b>Accurate brightness</b>SDR white at 100 nit stays at 100 nit.</li><li><b>Brightness mapping</b>Brightness beyond the display's peak is mapped using BT.2390.</li><li><b>Both graphics paths</b>Works the same in DXMT and D3DMetal.</li><li><b>Frame generation and HDR</b>HDR (PQ) games in D3DMetal display original frames instead of frame generation to preserve color. Tested in The Witcher 3.</li><li><b>Requirements</b>Requires an HDR-capable display. Auto HDR is off by default, and turns off when a game enables HDR itself.</li></ul></details></div>
+        <div class="ix-val"><p class="num">0.8<em>ms</em></p><p>GPU time per frame at 4K (1080p: 0.3 ms)</p></div>
+      </article>
+      <article class="ix">
+        <div class="ix-name"><strong>Ember <span>Pulse</span></strong><span class="kind">Frame pacing<button class="finfo" type="button" data-b="pulse" aria-label="About Ember Pulse" aria-expanded="false">i</button></span></div>
+        <div class="ix-text"><p>Measures when the display will accept the next frame and submits it at that moment, keeping output evenly spaced and reducing latency.</p>
+          <details><summary>Details</summary><ul class="pts"><li><b>Latency</b>Once Human: 12.6~15.3 → 4.5~6.4 ms.</li><li><b>Default</b>Enabled automatically in DXMT (D3D11) games. Disables itself in scenes with high GPU usage.</li></ul></details></div>
+        <div class="ix-val"><p class="num long">55–101<em>→</em>4–10</p><p>Pauses over 25 ms in Once Human</p></div>
+      </article>
+      <article class="ix">
+        <div class="ix-name"><strong>Ember <span>Boost</span></strong><span class="kind">Game Mode boost<button class="finfo" type="button" data-b="boost" aria-label="About Ember Boost" aria-expanded="false">i</button></span></div>
+        <div class="ix-text"><p>Changes how games launch so macOS Game Mode recognizes games launched through Ember. Priorities help keep game threads and the Wine server on performance cores. Whether to enable it is decided by measurement.</p>
+          <details><summary>Details</summary><ul class="pts"><li><b>Off · On · Auto</b>Auto uses Frame Check to measure both on and off, then picks the faster option.</li><li><b>Switch while running</b>Change it without closing the game.</li><li><b>Performance cores</b>With video encoding in the background, time on performance cores rose from 81 → 94%.</li><li><b>Power for the GPU</b>Fixed Windows timer threads that were spinning needlessly, freeing CPU power for the GPU. In the same Lost Ark scene: 44.2 → 46.4&nbsp;fps.</li><li><b>Accurate timers</b>Average Sleep error 5&nbsp;ms → 0.04&nbsp;ms. 60&nbsp;Late frames in fps-capped games: 32% → 2%.</li><li><b>Lost Ark</b>With FEX: Game Mode about +7%, timer fix +4.7%.</li></ul></details></div>
+        <div class="ix-val"><p class="num">61.2<em>→</em>64.0</p><p>Lost Ark fps with background video encoding</p></div>
+      </article>
+      <article class="ix">
+        <div class="ix-name"><strong>Ember <span>Kindle</span></strong><span class="kind">Ahead-of-time translation<button class="finfo" type="button" data-b="kindle" aria-label="About Ember Kindle" aria-expanded="false">i</button></span></div>
+        <div class="ix-text"><p>Uses code lists collected from previous runs to fill the FEX translation cache while your Mac is idle, reducing stutter at launch.</p>
+          <details><summary>Details</summary><ul class="pts"><li><b>Stutter</b>Pauses over 50 ms: 4 → 1.</li><li><b>Default</b>Works automatically for FEX games, only while connected to power. Stops as soon as you launch a game.</li></ul></details></div>
+        <div class="ix-val"><p class="num long">4.1–4.3<em>→</em>2.3–2.4</p><p>Seconds until Lost Ark's web view appears</p></div>
+      </article>
+      <article class="ix">
+        <div class="ix-name"><strong>Ember <span>Kiln</span></strong><span class="kind">Shader preparation<button class="finfo" type="button" data-b="kiln" aria-label="About Ember Kiln" aria-expanded="false">i</button></span></div>
+        <div class="ix-text"><p>Prepares shaders while the game is closed, reducing shader-related pauses in new scenes and first battles.</p>
+          <details><summary>Details</summary><ul class="pts"><li><b>Once Human</b>First-entry pause with Rosetta: 11.8 → 0.8 seconds.</li><li><b>First 45 seconds in town</b>Lost Ark game fps: 50 → 59.</li><li><b>Shader-heavy games</b>Prepares shaders in batches, even in games such as Lost Ark with 16,000 shaders. Pauses of 0.6~1.3 seconds recurring for 25 seconds after teleporting were reduced to one pause on arrival. There were 0 pauses over 100 ms in the first few minutes of a new area.</li><li><b>Default</b>On by default for DXMT games. Preparation runs after the game closes, so it does not run during play.</li></ul></details></div>
+        <div class="ix-val"><p class="num long">30.5<em>→</em>0.6</p><p>Shader-related pause on Lost Ark's first launch, seconds</p></div>
+      </article>
+      <article class="ix">
+        <div class="ix-name"><strong>Ember <span>Spark</span></strong><span class="kind">Reduce input latency<button class="finfo" type="button" data-b="spark" aria-label="About Ember Spark" aria-expanded="false">i</button></span></div>
+        <div class="ix-text"><p>Briefly holds the game back from starting the next frame too early. This lets the frame include more recent input, reducing the time until your action appears on screen.</p>
+          <details><summary>Details</summary><ul class="pts"><li><b>Lethal Company</b>Input latency at a 60 fps cap: 37~39 → 18~29 ms.</li><li><b>Performance impact</b>fps and display p99 were unchanged.</li><li><b>Default</b>On by default for DXMT games. Turns off automatically when Ember Flow is enabled.</li></ul></details></div>
+        <div class="ix-val"><p class="num long">35–39<em>→</em>26–28</p><p>Valheim input latency at a 60 fps cap, ms</p></div>
+      </article>
+      <article class="ix">
+        <div class="ix-name"><strong>Ember <span>Lens</span></strong><span class="kind">In-game HUD<button class="finfo" type="button" data-b="lens" aria-label="About Ember Lens" aria-expanded="false">i</button></span></div>
+        <div class="ix-text"><p>Draws fps, latency, frame generation status, boss panels, and Ember speech bubbles directly into game frames, without separate windows.</p>
+          <details><summary>Details</summary><ul class="pts"><li><b>Overhead</b>Two panels: 0.03~0.06 ms GPU time (4K).</li><li><b>Latency</b>1.3~1.7 ms less than a separate window (Once&nbsp;Human).</li><li><b>Default</b>Draws within the game image. Automatically falls back to a separate window for games that cannot support it (D3D12, DXVK, etc.).</li></ul></details></div>
+        <div class="ix-val"><p class="num">+1.5–1.8</p><p>Higher fps than a separate window (Once Human)</p></div>
+      </article>
+    </div>
+
+    <div class="engine" aria-label="Under the hood">
+      <article class="eg">
+        <p class="num">27<em>→</em>5<small>ns</small></p>
+        <div><p class="eyebrow">ARM translation engine</p><h3>Faster ARM translation without Rosetta</h3><p>FEX translates x86 game code into ARM instructions. Ember adds ahead-of-time translation and faster call paths.</p>
+          <ul class="pts"><li><b>Faster API transitions</b>Per system call: 27 ns → 5 ns.</li><li><b>Shorter rendering path</b>D3D draw call: 0.294 → 0.158 µs.</li><li><b>Ahead-of-time translation</b><span><span class="bn">Ember Kindle</span><button class="finfo" type="button" data-b="kindle" aria-label="About Ember Kindle" aria-expanded="false">i</button> Translates ahead while idle to reduce first-launch stutter.</span></li><li><b>Persistent translation cache</b>Saves code to disk that Unity (Mono) games used to retranslate on every launch. Valheim's maximum frame time fell from 27.8 → 18.9~20.4 ms, matching Rosetta. FEX cache improvements made initial translation 2.7~13× faster, and cache blocks left unsaved on exit fell from 20% to 0% in offline tests.</li><li><b>Lost Ark</b>Median of maximum frame times over 5-second intervals: 38 → 22 ms.</li><li><b>Launchers</b>Epic Games Launcher reaches the login screen with FEX, succeeding in all 8 repeated tests. EA app and GOG GALAXY also reach login with FEX; GOG GALAXY takes 16 seconds to show its window.</li><li><b>Starting Steam games</b>Fixed Steam games hanging at a pre-launch notice. The Witcher 3: 6 hangs in 16 attempts → 0 in 23.</li><li><b>Stability</b>Fixed several FEX hangs and crashes, including a game hang caused by a thread exiting while holding a lock. Stellar Blade's intermittent screen freeze fell from 3 of 9 runs → 0 of 7, and Team Fortress 2's audio-initialization hang was also fixed.</li><li><b>Architecture</b>Translates x86-64 code to ARM64. Choose the engine for each game.</li></ul></div>
+      </article>
+      <article class="eg">
+        <p class="num">DX9–12</p>
+        <div><p class="eyebrow">Automatic translator selection · Recovery</p><h3>Pick the fastest translator for each game, and retry with another after a crash</h3><p>Ember picks a suitable translator from DXMT, D3DMetal, and DXVK, which convert DirectX graphics to Metal. If a game crashes during launch, it retries with another translator. You can also select one manually for each game.</p>
+          <p class="spec" style="margin-top:16px"><span><b>DX9 – DX12 → Metal</b></span><span>D3DMetal is detected and used if Apple's Game Porting Toolkit is installed</span></p></div>
+      </article>
+      <article class="eg">
+        <p class="num">97.5<small>%</small></p>
+        <div><p class="eyebrow">Lost Ark boss mechanics</p><h3>See the next mechanic ahead of time, right in the game</h3><p>During raids, reads the visible boss name and HP-bar count locally on your Mac, then displays the next mechanic prominently through Ember Lens.</p>
+          <ul class="pts"><li><b>Boss guides</b>33.</li><li><b>Recognition</b>Boss names: 97.5%; HP-bar count: 94.6% (11 test videos).</li><li><b>Safety</b>Reads only on-screen text, without accessing game memory or inputs. Use is subject to the game's terms.</li></ul></div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== 엠버 AI ===== -->
+  <section class="sec wrap" id="ember" aria-labelledby="ai-title">
+    <div class="sec-head">
+      <p class="eyebrow lime">On-device AI assistant · Ember</p>
+      <h2 id="ai-title" class="sr">Ember</h2>
+    </div>
+    <div class="quote">
+      <div>
+        <blockquote><span>“Hey Ember,</span> launch Lost Ark, then in 30 minutes&nbsp;remind me.”</blockquote>
+        <p class="ai-lead">Speak to Ember to handle even multi-step requests at once. Speech recognition and response generation both run on your Mac.</p>
+      </div>
+      <figure class="side"><img src="../assets/ui-coach.webp" alt="Ember speech bubbles over a game: listening, settings replies, and mechanic alerts" loading="lazy" width="900" height="1047"><figcaption>Ember speech bubbles over your game</figcaption></figure>
+    </div>
+    <dl class="caps">
+      <div><dt>Game</dt><dd>Launch, quit, and measure fps</dd></div>
+      <div><dt>Time</dt><dd>Timers and reminders</dd></div>
+      <div><dt>Mac status</dt><dd>Check temperature and memory</dd></div>
+      <div><dt>Settings</dt><dd>Change and undo</dd></div>
+      <div><dt>Screen</dt><dd>Translate and explain game screens</dd></div>
+      <div><dt>Voice</dt><dd>Natural synthesized speech</dd></div>
+      <div><dt>Listening</dt><dd>Recognizes the Korean wake phrase “Ember-ya” even over game audio</dd></div>
+      <div><dt>Troubleshoot</dt><dd>Uses launch logs to explain causes and next steps; when evidence is missing, starts by explaining how to check</dd></div>
+      <div><dt>Conversation</dt><dd>Follow up naturally with requests such as “MetalFX too” or “the other way”</dd></div>
+      <div><dt>Proactive alerts</dt><dd>Speaks up when fps drops or temperatures rise</dd></div>
+      <div><dt>Why is it stuttering?</dt><dd>Explains causes and fixes based on measurements</dd></div>
+      <div><dt>Lightweight</dt><dd>Checks every 5 seconds using 0.3&nbsp;ms</dd></div>
+    </dl>
+    <p class="spec" style="margin-top:20px;border-top:0"><span><b>Recognized all 32 of 32 calls over game audio</b></span><span>Processed entirely on device</span><span>Wake phrase requires macOS 26 or later</span><span>Troubleshooting responses: self-assessed score across 48 questions, 5.2 → 8.6/10</span></p>
+  </section>
+
+  <!-- ===== 앱 안의 엠버 ===== -->
+  <section class="sec wrap" id="living" aria-labelledby="live-title">
+    <div class="sec-head">
+      <p class="eyebrow">Ember in the app · Animated backgrounds</p>
+      <h2 id="live-title">Ember moves around the app</h2>
+      <p class="note">These videos are direct recordings of the Ember app. Only for recording, the intervals between outings and tab changes were shortened.</p>
+    </div>
+    <div class="live">
+      <figure class="vid">
+        <video muted loop playsinline preload="none" poster="../assets/media/app-mascot-walk.webp" width="1120" height="782" aria-label="Recording of 3D Ember walking across the top game artwork on the Ember home screen">
+          <source src="../assets/media/app-mascot-walk.mp4" type="video/mp4"><source src="../assets/media/app-mascot-walk.webm" type="video/webm">
+        </video>
+        <button class="play" type="button" hidden>Play</button>
+        <figcaption>Usually rests below the sidebar, then goes for a walk every 1~2 minutes.</figcaption>
+      </figure>
+      <div class="live-text">
+        <h3>Ember explores the screen.</h3>
+        <p>Peeks out from behind cards, sits on image edges, and follows tab changes. You can also pick Ember up and move it with the mouse.</p>
+        <ul class="facts">
+          <li>Animations<b>16</b></li>
+          <li>App CPU usage (one core)<b>About 17% on average</b></li>
+          <li>When a game opens<b>Hides and pauses</b></li>
+          <li>Turn off<b>Settings → General → Display</b></li>
+        </ul>
+        <figure class="small vid">
+          <video muted loop playsinline preload="none" poster="../assets/media/app-mascot-tabs.webp" width="1120" height="782" aria-label="Recording of Ember following tab changes while embers drift across the app background">
+            <source src="../assets/media/app-mascot-tabs.mp4" type="video/mp4"><source src="../assets/media/app-mascot-tabs.webm" type="video/webm">
+          </video>
+          <button class="play" type="button" hidden>Play</button>
+          <figcaption>Ember follows tab changes against an animated background. Animation pauses while a game is running or the window is covered, and is disabled with Reduce Motion or Low Power Mode.</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 앱 둘러보기 ===== -->
+  <section class="sec wrap" id="app" aria-labelledby="gal-title">
+    <div class="sec-head">
+      <p class="eyebrow">Explore the app</p>
+      <h2 id="gal-title">Many features, one app</h2>
+      <p class="note">Games, settings, troubleshooting, and Ember all live in one app. Detailed settings stay collapsed to keep screens clear. Buttons are orange glass capsules, and selectors glide toward your choice like a drop of water.</p>
+    </div>
+    <div class="tour">
+      <div class="tabs" role="tablist" aria-label="App screenshots">
+        <button role="tab" id="tab-0" aria-controls="pane-0" aria-selected="true"><b>Home</b><span>Recent games and Mac status at a glance</span></button>
+        <button role="tab" id="tab-1" aria-controls="pane-1" aria-selected="false" tabindex="-1"><b>Game details</b><span>Choose an engine and translator per game</span></button>
+        <button role="tab" id="tab-2" aria-controls="pane-2" aria-selected="false" tabindex="-1"><b>Launch options</b><span>Display and Ember Flow groups</span></button>
+        <button role="tab" id="tab-3" aria-controls="pane-3" aria-selected="false" tabindex="-1"><b>Troubleshoot</b><span>Live performance and Ember chat</span></button>
+        <button role="tab" id="tab-4" aria-controls="pane-4" aria-selected="false" tabindex="-1"><b>Ember speech bubbles</b><span>Listens, changes settings, and keeps you informed</span></button>
+        <button role="tab" id="tab-5" aria-controls="pane-5" aria-selected="false" tabindex="-1"><b>Boss mechanic panel</b><span>Current and upcoming mechanics</span></button>
+      </div>
+      <div class="panes">
+        <figure role="tabpanel" id="pane-0" aria-labelledby="tab-0"><img src="../assets/ui-home.webp" alt="Ember home screen: recently played Lost Ark, game library, and system status" loading="lazy" width="1400" height="894"><figcaption>Home · Recent games and Mac status at a glance</figcaption></figure>
+        <figure role="tabpanel" id="pane-1" aria-labelledby="tab-1" hidden><img src="../assets/ui-game.webp" alt="Lost Ark game page: engine and graphics translator selection" loading="lazy" width="1400" height="875"><figcaption>Game details · An engine and translator for each game</figcaption></figure>
+        <figure role="tabpanel" id="pane-2" aria-labelledby="tab-2" hidden><img src="../assets/ui-options.webp" alt="Launch options: resolution and upscaling in the Display group; computation and frame generation methods in the Ember Flow group" loading="lazy" width="1400" height="875"><figcaption>Launch options · Resolution, upscaling, and Ember Flow in groups</figcaption></figure>
+        <figure role="tabpanel" id="pane-3" aria-labelledby="tab-3" hidden><img src="../assets/ui-troubleshoot.webp" alt="Troubleshooting screen: live performance and Ask Ember" loading="lazy" width="1400" height="875"><figcaption>Troubleshooting · Live performance and Ember chat</figcaption></figure>
+        <figure role="tabpanel" id="pane-4" aria-labelledby="tab-4" class="tall" hidden><img src="../assets/ui-coach.webp" alt="Ember speech bubbles over a game: listening, settings replies, and mechanic alerts" loading="lazy" width="900" height="1047"><figcaption>Ember speech bubbles · Listening, adjusting, and informing</figcaption></figure>
+        <figure role="tabpanel" id="pane-5" aria-labelledby="tab-5" class="wide" hidden><img src="../assets/ui-boss.webp" alt="Boss mechanic panel: boss name, HP-bar count, current and upcoming mechanics" loading="lazy" width="1200" height="448"><figcaption>Boss mechanic panel · Current and upcoming mechanics</figcaption></figure>
+      </div>
+    </div>
+    <div class="lic">
+      <h3>Licenses &amp; Notices tab</h3>
+      <p>In Settings → Licenses &amp; Notices, the app lists open-source software included in Ember, LGPL components modified by Ember, and notices and source information for separately installed components. The same information is available on the <a href="license.html">Licenses &amp; Notices</a> page.</p>
+    </div>
+
+    <h3 class="sr" id="more-title">More features</h3>
+    <dl class="more" aria-labelledby="more-title">
+      <div><dt>Ember Wayfinder</dt><dd>Tries launch combinations in sequence for games that fail to start, then lets you save one. It first tries known launch options and recommended translators, then other supported translators and engines. If a Steam game crashes under Rosetta, it also checks the FEX path sharing the same installation. <details><summary>Find, save, and undo</summary><p>Tests with add-ons disabled, using only installed bottles. It will not start while a game or Wine launcher is running, or test anti-cheat games. Games and launchers opened by each trial are closed afterward, and files changed during testing are restored.</p><p>Launch-success detection, settings saving, and undo were tested in Valheim and The Witcher 3. The Witcher 3 success detection relies on indirect evidence from a D3DMetal hook, game window, and CPU activity. It does not guarantee gameplay or long-term stability.</p><p>A discovered combination is saved only when you choose “Save these settings.” Add-ons are preserved, and you can turn them on and recheck if you wish. Use “Revert settings” to undo a saved configuration.</p></details></dd></div>
+      <div><dt>Frame Check</dt><dd>Measures the same scene with different settings and shows which is faster in numbers.</dd></div>
+      <div><dt>Shader cache</dt><dd>Keeps shaders once created to reduce stutter from the second launch onward.</dd></div>
+      <div><dt>Fast synchronization (msync)</dt><dd>Handles Windows program synchronization directly inside Ember, making it 22× faster.</dd></div>
+      <div><dt>Launcher support</dt><dd>Runs Steam, Epic, Battle.net, and STOVE inside Ember, keeping your Steam login. EA app and GOG GALAXY were tested as far as their login screens; completed login, game installation, and launch still need separate tests. Installed games appear on Home. An FEX Steam startup hang was also fixed: The Witcher 3 launch tests went from 6 hangs in 16 attempts → 0 in 23 (these are not successful gameplay counts).</dd></div>
+      <div><dt>Uninstall games</dt><dd>Use the ⋯ menu beside Play. Steam, STOVE, and Battle.net use their launcher's official uninstall; other games go to the Trash. The path and size are shown first.</dd></div>
+      <div><dt>Older-game cutscenes</dt><dd>Includes AVI video codecs so cutscenes in older games do not appear as black screens.</dd></div>
+      <div><dt>Older-game audio</dt><dd>Preserves audio in older games using DirectSound.</dd></div>
+      <div><dt>Korean fonts</dt><dd>Automatically selects fallback fonts to keep Korean text in Windows programs from appearing as boxes.</dd></div>
+      <div><dt>Compatibility environments</dt><dd>Choose a Windows 11, 10, or 7 environment per game. Running 32-bit games with FEX is experimental and must be enabled in settings.</dd></div>
+      <div><dt>Add games from folders or ZIP files</dt><dd>Games without installers can be added to your library by choosing a folder or opening a ZIP file.</dd></div>
+      <div><dt>Dialog alerts</dt><dd>Ember notifies you when a game is waiting at a notice or confirmation dialog. Check the dialog yourself to continue.</dd></div>
+      <div><dt>Microphone permission dialog</dt><dd>Limits voice-input initialization time so a microphone permission dialog does not leave the game unresponsive. Microphone input may not be ready while the permission dialog is pending.</dd></div>
+      <div><dt>Per-game launch options</dt><dd>Set frame caps, resolution (FHD · QHD · 4K), and upscaling for each game. Options are grouped into Display, Ember Flow, Frames &amp; Latency, Image Refinement, Experimental, and Advanced.</dd></div>
+      <div><dt>Launch logs</dt><dd>View what went wrong in the logs and ask Ember about them directly. Ember AI suggests actions based on the game and recent settings changes, keeping applied settings reversible.</dd></div>
+      <div><dt>Ember updates</dt><dd>An automatic update bar shows progress from checking for new versions through download and installation.</dd></div>
+      <div><dt>Send diagnostic logs</dt><dd>Choose what to include and review a preview with personal information masked. Logs are sent only with your consent. Saving to a file keeps them on your Mac. <a href="privacy.html">Privacy Policy</a>explains retention and deletion.</dd></div>
+      <div><dt>Battery and heat</dt><dd>Battery Mode is opt-in. Performance comes first by default.</dd></div>
+      <div><dt>Prepare ahead</dt><dd>When you are not playing, Ember Kindle prepares translations and Ember Kiln prepares shaders.</dd></div>
+    </dl>
+  </section>
+  <div style="height:clamp(88px,15vh,170px)"></div>
+  </div>
+
+  <section class="end wrap" id="download" aria-labelledby="end-title">
+    <div class="stop" data-stop="end0" style="top:0"></div>
+    <div class="stop" data-stop="end" style="top:80vh"></div>
+    <div class="end-in">
+      <p class="eyebrow">Ember <span data-cfg="version">1.0</span></p>
+      <h2 id="end-title">Start playing Windows games on your Mac.</h2>
+      <p><a class="get lg" href="https://eunggg0.github.io/ember-releases/download/" data-link="download"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M6 10l6 6 6-6M4 20h16"/></svg>Download for Mac</a></p>
+      <ul class="req" aria-label="Requirements">
+        <li>Mac<b>Apple Silicon (M1 or later)</b></li>
+        <li>macOS<b>14 Sonoma or later</b></li>
+        <li>Korean wake phrase “Ember-ya”<b>macOS 26 or later</b></li>
+        <li>D3DMetal path<b>With Apple's Game Porting Toolkit installed</b></li>
+      </ul>
+      <p class="end-links"><a href="mailto:realnoma@naver.com" data-link="contact">Contact</a><a href="why.html">Why we build Ember</a><a href="license.html">Licenses &amp; Notices</a><a href="terms.html" data-link="terms">Terms of Use</a><a href="privacy.html">Privacy Policy</a></p>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap">
+  <p>Ember is an independent project, unaffiliated with Apple, Microsoft, or game developers. Game names and images belong to their respective owners. © 2026 Ember</p>
+  <nav class="foot-links" aria-label="Footer"><a href="why.html">Why we build Ember</a><a href="license.html">Licenses &amp; Notices</a><a href="terms.html" data-link="terms">Terms of Use</a><a href="privacy.html">Privacy Policy</a><a href="mailto:realnoma@naver.com" data-link="contact">Contact</a></nav>
+</footer>
+
+<div class="ftip" id="ftip" role="tooltip" aria-hidden="true"></div>
+
+<script>
+/* 링크·값은 assets/site-config.json 한곳에서 읽는다 (출시 때 실제 주소로 교체). 못 읽으면 HTML 기본값을 그대로 둔다. */
+fetch('../assets/site-config.json').then((r) => { if (!r.ok) throw new Error('config'); return r.json(); }).then((c) => {
+  document.querySelectorAll('[data-link]').forEach((a) => { const v = c[a.dataset.link]; if (v) a.setAttribute('href', v.replace('https://eunggg0.github.io/ember-site/', './').replace(/^\.\/(?=#)/, '')); });
+  document.querySelectorAll('[data-cfg]').forEach((el) => { const v = c[el.dataset.cfg]; if (v) el.textContent = v; });
+}).catch(() => {});
+</script>
+
+<script>
+(() => {
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* nav: 첫 막이 끝나면 바탕을 깐다 */
+const nav = document.getElementById('nav'), act = document.getElementById('act');
+const navUpd = () => nav.classList.toggle('solid', act.getBoundingClientRect().bottom < 80);
+addEventListener('scroll', navUpd, { passive: true }); navUpd();
+{ const mb = document.getElementById('menubtn'); const set = (o) => { nav.classList.toggle('open', o); mb.setAttribute('aria-expanded', o); };
+  mb.addEventListener('click', () => set(!nav.classList.contains('open')));
+  document.getElementById('navlist').addEventListener('click', (e) => { if (e.target.closest('a')) set(false); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && nav.classList.contains('open')) { set(false); mb.focus(); } });
+  document.addEventListener('pointerdown', (e) => { if (!nav.contains(e.target)) set(false); });
+  document.addEventListener('focusin', (e) => { if (!nav.contains(e.target)) set(false); });
+  matchMedia('(max-width:900px)').addEventListener('change', () => set(false)); }
+
+/* manifesto: 스크롤을 따라 낱말이 하나씩 켜진다 */
+const mani = document.getElementById('mani'), prose = document.getElementById('prose');
+if (!reduce) {
+  prose.innerHTML = prose.textContent.trim().split(/\s+/).map((w) => '<span class="w">' + w + '</span>').join(' ');
+  const ws = [...prose.querySelectorAll('.w')]; mani.classList.add('js');
+  const upd = () => {
+    const r = mani.getBoundingClientRect(); const total = mani.offsetHeight - innerHeight;
+    const p = Math.min(1, Math.max(0, (-r.top + innerHeight * 0.35) / (total * 0.8)));
+    const k = Math.round(p * ws.length); ws.forEach((w, i) => w.classList.toggle('on', i < k));
+  };
+  addEventListener('scroll', upd, { passive: true }); addEventListener('resize', upd); upd();
+}
+
+/* ledger: 0–200 fps 한 축 */
+document.querySelectorAll('.axis').forEach((ax) => {
+  [60, 120, 180].forEach((v) => { const t = document.createElement('span'); t.className = 'tick'; t.style.left = (v / 200 * 100) + '%'; ax.prepend(t); });
+  ax.querySelectorAll('.bar').forEach((b) => { const [a, z] = b.dataset.r.split(',').map(Number); b.style.left = 'calc(' + (a / 200 * 100) + '% - 4px)'; b.style.width = 'calc(' + ((z - a) / 200 * 100) + '% + 8px)'; });
+});
+
+/* Flow cadence: 200 ms, 게임 20 ms 간격, 화면 10 ms 간격 */
+{
+  const NS = 'http://www.w3.org/2000/svg', x0 = 0, W = 560; const X = (ms) => x0 + ms / 200 * W;
+  const mk = (g, x, y, w, h, fill) => { const r = document.createElementNS(NS, 'rect'); Object.entries({ x, y, width: w, height: h, rx: 2, fill }).forEach(([k, v]) => r.setAttribute(k, v)); g.appendChild(r); };
+  const gr = document.getElementById('cad-real'), go = document.getElementById('cad-out');
+  for (let i = 0; i < 10; i++) mk(gr, X(i * 20) + 1, 34, W / 10 - 4, 38, '#ffb547');
+  for (let i = 0; i < 20; i++) mk(go, X(i * 10) + 1, 114, W / 20 - 3, 38, i % 2 ? '#ff6a1f' : '#ffb547');
+  const scan = document.getElementById('cad-scan');
+  if (reduce) scan.remove();
+  else { let t0 = performance.now(), on = false; const tick = (t) => { if (!on) return; const ms = ((t - t0) / 12) % 200; scan.setAttribute('x', X(ms)); requestAnimationFrame(tick); };
+    new IntersectionObserver((es) => { const v = es[0].isIntersecting; if (v && !on) { on = true; requestAnimationFrame(tick); } else if (!v) on = false; }).observe(scan.ownerSVGElement); }   // 화면 밖이면 멈춤
+}
+
+/* before/after: 두 그림이 다 있을 때만 보인다. assets/cmp/<이름>-a.webp(전)·<이름>-b.webp(후) */
+/* assets/cmp/list.json 에 ["flow","guard","forge","tone"] 처럼 준비된 비교의 이름을 적으면 그 칸만 불러온다 */
+fetch('../assets/cmp/list.json').then((r) => r.ok ? r.json() : []).catch(() => []).then((keys) => {
+  document.querySelectorAll('.ba[data-key]').forEach((f) => {
+    if (!keys.includes(f.dataset.key)) return;
+    const a = f.querySelector('.ba-a'), b = f.querySelector('.ba-b'), v = f.querySelector('.ba-view'), inp = f.querySelector('input');
+    let n = 0; const ok = () => { if (++n === 2) f.hidden = false; };
+    a.onload = ok; b.onload = ok; a.src = '../assets/cmp/' + f.dataset.key + '-a.webp'; b.src = '../assets/cmp/' + f.dataset.key + '-b.webp';
+    inp.addEventListener('input', () => v.style.setProperty('--p', inp.value + '%'));
+  });
+});
+
+/* app tour tabs */
+{
+  const tabs = [...document.querySelectorAll('.tabs [role=tab]')];
+  const sel = (t, focus) => { tabs.forEach((x) => { const on = x === t; x.setAttribute('aria-selected', on); x.tabIndex = on ? 0 : -1; document.getElementById(x.getAttribute('aria-controls')).hidden = !on; }); if (focus) t.focus(); };
+  tabs.forEach((t, i) => {
+    t.addEventListener('click', () => sel(t));
+    t.addEventListener('keydown', (e) => { if (e.key === 'Home' || e.key === 'End') { e.preventDefault(); sel(e.key === 'Home' ? tabs[0] : tabs[tabs.length - 1], true); return; } const d = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 }[e.key]; if (d) { e.preventDefault(); sel(tabs[(i + d + tabs.length) % tabs.length], true); } });
+  });
+}
+
+/* Videos retain an accessible pause/retry action, including autoplay failures. */
+document.querySelectorAll('.vid').forEach((f) => {
+  const v = f.querySelector('video'), btn = f.querySelector('.play');
+  let visible = false, userPaused = false, userStarted = false;
+  btn.hidden = false;
+  const label = () => { btn.textContent = v.paused ? "Play" : "Pause"; btn.setAttribute('aria-label', v.paused ? "Play video" : "Pause video"); };
+  const play = () => { v.preload = 'auto'; v.play().catch(() => { label(); }); };
+  const sync = () => { if (visible && !document.hidden && !userPaused && (!reduce || userStarted)) play(); else v.pause(); };
+  v.addEventListener('play', label); v.addEventListener('pause', label); v.addEventListener('error', label);
+  btn.addEventListener('click', () => { if (v.paused) { userPaused = false; userStarted = true; play(); } else { userPaused = true; v.pause(); } });
+  new IntersectionObserver((es) => { visible = es[0].isIntersecting; sync(); }, {threshold:0.25}).observe(v);
+  document.addEventListener('visibilitychange', sync); label();
+});
+})();
+</script>
+
+<script>
+(() => {
+/* Ember 고유 기능 설명 판 — 앱의 FeatureInfo(EmberBrand.lines)와 같은 글. 수치는 실측만. */
+const D = {
+  flow:   ['Ember Flow',"Frame generation","Creates intermediate frames to increase display output fps by up to two times",["Fills the gaps when game frames are scarce, with up to twice as many display frames.","The GPU tracks how objects moved between adjacent frames, then draws a new intermediate scene along those paths.","Frame generation engine 1.6: Lost Ark (FEX · DXMT) neural frame skips fell from 76~133 per 120 seconds → 0. Lost Ark QHD 47~54 → 94~107 fps. GPU cost is about 1 ms at FHD. Even GPU-bound Overwatch QHD reached 60 → 116 fps in smooth mode. Stellar Blade (144Hz) average display output 109.6 → 116.7 fps. Latency varies by game and scene.","Off by default. Rests when game fps reaches the display refresh rate, and pauses if the game becomes too slow. The reason is shown on screen. HDR (PQ) games in D3DMetal display original frames to preserve color."]],
+  forge:  ['Ember Forge',"AI detail restoration","Sharpens detail in upscaled images",["Restores clarity to grass, text, and edges in images upscaled by MetalFX.","A small neural network trained by Ember refines the upscaled image, bringing it closer to the original 4K image.","33~57% less difference from the original than MetalFX alone. Adds 1.4 ms GPU time for FHD → 4K.","Off by default. Works only in D3DMetal when scaling FHD to exactly twice its dimensions at 4K."]],
+  tone:   ['Ember Tone',"AI image refinement","Brings out color and contrast naturally",["Naturally refines color and contrast in the game image.","A neural network creates a color lookup table once at game launch. Each frame then simply reads the table.","GPU 0.3~0.4 ms per frame (QHD). Once Human stayed at 104 fps even alongside Ember Flow.","Off by default. With Battery Mode enabled, switches off automatically when unplugged."]],
+  flare:  ['Ember Flare',"AI Auto HDR","Brings SDR highlights into HDR",["Shows bright areas such as sunlight and flames in SDR games more brightly on an HDR display.","A small neural network estimates the original brightness of highlights. Only those areas brighten; text and menus stay unchanged.","GPU time per frame: 1080p 0.3 ms, 4K 0.8 ms.","Off by default. Works only with HDR enabled on the display, and switches off if the game enables HDR itself. HDR (PQ) games in D3DMetal show original frames instead of frame generation to preserve color. Tested in The Witcher 3."]],
+  pulse:  ['Ember Pulse',"Frame pacing","Delivers frames evenly with the display cycle, reducing latency",["Reduces stutter and latency caused by uneven frame delivery.","Measures when the display will accept the next frame, then submits the frame at that moment.","In Once Human, pauses over 25 ms fell from 55~101 → 4~10. Latency was 12.6~15.3 → 4.5~6.4 ms.","Enabled automatically in DXMT (D3D11) games. Disables itself in scenes with high GPU usage."]],
+  boost:  ['Ember Boost',"Game Mode boost","Prioritizes game performance cores over other apps",["Prioritizes game threads on performance cores over other apps.","Raises game thread priorities when Game Mode is on, and keeps the Wine server at high priority too.","With video encoding in the background, Lost Ark rose from 61.2 → 64.0 fps. Time on performance cores increased from 81 → 94%.","Works only when Game Mode is on. Auto measures the result and enables it only if there is no penalty."]],
+  kindle: ['Ember Kindle',"Ahead-of-time translation","Translates ahead before launch to reduce first-run stutter",["Reduces first-launch stutter caused by waiting for translation.","Fills the FEX translation cache while your Mac is idle, using code lists collected from previous runs.","Lost Ark's web view appeared in 4.1~4.3 → 2.3~2.4 seconds. Pauses over 50 ms fell from 4 → 1.","Works automatically for FEX games, only while connected to power. Stops as soon as you launch a game."]],
+  kiln:   ['Ember Kiln',"Shader preparation","Prepares shaders to reduce first-battle stutter",["Prepares shaders while the game is closed to reduce pauses in new scenes.","Records pipelines created by the game, then uses that list after the game closes to prepare GPU code for this Mac.","Shader-related pauses: Lost Ark (FEX) 30.5 → 0.6 seconds, Once Human (Rosetta) 11.8 → 0.8 seconds. Lost Ark's first 45 seconds in town: game fps 50 → 59. Preparing 16,000 shaders in batches also reduced post-teleport pauses to one on arrival.","On by default for DXMT games. Shader preparation does not run during gameplay."]],
+  spark:  ['Ember Spark',"Reduce input latency","Reduces the time until your action appears on screen",["Reduces the time until your action appears on screen.","Briefly prevents the game from starting its next frame too early, so the frame can reflect more recent input.","Input latency at a 60 fps cap: Valheim 35~39 → 26~28 ms, Lethal Company 37~39 → 18~29 ms. fps and display p99 were unchanged.","On by default for DXMT games. Turns off automatically when Ember Flow is enabled."]],
+  lens:   ['Ember Lens',"In-game HUD","Shows fps, latency, and frame generation status inside the game",["Shows fps, latency, frame generation status, boss panels, and speech bubbles inside the game.","Draws directly over the game's final output frame, without opening a separate window.","Two panels cost 0.03~0.06 ms GPU time (4K). Compared with separate windows, fps is 1.5~1.8 higher and latency is 1.3~1.7 ms lower.","Draws in the game by default. Automatically switches to a separate window for games that cannot support it (D3D12, DXVK, etc.)."]],
+  guard:  ['Ember Guard',"Text and nameplate protection","Keeps text and nameplates from smearing",["Keeps text and nameplates from smearing in intermediate frames created by Ember Flow.","Preserves sharp strokes that occupy the same position in the adjacent original frames. If motion cannot explain the scene, it uses the entire original frame.","Once Human, 8 scenes: image quality (PSNR) 25.0 → 26.3 dB. Lost Ark waterpark frame generation skip rate: 95% → 0%.","Always on with Ember Flow. No need to turn it off separately."]],
+};
+const L = ["What it does","How it works","Measurements","Default"];
+const tip = document.getElementById('ftip');
+let cur = null, pinned = false, tOpen = 0, tClose = 0;
+const esc = (t) => t.replace(/[&<>]/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+function fill(b) {
+  const d = D[b]; if (!d) return false;
+  tip.innerHTML = '<div class="fh"><b>' + d[0] + '</b><span>' + d[1] + '</span></div><p class="tl">' + esc(d[2]) + '</p><dl>' +
+    d[3].map((t, i) => '<dt>' + L[i] + '</dt><dd>' + esc(t) + '</dd>').join('') + '</dl>';
+  return true;
+}
+function place() {
+  if (!cur) return;
+  const r = cur.getBoundingClientRect(), vw = document.documentElement.clientWidth, vh = innerHeight;
+  const w = tip.offsetWidth, h = tip.offsetHeight;
+  let x = Math.round(r.left + r.width / 2 - w / 2); x = Math.max(16, Math.min(x, vw - w - 16));
+  let y = r.bottom + 10; if (y + h > vh - 12 && r.top - h - 10 > 12) y = r.top - h - 10;
+  const minY = Math.max(12, (document.querySelector('header.nav')?.getBoundingClientRect().bottom || 0) + 8);
+  y = Math.max(minY, Math.min(y, vh - h - 12));
+  tip.style.left = x + 'px'; tip.style.top = Math.round(y) + 'px';
+}
+function open(btn, pin) {
+  clearTimeout(tOpen); clearTimeout(tClose);
+  if (cur && cur !== btn) { cur.setAttribute('aria-expanded', 'false'); cur.removeAttribute('aria-describedby'); }
+  if (!fill(btn.dataset.b)) return;
+  cur = btn; pinned = !!pin;
+  btn.setAttribute('aria-expanded', 'true'); btn.setAttribute('aria-describedby', 'ftip');
+  tip.classList.add('on'); tip.setAttribute('aria-hidden', 'false'); place();
+}
+function close() {
+  clearTimeout(tOpen); clearTimeout(tClose);
+  if (cur) { cur.setAttribute('aria-expanded', 'false'); cur.removeAttribute('aria-describedby'); }
+  cur = null; pinned = false; tip.classList.remove('on'); tip.setAttribute('aria-hidden', 'true');
+}
+const later = () => { clearTimeout(tClose); tClose = setTimeout(() => { if (!pinned) close(); }, 180); };
+document.querySelectorAll('.finfo[data-b]').forEach((btn) => {
+  btn.addEventListener('pointerenter', (e) => { if (e.pointerType !== 'mouse') return; clearTimeout(tClose); if (cur === btn) return; tOpen = setTimeout(() => open(btn, false), 250); });
+  btn.addEventListener('pointerleave', (e) => { if (e.pointerType !== 'mouse') return; clearTimeout(tOpen); if (!pinned) later(); });
+  btn.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); (cur === btn && pinned) ? close() : open(btn, true); });
+  btn.addEventListener('focus', () => { if (btn.matches(':focus-visible') && cur !== btn) open(btn, false); });
+  btn.addEventListener('blur', () => { if (!pinned) later(); });
+});
+tip.addEventListener('pointerenter', () => clearTimeout(tClose));
+tip.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse' && !pinned) later(); });
+document.addEventListener('pointerdown', (e) => { if (cur && !tip.contains(e.target) && !e.target.closest('.finfo')) close(); });
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && cur) { const b = cur; close(); b.focus({ preventScroll: true }); } });
+addEventListener('scroll', place, { passive: true }); addEventListener('resize', place);
+})();
+</script>
+
+<script type="importmap">
+{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}
+</script>
+<script type="module">
+/* 첫 막: 거대한 EMBER 글자(카메라에 붙은 판) 앞의 3D 엠버 → 스크롤로 한 바퀴 궤도 → 발끝부터 불씨로 타서 실루엣 → ×2 → 유리 고리 사이를 지나며 열 이름.
+   끝 구간에서 다시 불씨가 모여 엠버가 돌아온다. 화면 밖이면 그리지 않는다. */
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
+import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+
+async function initStage() {
+const CFG = {
+  glb: '../assets/ember.gltf.json',      // 3D 엠버 (data-URI glTF, 기본색 4096)
+  glbLow: '../assets/ember-mobile.gltf.json', // 휴대폰·저사양: 텍스처 전부 2048 (GPU 메모리 약 270MB → 67MB)
+  cutout: '../assets/ember-cutout.webp', // 실루엣 불씨·대체 그림
+  draco: '../assets/draco/',
+  H: 3.2,
+  clipIdle: /idle|breath|stand/i,
+  clipWave: /wave|hello|greet|hi\b/i,
+};
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const coarse = matchMedia('(pointer: coarse)').matches;
+const LOW = coarse || Math.min(innerWidth, innerHeight) < 700;
+const COLS = 256, ROWS = LOW ? 40 : 128, N = COLS * ROWS;   // 10,240 / 32,768 불씨
+const TAU = Math.PI * 2;
+
+const canvas = document.getElementById('stage');
+let renderer;
+try {
+  renderer = new THREE.WebGLRenderer({ canvas, antialias: false, powerPreference: 'high-performance', alpha: false });
+  if (!renderer.capabilities.isWebGL2) throw new Error('webgl2');
+} catch (e) { canvas.hidden = true; document.getElementById('stage-fallback').hidden = false; throw e; }
+/* 무대 크기 = 캔버스 CSS 크기(100lvh). iOS 주소창이 접혀도 그대로라 다시 만들 일이 없다 */
+const SZ = () => [canvas.clientWidth || innerWidth, canvas.clientHeight || innerHeight];
+const ST = window.__emberStage = { LOW: false, N: 0, DPR: 0, glb: '', lost: false, degraded: 0, fallback: '' };
+let dead = false;
+function toFallback(why) {   // WebGL 이 죽거나 너무 느리면 정지 그림으로 (글은 그대로)
+  if (dead) return; dead = true; ST.fallback = why; running = false;
+  canvas.hidden = true; document.getElementById('stage-fallback').hidden = false; document.getElementById('lens')?.classList.add('off');
+}
+canvas.addEventListener('webglcontextlost', (e) => { e.preventDefault(); ST.lost = true; toFallback('context-lost'); }, false);
+let DPR = Math.min(devicePixelRatio || 1, LOW ? 1.5 : 1.75);
+renderer.setPixelRatio(DPR); renderer.setSize(...SZ(), false);
+Object.assign(ST, { LOW, N, DPR });
+renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.0;
+renderer.setClearColor(0x0b0908, 1);
+
+const scene = new THREE.Scene();
+scene.fog = new THREE.FogExp2(0x0b0908, 0.03);
+const camera = new THREE.PerspectiveCamera(32, SZ()[0] / SZ()[1], 0.05, 200);
+scene.add(camera);
+
+/* environment: dark forge, orange and gold panels */
+{
+  const env = new THREE.Scene(); env.background = new THREE.Color(0x050302);
+  const box = (w, h, color, k, pos, rot) => { const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ color: new THREE.Color(color).multiplyScalar(k), side: THREE.DoubleSide })); m.position.set(...pos); if (rot) m.rotation.set(...rot); env.add(m); };
+  box(6, 3, 0xff8a3d, 3.2, [-5, 2, 3], [0, Math.PI / 3, 0]);
+  box(2, 6, 0xffb547, 1.6, [5, 1, -3], [0, -Math.PI / 2.5, 0]);
+  box(8, 2, 0xfff1e0, 1.6, [0, 6, 0], [Math.PI / 2, 0, 0]);
+  box(10, 1, 0xff6a1f, 1.2, [0, -3, -5]);
+  box(3, 3, 0x9fd8ff, 0.8, [0, 2, -6]);
+  const pm = new THREE.PMREMGenerator(renderer); scene.environment = pm.fromScene(env, 0.04).texture;
+}
+
+/* lights for the GLB */
+const charLights = new THREE.Group();
+charLights.add(new THREE.HemisphereLight(0xe8e2dc, 0x1a0c06, 0.55));
+const key = new THREE.DirectionalLight(0xfff0e4, 2.7); charLights.add(key);
+const back = new THREE.DirectionalLight(0xffb27a, 1.1); charLights.add(back);
+const up = new THREE.PointLight(0xff7a2e, 1.4, 5, 1.6); charLights.add(up);
+const LP = [[key, -1.4, 3.8, 5.5], [back, 0.6, 4, -5], [up, 0, 0.3, 1.4]];
+function placeLights(az) { const c = Math.cos(az), s = Math.sin(az); for (const [l, x, y, z] of LP) l.position.set(c * x + s * z, y, -s * x + c * z); }
+
+/* ---------- giant word, fixed to the camera ---------- */
+const wordMat = new THREE.MeshBasicMaterial({ transparent: true, depthWrite: false, toneMapped: false, fog: false, opacity: 1 });
+const word = new THREE.Mesh(new THREE.PlaneGeometry(1, 0.3125), wordMat); word.renderOrder = -2; camera.add(word);
+function drawWord() {
+  const c = document.createElement('canvas'); c.width = 4096; c.height = 1280; const g = c.getContext('2d');
+  g.textAlign = 'center'; g.textBaseline = 'alphabetic'; g.font = '900 1240px "Big Shoulders Display", Impact, sans-serif';
+  if ('letterSpacing' in g) g.letterSpacing = '24px';
+  const gr = g.createLinearGradient(0, 120, 0, 1180); gr.addColorStop(0, '#efe3d6'); gr.addColorStop(0.55, '#cdb39b'); gr.addColorStop(1, 'rgba(120,52,20,0.25)');
+  g.fillStyle = gr; g.fillText('EMBER', 2048 + 12, 1160);
+  g.globalCompositeOperation = 'source-atop';
+  for (let i = 0; i < 9000; i++) { g.fillStyle = `rgba(0,0,0,${Math.random() * 0.22})`; g.fillRect(Math.random() * 4096, Math.random() * 1280, 3, 3); }
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4; wordMat.map = t; wordMat.color.setScalar(0.78); wordMat.needsUpdate = true;
+}
+const WD = 18;
+function placeWord() {
+  const visH = 2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * WD, visW = visH * camera.aspect;
+  const w = visW * 0.97; word.scale.set(w, w, 1);
+  const h = w * 0.3125; word.position.set(0, portrait ? visH * 0.5 - h * 0.5 - visH * 0.14 : visH * 0.5 - h * 0.5 - visH * 0.12, -WD);
+}
+
+/* ---------- particles ---------- */
+const F = { SWIRL: 0, SIL: 1, NUM: 2, RING: 3 }; const NF = 4;
+const data = new Float32Array(N * NF * 4);
+const rnd = (() => { let s = 1337; return () => (s = (s * 16807) % 2147483647) / 2147483647; })();
+const gauss = () => { let u = 0, v = 0; while (!u) u = rnd(); while (!v) v = rnd(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(TAU * v); };
+const put = (f, i, x, y, z, w = 0) => { const o = (f * N + i) * 4; data[o] = x; data[o + 1] = y; data[o + 2] = z; data[o + 3] = w; };
+const fillF = (f, fn) => { for (let i = 0; i < N; i++) { const p = fn(i); put(f, i, p[0], p[1], p[2], p[3] || 0); } };
+function sampleCanvas(c, worldW, depth, tint) {
+  const g = c.getContext('2d'), w = c.width, h = c.height; const px = g.getImageData(0, 0, w, h).data; const pts = [];
+  for (let y = 0; y < h; y += 2) for (let x = 0; x < w; x += 2) { const o = (y * w + x) * 4; if (px[o + 3] > 140 && px[o] + px[o + 1] + px[o + 2] > 0) pts.push(x, y, o); }
+  const sc = worldW / w; const out = [];
+  for (let i = 0; i < N; i++) { const k = Math.floor(rnd() * (pts.length / 3)) * 3; const o = pts[k + 2];
+    out.push([(pts[k] + rnd() * 2 - w / 2) * sc, (h - pts[k + 1] - rnd() * 2) * sc, gauss() * depth, tint(px[o], px[o + 1], px[o + 2])]); }
+  return out;
+}
+async function buildFormations() {
+  fillF(F.SWIRL, () => { const r = 0.75 + Math.pow(rnd(), 1.6) * 3.6; return [r, rnd(), rnd() * TAU, rnd() < 0.06 ? 1 : 0]; });
+  // silhouette from the cutout (x centred, feet at y=0)
+  try {
+    const img = new Image(); img.src = CFG.cutout; await img.decode();
+    const c = document.createElement('canvas'); c.width = 218; c.height = 400; c.getContext('2d').drawImage(img, 0, 0, 218, 400);
+    const s = sampleCanvas(c, CFG.H * 218 / 400, 0.07, (r, g, b) => (g > r * 0.92 && g > b + 40 ? 1 : (rnd() < 0.04 ? 1 : 0)));
+    fillF(F.SIL, (i) => s[i]);
+  } catch (e) { fillF(F.SIL, () => [gauss() * 0.35, rnd() * CFG.H, gauss() * 0.2, 0]); }
+  // ×2
+  {
+    const c = document.createElement('canvas'); c.width = 1100; c.height = 620; const g = c.getContext('2d');
+    g.fillStyle = '#fff'; g.textAlign = 'center'; g.textBaseline = 'alphabetic'; g.font = '900 640px "Big Shoulders Display", Impact, sans-serif';
+    g.fillText('×2', 550, 590);
+    const s = sampleCanvas(c, 5.2, 0.06, () => (rnd() < 0.05 ? 1 : 0));
+    fillF(F.NUM, (i) => { const p = s[i]; p[1] -= 1.55; if (p[0] > 0.2 && rnd() < 0.55) p[3] = 1; return p; });
+  }
+  // ring dust
+  fillF(F.RING, () => { const a = rnd() * TAU, r = 5.5 + gauss() * 1.6; return [Math.sin(a) * r, gauss() * 1.3, Math.cos(a) * r, rnd() < 0.07 ? 1 : 0]; });
+}
+const posTex = new THREE.DataTexture(data, COLS, ROWS * NF, THREE.RGBAFormat, THREE.FloatType); posTex.minFilter = posTex.magFilter = THREE.NearestFilter;
+const geo = new THREE.BufferGeometry();
+{ const idx = new Float32Array(N), seed = new Float32Array(N * 4); for (let i = 0; i < N; i++) { idx[i] = i; for (let k = 0; k < 4; k++) seed[i * 4 + k] = Math.random(); }
+  geo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(N * 3), 3)); geo.setAttribute('aIdx', new THREE.BufferAttribute(idx, 1)); geo.setAttribute('aSeed', new THREE.BufferAttribute(seed, 4)); }
+const PU = {
+  uPos: { value: posTex }, uTime: { value: 0 }, uMix: { value: 0 }, uFrom: { value: 0 }, uTo: { value: 0 },
+  uOffA: { value: new THREE.Vector3() }, uOffB: { value: new THREE.Vector3() }, uSclA: { value: 1 }, uSclB: { value: 1 },
+  uScatter: { value: 0 }, uSize: { value: LOW ? 20 : 14 }, uPR: { value: DPR }, uMouse: { value: new THREE.Vector2(9, 9) }, uAspect: { value: 1 }, uBright: { value: 1 }, uLime: { value: 0 },
+};
+const pmat = new THREE.ShaderMaterial({
+  uniforms: PU, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+  vertexShader: /* glsl */`
+    uniform sampler2D uPos; uniform float uTime, uMix, uFrom, uTo, uSclA, uSclB, uScatter, uSize, uPR, uAspect, uBright, uLime;
+    uniform vec3 uOffA, uOffB; uniform vec2 uMouse;
+    attribute float aIdx; attribute vec4 aSeed; varying vec3 vCol; varying float vA;
+    const float ROWS = ${ROWS.toFixed(1)}; const float COLS = ${COLS.toFixed(1)};
+    vec4 fetchF(float f){ ivec2 c = ivec2(int(mod(aIdx, COLS)), int(f * ROWS + floor(aIdx / COLS))); return texelFetch(uPos, c, 0); }
+    vec3 rotY(vec3 p, float a){ float c = cos(a), s = sin(a); return vec3(c*p.x + s*p.z, p.y, -s*p.x + c*p.z); }
+    vec3 animate(float f, vec4 d, out float alpha){
+      alpha = 1.0; vec3 p = d.xyz; float t = uTime;
+      if (f < 0.5) {
+        float yf = fract(d.y + t * (0.022 + aSeed.x * 0.045)); float th = d.z + t * (0.16 + 0.45 / d.x);
+        float r = d.x * (1.0 + 0.12 * sin(t * 0.7 + aSeed.y * 6.28));
+        p = vec3(cos(th) * r, yf * 5.4 - 0.3, sin(th) * r); alpha = smoothstep(0.0, 0.12, yf) * (1.0 - smoothstep(0.55, 1.0, yf));
+      } else if (f < 1.5) { p.y += sin(t * 0.8 + aSeed.y * 6.28) * 0.02; alpha = 0.85; }
+      else if (f > 2.5) { p = rotY(p, t * 0.04); p.y += sin(t * 0.4 + aSeed.z * 6.28) * 0.25; alpha = 0.7; }
+      p += 0.022 * vec3(sin(t * 0.9 + aSeed.x * 40.0), cos(t * 0.8 + aSeed.y * 40.0), sin(t * 0.7 + aSeed.z * 40.0));
+      return p;
+    }
+    void main(){
+      vec4 dA = fetchF(uFrom), dB = fetchF(uTo); float aA, aB;
+      vec3 pA = animate(uFrom, dA, aA) * uSclA + uOffA, pB = animate(uTo, dB, aB) * uSclB + uOffB;
+      float m = clamp(uMix * 1.4 - aSeed.x * 0.4, 0.0, 1.0); m = m * m * (3.0 - 2.0 * m);
+      vec3 p = mix(pA, pB, m); float sc = sin(3.14159 * m) * uScatter;
+      vec3 dir = normalize(vec3(aSeed.y - 0.5, aSeed.z - 0.5 + 0.35, aSeed.w - 0.5) + 1e-4);
+      p += dir * sc * (1.0 + aSeed.x * 2.4);
+      vec4 mv = modelViewMatrix * vec4(p, 1.0); vec4 cp = projectionMatrix * mv; vec2 nd = cp.xy / cp.w;
+      vec2 dd = (nd - uMouse) * vec2(uAspect, 1.0); float fr = exp(-dot(dd, dd) * 22.0);
+      mv.xy += normalize(dd + 1e-4) * fr * 0.05 * -mv.z; gl_Position = projectionMatrix * mv;
+      float tint = mix(min(dA.w, 1.0), min(dB.w, 1.0), m);
+      vec3 ember = vec3(1.0, 0.36, 0.08), gold = vec3(1.0, 0.68, 0.28), lime = vec3(1.0, 0.68, 0.28);
+      vec3 c = mix(ember, gold, aSeed.y); c = mix(c, lime, clamp(tint + uLime * step(0.8, aSeed.z), 0.0, 1.0));
+      float tw = 0.7 + 0.3 * sin(uTime * (2.0 + aSeed.w * 4.0) + aSeed.x * 60.0);
+      vA = mix(aA, aB, m) * tw * uBright * (1.0 + fr * 0.6); vCol = c * (1.35 + fr * 0.8);
+      gl_PointSize = uSize * uPR * (0.35 + aSeed.z * 0.9) / -mv.z * (1.0 + sc * 0.4);
+    }`,
+  fragmentShader: /* glsl */`
+    varying vec3 vCol; varying float vA;
+    void main(){ vec2 c = gl_PointCoord - 0.5; float d = length(c); float a = smoothstep(0.5, 0.0, d); a *= a; float core = smoothstep(0.16, 0.0, d);
+      gl_FragColor = vec4(vCol * (0.6 + core * 1.6), (a * 0.85 + core) * vA); }`,
+});
+const points = new THREE.Points(geo, pmat); points.frustumCulled = false; points.renderOrder = 5; scene.add(points);
+
+/* far dust */
+{ const M = LOW ? 1200 : 3000; const a = new Float32Array(M * 3);
+  for (let i = 0; i < M; i++) { const r = 20 + Math.random() * 50, t = Math.random() * TAU, u = Math.random() * 2 - 1; a[i * 3] = Math.cos(t) * Math.sqrt(1 - u * u) * r; a[i * 3 + 1] = u * r * 0.6 + 6; a[i * 3 + 2] = Math.sin(t) * Math.sqrt(1 - u * u) * r; }
+  const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(a, 3));
+  scene.add(new THREE.Points(g, new THREE.PointsMaterial({ color: 0x8a5a3a, size: 0.12, transparent: true, opacity: 0.5, depthWrite: false, fog: false }))); }
+
+/* floor pool of warm light */
+const floor = new THREE.Mesh(new THREE.CircleGeometry(16, 96), new THREE.ShaderMaterial({
+  transparent: true, depthWrite: false, uniforms: { uTime: { value: 0 }, uO: { value: 1 } },
+  vertexShader: `varying vec2 vP; void main(){ vP = position.xy; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
+  fragmentShader: `varying vec2 vP; uniform float uTime, uO; void main(){ float r = length(vP);
+    float glow = exp(-r * 0.9) * 0.2; float core = exp(-r * r * 3.0) * 0.22;
+    float ring = smoothstep(0.03, 0.0, abs(fract(r * 0.8 - uTime * 0.05) - 0.5) - 0.47) * exp(-r * 0.25) * 0.08;
+    float shadow = smoothstep(0.9, 0.0, r) * 0.75; vec3 col = vec3(1.0, 0.4, 0.12) * (glow + ring) + vec3(1.0, 0.6, 0.3) * core * 0.4;
+    float a = clamp(glow + ring + core, 0.0, 1.0) * smoothstep(16.0, 6.0, r) * uO; col *= 1.0 - shadow * 0.85; gl_FragColor = vec4(col, a); }`,
+}));
+floor.rotation.x = -Math.PI / 2; scene.add(floor);
+
+/* ---------- glass ring: nine names in refracting iridescent slabs ---------- */
+const C = new THREE.Vector3(0, 1.8, 0), R = 5.5;
+const SLABS = [
+  ['FLOW', "Frame generation", '×2', "Adds intermediate frames to increase display output"],
+  ['GUARD', "Text and nameplate protection", '95→0%', "Frame generation skip rate in the waterpark"],
+  ['FORGE', "AI detail restoration", '−57%', "33~57% less difference from original (LPIPS)"],
+  ['TONE', "AI image refinement", '0.3ms', "GPU time per frame at QHD"],
+  ['FLARE', "AI Auto HDR", '0.8ms', "GPU time per frame at 4K"],
+  ['PULSE', "Frame pacing", '4–10', "Pauses over 25 ms (previously 55–101)"],
+  ['BOOST', "Game Mode boost", '94%', "Time on performance cores (previously 81%)"],
+  ['KINDLE', "Ahead-of-time translation", '2.3s', "Time until web view appears (previously 4.1–4.3 seconds)"],
+  ['KILN', "Shader preparation", '0.6s', "Shader-related pause (previously 30.5 seconds)"],
+  ['SPARK', "Reduce input latency", '−10ms', "Valheim input latency (60 fps cap)"],
+  ['LENS', "In-game HUD", '+1.8', "fps +1.5–1.8 versus separate windows"],
+];
+const glass = new THREE.Group(); glass.visible = false; scene.add(glass);
+const slabAngle = (k) => Math.PI + k * TAU / SLABS.length;
+const glassMat = LOW
+  ? new THREE.MeshPhysicalMaterial({ color: 0x1c1612, roughness: 0.18, metalness: 0, transparent: true, opacity: 0.66, depthWrite: false, iridescence: 1, iridescenceIOR: 1.3, iridescenceThicknessRange: [200, 700], clearcoat: 1, clearcoatRoughness: 0.05, envMapIntensity: 1.2 })
+  : new THREE.MeshPhysicalMaterial({ color: 0xffffff, roughness: 0.06, metalness: 0, transmission: 1, thickness: 0.9, ior: 1.5, dispersion: 4, iridescence: 1, iridescenceIOR: 1.3, iridescenceThicknessRange: [180, 720], clearcoat: 1, clearcoatRoughness: 0.04, envMapIntensity: 1.6, attenuationColor: new THREE.Color(0xffe2c8), attenuationDistance: 4, depthWrite: false });
+function slabTexture([name, kind, big, small], k) {
+  const c = document.createElement('canvas'); c.width = 1024; c.height = 1336; const g = c.getContext('2d');
+  g.textBaseline = 'alphabetic';
+  g.fillStyle = '#ffb547'; g.font = '500 40px "IBM Plex Mono", monospace'; g.fillText('EMBER', 70, 120);
+  g.fillStyle = '#efe6dc'; g.font = '900 ' + (name.length > 5 ? 300 : 340) + 'px "Big Shoulders Display", Impact, sans-serif'; if ('letterSpacing' in g) g.letterSpacing = '6px';
+  g.fillText(name, 62, 470); if ('letterSpacing' in g) g.letterSpacing = '0px';
+  g.fillStyle = '#d9cbbd'; g.font = '500 58px "IBM Plex Sans KR", sans-serif'; g.fillText(kind, 70, 570);
+  g.fillStyle = k === 0 ? '#ffb547' : '#ffb547'; g.font = '900 300px "Big Shoulders Display", Impact, sans-serif'; g.fillText(big, 62, 1110);
+  g.fillStyle = '#bfb2a6'; g.font = '400 44px "IBM Plex Sans KR", sans-serif'; g.fillText(small, 70, 1210);
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; return t;
+}
+function buildGlass() {
+  const sg = new RoundedBoxGeometry(2.5, 3.26, 0.34, 5, 0.14);
+  SLABS.forEach((s, k) => {
+    const a = slabAngle(k); const grp = new THREE.Group(); grp.position.set(C.x + Math.sin(a) * R, C.y, C.z + Math.cos(a) * R); grp.lookAt(C);
+    const slab = new THREE.Mesh(sg, glassMat); slab.renderOrder = 8; grp.add(slab);
+    const tm = LOW ? new THREE.MeshBasicMaterial({ map: slabTexture(s, k), transparent: true, depthWrite: false, toneMapped: false, fog: false })
+                   : new THREE.MeshBasicMaterial({ map: slabTexture(s, k), alphaTest: 0.35, toneMapped: false, fog: false });
+    const txt = new THREE.Mesh(new THREE.PlaneGeometry(2.1, 2.74), tm); txt.position.z = LOW ? 0.18 : -0.02; grp.add(txt);   // 저전력 유리는 반투명 판이라 글자를 앞에 둔다
+    grp.userData.base = grp.quaternion.clone(); grp.userData.k = k; glass.add(grp);
+  });
+}
+
+/* ---------- character: GLB with an ember-burn dissolve, else cutout card ---------- */
+const charRoot = new THREE.Group(); scene.add(charRoot);
+const H = CFG.H; let headY = H * 0.9, mixer = null, glbReady = false;
+const DU = { uDiss: { value: 0 }, uLimeGlow: { value: 1.3 } };
+const Anim = {
+  model: null, clips: [], idle: null, wave: null, busy: false, pending: false, b: 0, bTarget: 0, waveW: 0.7,
+  attach(model, clips) { this.model = model; Look.find(model); this.add(clips); },
+  add(clips) {
+    if (!this.model || !clips.length) return;
+    if (!mixer) { mixer = new THREE.AnimationMixer(this.model); mixer.addEventListener('finished', (e) => { if (e.action === this.wave) this.bTarget = 0; }); }
+    this.clips.push(...clips); const find = (re) => this.clips.find((c) => re.test(c.name));
+    if (!this.idle) { const c = find(CFG.clipIdle) || this.clips.find((c) => !CFG.clipWave.test(c.name)); if (c) { this.idle = mixer.clipAction(c); this.idle.play(); } }
+    if (!this.wave) { const c = find(CFG.clipWave); if (c) { this.wave = mixer.clipAction(c); this.wave.setLoop(THREE.LoopOnce, 1); this.wave.clampWhenFinished = true; if (this.pending) { this.pending = false; this.playWave(); } } }
+  },
+  playWave() { if (reduce) return; if (!this.wave) { this.pending = true; return; } if (this.busy) return; this.busy = true; this.wave.reset().play(); this.bTarget = 1; },
+  update(dt) {
+    if (!mixer) return; this.b += (this.bTarget - this.b) * (1 - Math.exp(-dt * 6));
+    if (this.idle) this.idle.setEffectiveWeight(1 - this.waveW * this.b);
+    if (this.wave) { this.wave.setEffectiveWeight(this.waveW * this.b); if (this.bTarget === 0 && this.b < 0.01 && this.busy) { this.wave.stop(); this.busy = false; } }
+  },
+};
+const Look = {
+  bones: [], rest: new Map(), qa: new THREE.Quaternion(), qb: new THREE.Quaternion(), qp: new THREE.Quaternion(), axY: new THREE.Vector3(0, 1, 0), axX: new THREE.Vector3(),
+  find(model) {
+    const pick = (re) => { let b = null; model.traverse((o) => { if (!b && o.isBone && re.test(o.name)) b = o; }); return b; };
+    const head = pick(/^(head|mixamorig:?head)$/i) || pick(/head(?!_?end|front|top)/i), neck = pick(/neck/i), chest = pick(/spine0?2|spine2|chest|upperchest/i);
+    this.bones = [[head, 0.45, 0.25], [neck, 0.3, 0.15], [chest, 0.2, 0.06]].filter((b) => b[0]); this.bones.forEach(([b]) => this.rest.set(b, b.quaternion.clone()));
+  },
+  restore() { for (const [b] of this.bones) b.quaternion.copy(this.rest.get(b)); },
+  apply(yaw, pitch) {
+    if (!this.bones.length) return; this.axX.set(1, 0, 0).applyQuaternion(camera.quaternion);
+    for (const [b, ky, kp] of this.bones) {
+      this.rest.get(b).copy(b.quaternion); b.parent.getWorldQuaternion(this.qp);
+      this.qa.setFromAxisAngle(this.axY, yaw * ky).multiply(this.qb.setFromAxisAngle(this.axX, -pitch * kp));
+      const inv = this.qp.clone().invert(); this.qa.premultiply(inv).multiply(this.qp); b.quaternion.premultiply(this.qa);
+    }
+  },
+};
+const cardMat = new THREE.MeshBasicMaterial({ transparent: true, alphaTest: 0.05, opacity: 0 });
+const card = new THREE.Mesh(new THREE.PlaneGeometry(H * 871 / 1600, H), cardMat); card.position.y = H / 2; charRoot.add(card);
+new THREE.TextureLoader().load(CFG.cutout, (t) => { t.colorSpace = THREE.SRGBColorSpace; cardMat.map = t; cardMat.needsUpdate = true; if (!glbReady) cardMat.opacity = 1; });
+const NOISE = `varying vec3 vDW; float dEdge = 1.0;
+  float dh(vec3 p){ p = fract(p * 0.3183099 + 0.1); p *= 17.0; return fract(p.x * p.y * p.z * (p.x + p.y + p.z)); }
+  float dn(vec3 x){ vec3 i = floor(x), f = fract(x); f = f * f * (3.0 - 2.0 * f);
+    return mix(mix(mix(dh(i), dh(i + vec3(1,0,0)), f.x), mix(dh(i + vec3(0,1,0)), dh(i + vec3(1,1,0)), f.x), f.y),
+               mix(mix(dh(i + vec3(0,0,1)), dh(i + vec3(1,0,1)), f.x), mix(dh(i + vec3(0,1,1)), dh(i + vec3(1,1,1)), f.x), f.y), f.z); }
+  uniform float uDiss; uniform float uLimeGlow;\n`;
+function loadGlb() {
+  if (loadGlb.started || dead) return; loadGlb.started = true;
+  const url = LOW || renderer.capabilities.maxTextureSize < 4096 ? CFG.glbLow : CFG.glb; ST.glb = url;
+  const loader = new GLTFLoader().setDRACOLoader(new DRACOLoader().setDecoderPath(CFG.draco)).setMeshoptDecoder(MeshoptDecoder);
+  loader.load(url, (gltf) => {
+    const model = gltf.scene; model.updateMatrixWorld(true);
+    const box = new THREE.Box3().setFromObject(model); const size = box.getSize(new THREE.Vector3());
+    model.scale.setScalar(H / (size.y || 1)); model.updateMatrixWorld(true);
+    box.setFromObject(model); const ctr = box.getCenter(new THREE.Vector3()); model.position.x -= ctr.x; model.position.z -= ctr.z; model.position.y -= box.min.y;
+    model.traverse((o) => {
+      if (!o.isMesh) return; o.frustumCulled = false;
+      (Array.isArray(o.material) ? o.material : [o.material]).forEach((m) => {
+        if ('envMapIntensity' in m) m.envMapIntensity = 0.55;
+        if ('metalness' in m) { m.metalness = Math.min(m.metalness, 0.35); m.roughness = Math.max(m.roughness, 0.2); }
+        m.onBeforeCompile = (sh) => {
+          sh.uniforms.uDiss = DU.uDiss; sh.uniforms.uLimeGlow = DU.uLimeGlow;
+          sh.vertexShader = 'varying vec3 vDW;\n' + sh.vertexShader.replace('#include <skinning_vertex>', '#include <skinning_vertex>\n vDW = (modelMatrix * vec4(transformed, 1.0)).xyz;');
+          sh.fragmentShader = NOISE + sh.fragmentShader
+            .replace('#include <clipping_planes_fragment>', `#include <clipping_planes_fragment>
+              { float n = dn(vDW * 5.0) * 0.6 + dn(vDW * 14.0) * 0.4; dEdge = vDW.y / ${H.toFixed(2)} + n * 0.32 - (uDiss * 1.62 - 0.3); if (dEdge < 0.0) discard; }`)
+            .replace('#include <emissivemap_fragment>', `#include <emissivemap_fragment>
+              { vec3 bc = diffuseColor.rgb; float limeMask = smoothstep(0.06, 0.2, bc.g - max(bc.r * 0.9, bc.b)) * smoothstep(0.12, 0.3, bc.g);
+                totalEmissiveRadiance += bc * limeMask * uLimeGlow;
+                vec3 gn = nonPerturbedNormal * inversesqrt(max(dot(nonPerturbedNormal, nonPerturbedNormal), 1e-8)); vec3 vd = vViewPosition * inversesqrt(max(dot(vViewPosition, vViewPosition), 1e-8)); float ndv = clamp(abs(dot(gn, vd)), 0.0, 1.0);
+                float rimF = pow(1.0 - ndv, 4.0); float side = smoothstep(0.15, 0.75, gn.x);
+                totalEmissiveRadiance += mix(vec3(1.0, 0.4, 0.12), vec3(1.0, 0.68, 0.28), side) * rimF * 1.1;
+                totalEmissiveRadiance += vec3(1.0, 0.42, 0.1) * smoothstep(0.07, 0.0, dEdge) * 7.0 * step(0.002, uDiss); }`);
+        };
+        m.needsUpdate = true;
+      });
+    });
+    Anim.attach(model, gltf.animations || []);
+    charRoot.add(model); card.visible = false; scene.add(charLights); glbReady = true;
+  }, undefined, () => {});
+}
+
+/* ---------- post ---------- */
+const composer = new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene, camera));
+/* 깨진 값(NaN·무한대) 지우기 — 엠버가 어떤 자세에서 한 픽셀 NaN 을 내면 블룸이 가로·세로로 퍼뜨려 엠버 둘레가 검은 정사각형으로 번쩍였다(10-08, 240Hz 에서 120장 중 5장). 블룸 전에 0 으로. */
+composer.addPass(new ShaderPass({
+  uniforms: { tDiffuse: { value: null } },
+  vertexShader: `varying vec2 vU; void main(){ vU = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
+  fragmentShader: `uniform sampler2D tDiffuse; varying vec2 vU;
+    void main(){ vec4 c = texture2D(tDiffuse, vU);
+      if (any(isnan(c)) || any(isinf(c))) c = vec4(0.0, 0.0, 0.0, 1.0);
+      gl_FragColor = vec4(min(c.rgb, vec3(64.0)), c.a); }`,
+}));
+const bloom = new UnrealBloomPass(new THREE.Vector2(SZ()[0] / 2, SZ()[1] / 2), LOW ? 0.6 : 0.72, 0.45, 0.88); composer.addPass(bloom);
+const finalPass = new ShaderPass({
+  uniforms: { tDiffuse: { value: null }, uCA: { value: 0.0015 }, uFade: { value: 0 } },
+  vertexShader: `varying vec2 vU; void main(){ vU = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
+  fragmentShader: `uniform sampler2D tDiffuse; uniform float uCA, uFade; varying vec2 vU;
+    void main(){ vec2 d = vU - 0.5; float r2 = dot(d, d);
+      vec3 c = vec3(texture2D(tDiffuse, vU + d * uCA * r2 * 8.0).r, texture2D(tDiffuse, vU).g, texture2D(tDiffuse, vU - d * uCA * r2 * 8.0).b);
+      c *= 1.0 - r2 * 1.1; c = mix(c, vec3(0.043, 0.035, 0.031), uFade); gl_FragColor = vec4(c, 1.0); }`,
+});
+composer.addPass(finalPass); composer.addPass(new OutputPass());
+
+/* ---------- keyframes (one per scroll stop) ---------- */
+let portrait = innerWidth / innerHeight < 0.85;
+const KF = {};
+/* 화면 안전 구역: 글이 놓이는 쪽의 반대편에 주인공을 둔다. 이동량은 그 순간의 보이는 폭(세계 단위)에 대한 비율로 정해
+   어느 창 크기에서도 같은 화면 비율 자리에 온다. 세로 화면은 주인공을 위쪽 절반에, 글은 아래쪽 절반에(CSS .cap 쪽). */
+const visW = (r, fov) => 2 * Math.tan(THREE.MathUtils.degToRad(fov / 2)) * r * camera.aspect;
+const RING_D = 6.8;          // 고리 안 카메라에서 앞 유리판까지 거리
+let ringShift = 0, ringLift = 0;
+function buildKeyframes() {
+  portrait = innerWidth / innerHeight < 0.85; const P = portrait;
+  const TAB = P && camera.aspect > 0.62;   // 세로 태블릿: 화면이 넓어 조금 더 크게
+  const RP = P ? (TAB ? 10.5 : 13) : 7.6, FP = P ? 40 : 32, TY = P ? (TAB ? 0.3 : -0.2) : 1.62;   // 세로: 13 거리·눈높이 -0.2 → 주인공이 화면 위쪽 12~48%
+  const sx = (frac, r, fov) => (P ? 0 : frac * visW(r, fov));
+  const base = { sx: 0, tgt: [0, TY, 0], az: 0, el: 0.05, r: RP, fov: FP, word: 1, diss: 0, form: F.SWIRL, bright: 1, lime: 0, scatter: 0.6, ring: 0, ra: Math.PI, fade: 0, glass: 0 };
+  const k = (o) => Object.assign({}, base, o);
+  const RF = P ? 54 : 47;
+  Object.assign(KF, {
+    hero:  k({}),                                                                              // 가운데. 글은 CSS로 가운데 띠 밖에
+    side:  k({ sx: sx(0.2, 7.0, 32), tgt: [0, P ? TY : 1.7, 0], az: Math.PI / 2, el: 0.12, r: P ? RP : 7.0, scatter: 1.0, word: 0.4 }),   // 글 왼쪽 → 주인공 화면 70%
+    back:  k({ sx: sx(-0.2, 7.2, 32), tgt: [0, P ? TY : 1.75, 0], az: Math.PI, el: 0.07, r: P ? RP : 7.2, word: 0.4 }),                 // 글 오른쪽 → 30%
+    front: k({ sx: sx(0.18, 7.9, 32), az: TAU, r: P ? RP : 7.9, word: 0.4 }),                                                          // 글 왼쪽 → 68%
+    sil:   k({ az: TAU, r: P ? RP : 7.9, diss: 1, form: F.SIL, word: 0.08, bright: 1.0, scatter: 1.1 }),
+    num:   k({ tgt: [0, P ? 2.2 : 1.75, 0], az: TAU, el: 0.03, r: P ? 12 : 8.8, diss: 1, form: F.NUM, word: 0, bright: 1.3, scatter: 1.5, lime: 0.05 }),
+    ring0: k({ az: TAU, diss: 1, form: F.RING, word: 0, ring: 1, ra: Math.PI, fov: RF, scatter: 1.1, glass: 1, bright: 0.9 }),
+    ring1: k({ az: TAU, diss: 1, form: F.RING, word: 0, ring: 1, ra: slabAngle(SLABS.length - 1), fov: RF, scatter: 0.4, glass: 1, bright: 0.9 }),
+    out:   k({ az: TAU, diss: 1, form: F.RING, word: 0, ring: 1, ra: slabAngle(SLABS.length - 1) + 0.35, fov: RF, glass: 1, fade: 1, bright: 0.6 }),
+    end0:  k({ sx: sx(0.22, 7.8, 32), az: TAU + 0.3, r: P ? RP : 7.8, diss: 1, form: F.SIL, scatter: 0.8, word: 1 }),          // 글 왼쪽 → 72%
+    end:   k({ sx: sx(0.22, 7.8, 32), az: TAU + 0.3, r: P ? RP : 7.8, diss: 0, form: F.SWIRL, scatter: 1.0, word: 1 }),
+  });
+  // 고리: 앞 유리판을 화면 64% 자리로(왼쪽 아래 글 피함), 세로 화면은 가운데에서 위로
+  ringShift = P ? 0 : 0.14 * visW(RING_D, RF);
+  ringLift = P ? 0.8 : 0.35;
+}
+const XF = {};
+function buildXforms() {
+  const P = portrait;
+  XF[F.SWIRL] = { off: new THREE.Vector3(0, 0, 0), s: 1 };
+  XF[F.SIL] = { off: new THREE.Vector3(0, 0, 0), s: 1 };
+  // ×2(원래 폭 5.2, 높이 2.93): 가로 화면은 보이는 폭의 왼쪽 42% 안(가운데 -27%), 세로 화면은 폭 75% 이하로 위쪽
+  const n = KF.num, vw = visW(n.r, n.fov), vh = vw / camera.aspect;
+  const s = P ? Math.min(0.55, 0.75 * vw / 5.2) : Math.min(1, 0.42 * vw / 5.2, 0.6 * vh / 2.93);
+  XF[F.NUM] = { off: new THREE.Vector3(P ? 0 : -0.27 * vw, P ? 4.3 : 1.8, 0), s };
+  XF[F.RING] = { off: C.clone(), s: 1 };
+}
+let stops = [];
+function measureStops() { stops = [...document.querySelectorAll('[data-stop]')].map((el) => ({ name: el.dataset.stop, y: el.getBoundingClientRect().top + scrollY })).filter((s) => KF[s.name]).sort((a, b) => a.y - b.y); }
+function sceneT() {
+  if (!stops.length) return 0; const c = scrollY + innerHeight / 2;
+  if (c <= stops[0].y) return 0;
+  for (let i = 0; i < stops.length - 1; i++) if (c < stops[i + 1].y) return i + (c - stops[i].y) / (stops[i + 1].y - stops[i].y);
+  return stops.length - 1;
+}
+
+/* ---------- input ---------- */
+const mouse = new THREE.Vector2(), mouseS = new THREE.Vector2(); let mouseActive = false;
+addEventListener('pointermove', (e) => { mouse.set(e.clientX / innerWidth * 2 - 1, -(e.clientY / innerHeight * 2 - 1)); mouseActive = e.pointerType === 'mouse'; }, { passive: true });
+
+/* ---------- loop ---------- */
+const P_ = ['sx', 'az', 'el', 'r', 'fov', 'word', 'diss', 'bright', 'lime', 'ring', 'ra', 'fade', 'glass'];
+const cur = { tx: 0, ty: 1.6, tz: 0, s: 0 }; P_.forEach((p) => cur[p] = 0);
+let first = true;
+const lerp = (a, b, t) => a + (b - a) * t, ease = (t) => t * t * (3 - 2 * t);
+const vA = new THREE.Vector3(), vB = new THREE.Vector3(), tA = new THREE.Vector3(), tB = new THREE.Vector3(), dirv = new THREE.Vector3();
+let lastSz = [0, 0];
+function resize() {
+  const [w, h] = SZ();
+  if (w === lastSz[0] && Math.abs(h - lastSz[1]) < 2) { measureStops(); return; }   // 주소창만 움직임: 자리만 다시 잰다
+  lastSz = [w, h];
+  renderer.setSize(w, h, false); composer.setSize(w, h); bloom.resolution.set(w / 2, h / 2);
+  camera.aspect = w / h; camera.updateProjectionMatrix(); PU.uAspect.value = camera.aspect;
+  buildKeyframes(); buildXforms(); measureStops(); placeWord(); first = true;
+}
+const ringCap = document.querySelector('.ring-cap');
+const debugFPS = new URLSearchParams(location.search).get('debug') === 'fps';
+const lens = document.getElementById('lens'), lensFps = document.getElementById('lensfps');
+const lg = debugFPS ? document.getElementById('lensg').getContext('2d') : null;
+lens.hidden = !debugFPS;
+const clock = new THREE.Clock(); let t = 0, acc = 0, frames = 0, slowFor = 0, degraded = false, running = false, visAct = true, visEnd = false, waveStop = ''; const ft = [];
+function frame() {
+  if (!running || dead) return;
+  const dt = Math.min(clock.getDelta(), 0.1); if (!reduce) t += dt;
+  const sT = sceneT(); cur.s = first || reduce ? sT : lerp(cur.s, sT, 1 - Math.exp(-dt * 5));
+  const i = Math.min(Math.floor(cur.s), stops.length - 1), fr = cur.s - i;
+  const A = KF[stops[i]?.name] || KF.hero, B = KF[stops[Math.min(i + 1, stops.length - 1)]?.name] || A;
+  const e = ease(Math.min(1, Math.max(0, fr))); const k = first || reduce ? 1 : 1 - Math.exp(-dt * 6);
+  cur.tx = lerp(cur.tx, lerp(A.tgt[0], B.tgt[0], e), k); cur.ty = lerp(cur.ty, lerp(A.tgt[1], B.tgt[1], e), k); cur.tz = lerp(cur.tz, lerp(A.tgt[2], B.tgt[2], e), k);
+  for (const p of P_) cur[p] = lerp(cur[p], lerp(A[p], B[p], p === 'diss' ? Math.min(1, Math.max(0, fr * 1.15)) : e), k);
+  first = false;
+
+  mouseS.lerp(mouse, 1 - Math.exp(-dt * 3)); const mx = reduce ? 0 : mouseS.x, my = reduce ? 0 : mouseS.y;
+  // orbit camera
+  const az = cur.az + mx * 0.06, el = cur.el + my * 0.03;
+  const stx = cur.tx - Math.cos(cur.az) * cur.sx, stz = cur.tz + Math.sin(cur.az) * cur.sx;
+  vA.set(stx + Math.sin(az) * Math.cos(el) * cur.r, cur.ty + Math.sin(el) * cur.r, stz + Math.cos(az) * Math.cos(el) * cur.r); tA.set(stx, cur.ty, stz);
+  // ring camera (inside the ring, looking out at one slab)
+  if (cur.ring > 0.001) {
+    const ra = cur.ra + mx * 0.08; dirv.set(Math.sin(ra), 0, Math.cos(ra));
+    vB.copy(C).addScaledVector(dirv, -1.3).add(new THREE.Vector3(0, my * 0.15, 0));
+    // 보는 점을 왼쪽·아래로 → 앞 유리판이 오른쪽·위로(글 자리 비움). 왼쪽 = (cos, 0, -sin)
+    tB.copy(C).addScaledVector(dirv, R).add(new THREE.Vector3(Math.cos(ra) * ringShift, -ringLift, -Math.sin(ra) * ringShift));
+    const w = ease(Math.min(1, cur.ring)); vA.lerp(vB, w); tA.lerp(tB, w);
+  }
+  camera.position.copy(vA); camera.lookAt(tA);
+  if (Math.abs(camera.fov - cur.fov) > 0.01) { camera.fov = cur.fov; camera.updateProjectionMatrix(); placeWord(); }
+
+  // particles
+  const fA = A.form, fB = B.form; const mixv = fA === fB ? 0 : Math.min(1, Math.max(0, (fr - 0.08) / 0.8));
+  PU.uFrom.value = fA; PU.uTo.value = fB; PU.uMix.value = mixv; PU.uOffA.value.copy(XF[fA].off); PU.uOffB.value.copy(XF[fB].off); PU.uSclA.value = XF[fA].s; PU.uSclB.value = XF[fB].s;
+  PU.uScatter.value = reduce ? 0 : (fA === fB ? 0 : B.scatter); PU.uTime.value = t; PU.uBright.value = cur.bright; PU.uLime.value = cur.lime;
+  if (mouseActive && !reduce) PU.uMouse.value.copy(mouseS); else PU.uMouse.value.set(9, 9);
+
+  // character
+  DU.uDiss.value = cur.diss; charRoot.visible = cur.diss < 0.995;
+  const camAz = Math.atan2(camera.position.x, camera.position.z);
+  if (glbReady) { charRoot.rotation.y = lerp(charRoot.rotation.y, mx * (Look.bones.length ? 0.12 : 0.35), 1 - Math.exp(-dt * 4)); placeLights(camAz - charRoot.rotation.y * 0.5); }
+  else { card.rotation.y = camAz + mx * 0.12; cardMat.opacity = 1 - cur.diss; }
+  if (glbReady) Look.restore(); if (mixer) { Anim.update(dt); mixer.update(reduce ? 0 : dt); }
+  if (glbReady && charRoot.visible) { charRoot.updateMatrixWorld(true); Look.apply(mx * 0.7, my * 0.5); }
+  { const near = stops[Math.round(cur.s)]?.name || 'hero'; const want = (near === 'hero' || near === 'end') && Math.abs(cur.s - Math.round(cur.s)) < 0.15 ? near : '';
+    if (want && want !== waveStop && glbReady) Anim.playWave(); if (want || Math.abs(cur.s - Math.round(cur.s)) > 0.4) waveStop = want; }
+
+  wordMat.opacity = cur.word; word.visible = cur.word > 0.01;
+  floor.material.uniforms.uTime.value = t; floor.material.uniforms.uO.value = 1 - cur.ring;
+  glass.visible = cur.glass > 0.01;
+  if (glass.visible) { const s = 0.4 + 0.6 * ease(Math.min(1, cur.glass)); glass.children.forEach((g) => { g.scale.setScalar(s); g.quaternion.copy(g.userData.base); g.rotateY(Math.sin(t * 0.35 + g.userData.k) * 0.12); g.rotateX(Math.sin(t * 0.27 + g.userData.k * 1.7) * 0.05); }); }
+  finalPass.uniforms.uFade.value = cur.fade;
+  if (ringCap) { const r0 = stops.findIndex((s) => s.name === 'ring0'); const o = r0 < 0 ? 1 : Math.max(0, Math.min(1, (cur.s - r0 + 0.55) / 0.3, 1 - (cur.s - r0 - 0.35) / 0.3)); ringCap.style.opacity = o.toFixed(3); }
+
+  if (degraded) renderer.render(scene, camera); else composer.render(dt);
+
+  ft.push(dt * 1000); if (ft.length > 32) ft.shift(); acc += dt; frames++;
+  if (acc > 0.5) {
+    const fps = frames / acc; if (debugFPS) lensFps.textContent = Math.round(fps); acc = 0; frames = 0;
+    if (fps < 50 && t > 3) { if (++slowFor >= 4) { slowFor = 0; if (DPR > 1) { DPR = 1; renderer.setPixelRatio(1); composer.setPixelRatio(1); PU.uPR.value = 1; lastSz = [0, 0]; resize(); Object.assign(ST, { DPR: 1, degraded: 1 }); } else if (!degraded) { degraded = true; ST.degraded = 2; } else if (geo.drawRange.count === Infinity || geo.drawRange.count > N / 2) { geo.setDrawRange(0, Math.floor(N / 2)); ST.degraded = 3; } else if (fps < 20) toFallback('slow'); } } else slowFor = 0;
+    if (lg) {
+    lg.clearRect(0, 0, 128, 48); lg.strokeStyle = '#ffb547'; lg.lineWidth = 2; lg.beginPath();
+    ft.forEach((v, j) => { const x = j * 4, y = 46 - Math.min(44, v / 33.3 * 44); j ? lg.lineTo(x, y) : lg.moveTo(x, y); }); lg.stroke();
+    lg.strokeStyle = 'rgba(255,181,71,.35)'; lg.lineWidth = 1; lg.beginPath(); lg.moveTo(0, 46 - 22); lg.lineTo(128, 46 - 22); lg.stroke();
+    }
+  }
+  requestAnimationFrame(frame);
+}
+function setRunning() {
+  const want = (visAct || visEnd) && !document.hidden && !dead;
+  canvas.style.visibility = (visAct || visEnd) ? 'visible' : 'hidden';
+  lens.classList.toggle('off', !debugFPS || !visAct);
+  if (want && !running) { running = true; first = true; clock.getDelta(); requestAnimationFrame(frame); } else if (!want) running = false;
+}
+async function start() {
+  try { await Promise.race([Promise.all(['900 200px "Big Shoulders Display"', '500 58px "IBM Plex Sans KR"', '500 40px "IBM Plex Mono"'].map((f) => document.fonts.load(f, "EMBER frame 0"))), new Promise((r) => setTimeout(r, 2500))]); } catch (e) {}
+  const fontsAtDraw = ['900 200px "Big Shoulders Display"', '500 58px "IBM Plex Sans KR"'].every((f) => document.fonts.check(f, 'EMBER'));
+  await buildFormations(); posTex.needsUpdate = true; drawWord(); buildGlass(); resize();
+  if (!fontsAtDraw) document.fonts.ready.then(() => { drawWord(); glass.children.forEach((g) => { const m = g.children[1]?.material; if (m?.map) { const old = m.map; m.map = slabTexture(SLABS[g.userData.k], g.userData.k); m.needsUpdate = true; old.dispose(); } }); });
+  // 3D 모델(휴대폰 5.7MB · 데스크톱 6.6MB)은 페이지가 다 뜬 뒤, 첫 막이 화면 근처일 때 받는다. 그동안은 그림 카드가 서 있다
+  const goGlb = () => new IntersectionObserver((es, io) => { if (es.some((e) => e.isIntersecting)) { io.disconnect(); loadGlb(); } }, { rootMargin: '50% 0px' }).observe(document.getElementById('act'));
+  let goOnce = false; const go = () => { if (!goOnce) { goOnce = true; goGlb(); } };
+  if (document.readyState === 'complete') go(); else { addEventListener('load', go, { once: true }); setTimeout(go, 4000); }   // 느린 글꼴·그림이 load 를 붙잡아도 4초 뒤엔 받기 시작
+  addEventListener('resize', resize); addEventListener('load', measureStops);
+  new ResizeObserver(() => measureStops()).observe(document.querySelector('main'));
+  new IntersectionObserver((es) => es.forEach((en) => { if (en.target.id === 'act') visAct = en.isIntersecting; else visEnd = en.isIntersecting; setRunning(); }), { rootMargin: '0px' })
+    .observe(document.getElementById('act'));
+  new IntersectionObserver((es) => es.forEach((en) => { visEnd = en.isIntersecting; setRunning(); })).observe(document.getElementById('download'));
+  document.addEventListener('visibilitychange', setRunning);
+  setRunning();
+}
+await start();
+if (!dead) document.getElementById('stage-fallback').hidden = true;
+}
+initStage().catch(() => {
+  document.getElementById('stage').hidden = true;
+  document.getElementById('stage-fallback').hidden = false;
+  document.getElementById('lens').hidden = true;
+  window.__emberStage = {...window.__emberStage, fallback:'unavailable'};
+});
+</script>
+</body>
+</html>

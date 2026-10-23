@@ -1,0 +1,1662 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ember · Mac版Windows游戏启动器</title>
+<meta name="description" content="Ember，面向 Apple Silicon Mac 的 Windows 游戏启动器。查看亲测游戏的兼容性、启动设置和已知问题。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" id="gf" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Hahmlet:wght@500;700&family=IBM+Plex+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" media="print">
+<script>/* 글꼴 CSS 가 늦어도 첫 화면을 막지 않게: 받는 동안은 대체 글꼴, 오면 바꿔 끼운다 */
+(() => { const l = document.getElementById('gf'); const on = () => { l.media = 'all'; }; if (l.sheet) on(); else l.addEventListener('load', on); })();</script>
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Hahmlet:wght@500;700&family=IBM+Plex+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap"></noscript>
+<style>
+/* Concept: "불 꺼진 대장간". 첫 막은 WebGL 한 장면(거대한 EMBER 글자 앞의 3D 엠버 → 궤도 → 불씨로 타서 흩어짐 → ×2 → 유리 고리),
+   그 아래는 숯빛 지면 위의 편집 지면(넓은 실제 화면 / 측정 장부 / 엔진 색인 / 인용 / 영상 / 앱 둘러보기).
+   주황과 금색으로 화면 출력·보간 프레임·실측을 강조한다. 단일 다크 룩. */
+:root{
+  color-scheme:dark;
+  --ink:#0b0908;          /* 숯 */
+  --ink-2:#14110f;        /* 한 단 높은 면 */
+  --ink-3:#1c1815;        /* 선 위 채움 */
+  --ash:#efe6dc;          /* 본문 */
+  --ash-dim:#b2a79c;      /* 보조 */
+  --ash-faint:#857a70;    /* 캡션 (숯 위 4.6:1) */
+  --ember:#ff6a1f;        /* 불씨 주황 */
+  --gold:#ffb547;         /* 불씨 금 */
+  --lime:#ffb547;         /* Ember가 더한 것 */
+  --line:rgba(255,214,180,.13);
+  --line-2:rgba(255,214,180,.24);
+  --f-display:"Big Shoulders Display","Arial Narrow","Helvetica Neue Condensed",Impact,sans-serif;
+  --f-head:"Hahmlet","Noto Serif KR","AppleMyungjo",serif;
+  --f-body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+  --gutter:max(clamp(16px,5vw,80px),env(safe-area-inset-left,0px),env(safe-area-inset-right,0px));
+  --t-xs:12px; --t-sm:14px; --t-md:17px; --t-lg:clamp(21px,2.1vw,28px); --t-xl:clamp(32px,4.6vw,64px); --t-num:clamp(52px,7vw,112px);
+}
+*{box-sizing:border-box}
+html{background:var(--ink);scroll-behavior:smooth}
+body{margin:0;background:var(--ink);color:var(--ash);font-family:var(--f-body);font-size:var(--t-md);line-height:1.68;-webkit-font-smoothing:antialiased;overflow-x:hidden;word-break:keep-all;overflow-wrap:break-word}
+img,video{max-width:100%;display:block}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--lime);outline-offset:3px;border-radius:4px}
+h1,h2,h3{margin:0;text-wrap:balance;font-weight:700}
+p,ul,ol,dl,figure{margin:0}
+ul,ol{padding:0;list-style:none}
+[hidden]{display:none!important}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.wrap{padding-inline:var(--gutter)}
+.eyebrow{font-family:var(--f-mono);font-size:var(--t-xs);letter-spacing:.1em;text-transform:uppercase;color:var(--gold)}
+.eyebrow.lime{color:var(--lime)}
+.h-serif{font-family:var(--f-head);font-weight:700;letter-spacing:-.02em;line-height:1.22}
+.mono{font-family:var(--f-mono)}
+.num{font-family:var(--f-display);font-weight:900;font-variant-numeric:tabular-nums;letter-spacing:.005em;line-height:.86}
+
+/* ---------- stage (WebGL) ---------- */
+/* iOS: 주소창이 접혔다 펴져도 무대 크기가 안 바뀌게 큰 뷰포트(lvh) 높이로 고정 — 다시 그리기·튐 없음 */
+#stage{position:fixed;top:0;left:0;width:100%;height:100vh;height:100lvh;z-index:0;display:block;background:var(--ink);touch-action:pan-y}
+#stage-fallback{position:fixed;inset:0;z-index:0;display:grid;place-items:end center;background:var(--ink);overflow:hidden}
+#stage-fallback .fw{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--f-display);font-weight:900;font-size:29vw;letter-spacing:.04em;color:#2a211b;line-height:1}
+#stage-fallback img{position:relative;height:84vh;width:auto;max-width:90vw;object-fit:contain}
+.grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.035;mix-blend-mode:overlay;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+main{position:relative;z-index:2}
+
+/* ---------- nav ---------- */
+.nav{position:fixed;z-index:20;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:calc(16px + env(safe-area-inset-top,0px)) var(--gutter) 16px;transition:background .3s,border-color .3s;border-bottom:1px solid transparent}
+.nav:not(.solid){background:linear-gradient(180deg,rgba(11,9,8,.92),rgba(11,9,8,.6) 70%,rgba(11,9,8,0))}
+.nav.solid{background:rgba(11,9,8,.92);border-bottom-color:var(--line)}
+.brand{display:flex;align-items:center;gap:10px;min-height:44px;text-decoration:none;font-family:var(--f-display);font-weight:900;font-size:22px;letter-spacing:.16em}
+.brand svg{width:18px;height:24px}
+.nav ul{display:flex;gap:22px}
+.nav li a{font-size:var(--t-sm);text-decoration:none;color:var(--ash-dim);transition:color .2s}
+.nav li a:hover{color:var(--ash)}
+.get{display:inline-flex;align-items:center;justify-content:center;min-height:44px;gap:8px;transition:background .18s ease;padding:9px 16px;border-radius:6px;font-size:var(--t-sm);font-weight:700;text-decoration:none;color:#170b04;background:var(--gold);white-space:nowrap}
+.get:hover{background:#ffc66e}
+.get svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.get.lg{padding:16px 26px;font-size:18px;border-radius:8px}
+
+/* frame meter (Ember Lens 흉내 — 이 페이지의 실제 fps) */
+.lens{position:fixed;z-index:20;right:var(--gutter);bottom:calc(16px + env(safe-area-inset-bottom,0px));display:grid;grid-template-columns:auto auto;gap:2px 10px;padding:8px 10px;font-family:var(--f-mono);font-size:11px;line-height:1.3;color:var(--ash-dim);background:rgba(11,9,8,.7);border:1px solid var(--line);border-radius:6px;font-variant-numeric:tabular-nums;transition:opacity .3s}
+.lens b{color:var(--lime);font-weight:500}
+.lens canvas{grid-row:1/3;width:64px;height:24px}
+.lens.off{opacity:0;pointer-events:none}
+
+/* ---------- act 1 (3D) ---------- */
+.act{position:relative;height:880vh}
+.stop{position:absolute;left:0;width:1px;height:1px;pointer-events:none}
+.hero{position:relative;height:100vh;height:100svh;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:24px 48px;padding-block:0 clamp(28px,6vh,64px)}
+.hero-copy{max-width:min(31em,calc(50vw - 18vh - var(--gutter) - 16px));display:grid;gap:14px}
+.hero h1{font-family:var(--f-head);font-weight:700;font-size:min(clamp(28px,3vw,44px),calc((50vw - 18vh - var(--gutter) - 16px) / 11.8));line-height:1.24;letter-spacing:-.025em;text-shadow:0 2px 24px rgba(11,9,8,.9)}
+.hero h1 em{font-style:normal;color:var(--gold)}
+.hero .lead{color:var(--ash-dim);max-width:30em;text-shadow:0 1px 14px rgba(11,9,8,.95)}
+.hero-row{display:flex;flex-wrap:wrap;align-items:center;gap:12px 18px;margin-top:6px}
+.hero-meta{font-family:var(--f-mono);font-size:var(--t-xs);color:var(--ash-dim)}
+.hero-proof{max-width:calc(50vw - 18vh - var(--gutter) - 16px);display:grid;gap:6px;justify-items:end;text-align:right;font-family:var(--f-mono);font-size:var(--t-xs);color:var(--ash-dim);text-shadow:0 1px 12px rgba(11,9,8,.95)}
+.hero-proof .num{font-size:min(clamp(34px,3.6vw,54px),calc((50vw - 18vh - var(--gutter) - 16px) / 7.4));color:var(--ash);white-space:nowrap}
+.hero-proof .num span{color:var(--ash-faint)}
+.hero-proof .num i{font-style:normal;color:var(--gold)}
+.hint{display:flex;align-items:center;gap:10px;margin-top:10px;color:var(--ash-faint);letter-spacing:.12em}
+.hint span{display:block;width:1px;height:34px;background:var(--gold);transform-origin:top;animation:drip 2.4s ease-in-out infinite}
+@keyframes drip{0%{transform:scaleY(0)}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+.cap{position:absolute;top:var(--t);left:var(--gutter);max-width:min(25em,44vw);display:grid;gap:12px;text-shadow:0 2px 20px rgba(11,9,8,.95),0 0 2px rgba(11,9,8,.8)}
+.cap.r{left:auto;right:var(--gutter)}
+.cap h2{font-family:var(--f-head);font-size:var(--t-lg);line-height:1.34;letter-spacing:-.02em}
+.cap p{color:var(--ash-dim)}
+.cap .bnums{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px;font-family:var(--f-mono);font-size:var(--t-sm);color:var(--ash)}
+.cap .bnums .nw{white-space:nowrap}
+.cap .bnums b{font-family:var(--f-display);font-weight:900;font-size:40px;line-height:1;color:var(--gold);font-variant-numeric:tabular-nums}
+.ring-hold{position:absolute;left:0;right:0;top:520vh;height:280vh}
+.ring-cap{position:sticky;top:calc(100vh - 40px);top:calc(100svh - 40px - env(safe-area-inset-bottom,0px));transform:translateY(-100%);padding-inline:var(--gutter);display:grid;gap:10px;max-width:calc(min(28em,40vw) + 2*var(--gutter));text-shadow:0 2px 20px rgba(11,9,8,.95)}
+.ring-cap h2{font-family:var(--f-head);font-size:var(--t-lg);line-height:1.34}
+.ring-cap p{color:var(--ash-dim);font-size:var(--t-sm)}
+
+/* ---------- manifesto ---------- */
+.mani{position:relative;height:230vh;background:var(--ink)}
+/* 3D 장면 → 숯 바탕: 경계선 대신 길게 어두워지며 넘어간다 */
+.mani::before{content:"";position:absolute;left:0;right:0;bottom:100%;height:60vh;pointer-events:none;background:linear-gradient(180deg,rgba(11,9,8,0),rgba(11,9,8,.35) 35%,rgba(11,9,8,.8) 70%,var(--ink))}
+.mani-in{position:sticky;top:0;min-height:100vh;min-height:100svh;display:grid;align-content:center;gap:clamp(24px,5vh,48px);padding-block:96px 64px}
+.mani .slogan{font-family:var(--f-display);font-weight:900;font-size:clamp(54px,10.5vw,172px);line-height:.84;letter-spacing:.005em;text-transform:uppercase}
+.mani .slogan span{display:block}
+.mani .slogan span:last-child{color:var(--gold)}
+.mani .prose{max-width:34em;margin-left:auto;font-family:var(--f-head);font-weight:500;font-size:clamp(20px,2vw,27px);line-height:1.6;letter-spacing:-.015em}
+.mani .prose .w{transition:opacity .35s ease,color .35s ease}
+.mani.js .prose .w{opacity:.16}
+.mani.js .prose .w.on{opacity:1}
+
+/* ---------- editorial ground ---------- */
+.sheet{position:relative;background:var(--ink)}
+.sec{padding-block:clamp(88px,15vh,170px) 0}
+.sec-head{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:16px clamp(24px,5vw,80px);align-items:end}
+.sec-head h2{font-family:var(--f-head);font-size:var(--t-xl);line-height:1.14;letter-spacing:-.03em}
+.sec-head .note{color:var(--ash-dim);font-size:var(--t-sm);max-width:34em}
+.sec-head .eyebrow{grid-column:1/-1}
+.rule{border:0;border-top:1px solid var(--line);margin:0}
+
+/* real screen, full bleed */
+.bleed{position:relative;margin-top:clamp(36px,6vh,64px)}
+.bleed img{width:100%;height:auto;aspect-ratio:16/9;object-fit:cover}
+.bleed .hudzoom{position:absolute;left:var(--gutter);top:clamp(16px,10%,120px);width:min(400px,44vw);background:var(--ink);border:1px solid var(--line-2);padding:6px}
+.bleed .hudzoom img{aspect-ratio:auto;image-rendering:auto}
+.bleed .hudzoom figcaption{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;padding:10px 6px 4px;font-family:var(--f-mono);font-size:var(--t-xs);color:var(--ash-dim);font-variant-numeric:tabular-nums}
+.bleed .hudzoom figcaption b{color:var(--ash);font-weight:500}
+.bleed .hudzoom figcaption .l{color:var(--lime)}
+.bleed-cap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 24px;padding:14px var(--gutter) 0;font-size:var(--t-sm);color:var(--ash-dim)}
+.bleed-cap b{color:var(--ash);font-weight:500}
+.loa-grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(24px,4vw,64px);margin-top:clamp(48px,8vh,96px)}
+.loa-stat .num{font-size:var(--t-num);color:var(--ash);margin-top:14px;white-space:nowrap}
+.loa-stat .num small{font-family:var(--f-mono);font-weight:400;font-size:14px;letter-spacing:.04em;color:var(--ash-dim);margin-left:8px}
+.loa-stat .sub{margin-top:8px;color:var(--ash-dim);font-size:var(--t-sm)}
+.facts{margin-top:28px;display:grid;font-size:var(--t-sm)}
+.facts li{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:11px 0;border-top:1px solid var(--line);color:var(--ash-dim)}
+.facts li b{font-family:var(--f-mono);font-weight:500;color:var(--ash);white-space:nowrap;font-variant-numeric:tabular-nums}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:18px}
+.chips span{font-family:var(--f-mono);font-size:11px;letter-spacing:.04em;padding:3px 8px;border:1px solid var(--line-2);border-radius:4px;color:var(--ash-dim);white-space:nowrap}
+.loa-shots{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(14px,2vw,24px);align-content:start}
+.loa-shots figure:first-child{grid-column:1/-1}
+.loa-shots figure:nth-child(3){margin-top:clamp(0px,6vh,64px)}
+.loa-shots img{width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;background:var(--ink-2)}
+.loa-shots figcaption{padding-top:10px;font-size:var(--t-sm);color:var(--ash-dim);display:grid;gap:2px}
+.loa-shots figcaption b{color:var(--ash);font-weight:500}
+.foot-note{margin-top:28px;font-family:var(--f-mono);font-size:var(--t-xs);color:var(--ash-faint);max-width:72em}
+
+/* ledger */
+.ledger{margin-top:clamp(36px,6vh,64px);border-bottom:1px solid var(--line)}
+.lg-head,.lg-row{display:grid;grid-template-columns:minmax(0,21em) minmax(0,1fr) minmax(0,12em);grid-template-areas:"game axis val";gap:12px clamp(16px,3vw,40px);align-items:center}
+.lg-game,.lg-head>:nth-child(1){grid-area:game}.axis-wrap,.lg-head .ax{grid-area:axis}.lg-val,.lg-head .r{grid-area:val}
+.lg-row.scale{border-top:0;padding-top:0}
+.lg-head{padding-bottom:12px;font-family:var(--f-mono);font-size:var(--t-xs);color:var(--ash-faint)}
+.lg-key{display:flex;flex-wrap:wrap;gap:6px 18px}
+.lg-key span{display:inline-flex;align-items:center;gap:8px}
+.lg-key i{display:inline-block;width:18px;height:6px;border-radius:3px;background:var(--ash-dim)}
+.lg-key i.o{background:var(--ember)}
+.lg-head .r{text-align:right}
+.lg-row{padding-block:18px;border-top:1px solid var(--line);position:relative}
+.lg-row:hover{background:linear-gradient(90deg,transparent,rgba(255,214,180,.035) 20%,rgba(255,214,180,.035) 80%,transparent)}
+.lg-game{display:grid;grid-template-columns:96px minmax(0,1fr);gap:14px;align-items:center}
+.lg-game img{width:96px;height:54px;object-fit:cover;background:var(--ink-2)}
+.lg-game h3{font-size:var(--t-md);font-weight:700;line-height:1.3}
+.lg-game p{font-family:var(--f-mono);font-size:11px;color:var(--ash-faint);line-height:1.5;margin-top:2px}
+.axis{position:relative;height:30px}
+.axis .bar{position:absolute;height:8px;border-radius:4px;background:var(--ash-dim)}
+.axis .bar.o{background:var(--ember)}
+.axis .bar.g{top:4px}.axis .bar.o{top:18px}
+.axis .bar.solo{top:11px}
+.axis .tick{position:absolute;top:-6px;bottom:-6px;width:1px;background:var(--line)}
+.lg-scale{position:relative;height:16px;font-family:var(--f-mono);font-size:11px;color:var(--ash-faint)}
+.lg-scale span{position:absolute;transform:translateX(-50%)}
+.lg-scale span:first-child{transform:none}
+.lg-val{text-align:right;min-width:0}
+.lg-val .num{font-size:clamp(30px,3vw,46px);color:var(--ash);white-space:nowrap;font-variant-numeric:tabular-nums}
+.lg-val .num em{font-style:normal;color:var(--ash-faint);font-size:.6em;margin:0 .1em}
+.lg-val p{font-family:var(--f-mono);font-size:11px;color:var(--ash-faint);margin-top:4px}
+
+/* features */
+.flow{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(28px,5vw,88px);margin-top:clamp(40px,7vh,80px);align-items:start}
+.bname{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px}
+.bname strong{font-family:var(--f-display);font-weight:900;font-size:clamp(46px,6vw,92px);line-height:.86;letter-spacing:.01em;text-transform:uppercase}
+.bname strong span{color:var(--gold)}
+.bname .kind{font-size:var(--t-sm);color:var(--ash-dim)}
+.flow h3{font-family:var(--f-head);font-size:var(--t-lg);line-height:1.34;margin-top:22px;letter-spacing:-.02em}
+.flow .body>p{margin-top:14px;color:var(--ash-dim);max-width:34em}
+.pts{margin-top:20px;display:grid;font-size:var(--t-sm);color:var(--ash-dim)}
+.pts li{display:grid;grid-template-columns:7.4em minmax(0,1fr);gap:12px;padding:10px 0;border-top:1px solid var(--line)}
+.pts li b{color:var(--ash);font-weight:500}
+.cad{margin-top:4px}
+.cad svg{width:100%;height:auto;display:block}
+.cad figcaption{margin-top:10px;font-size:var(--t-sm);color:var(--ash-dim)}
+.cad .spec{margin-top:24px}
+.spec{display:flex;flex-wrap:wrap;gap:8px 20px;padding-top:14px;border-top:1px solid var(--line);font-family:var(--f-mono);font-size:var(--t-xs);color:var(--ash-dim)}
+.spec b{color:var(--lime);font-weight:500}
+
+/* before/after */
+.ba{margin-top:28px}
+.ba-view{--p:50%;position:relative;aspect-ratio:16/9;max-width:100%;overflow:hidden;background:var(--ink-2);touch-action:pan-y}
+.ba-view img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ba-view .ba-b{clip-path:inset(0 0 0 var(--p))}
+.ba-view .ba-line{position:absolute;top:0;bottom:0;left:var(--p);width:2px;margin-left:-1px;background:var(--ash);pointer-events:none}
+.ba-view .ba-line::after{content:"";position:absolute;top:50%;left:50%;width:30px;height:30px;margin:-15px 0 0 -15px;border-radius:50%;background:var(--ink);border:2px solid var(--ash)}
+.ba-view input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:ew-resize}
+.ba-view .lab{position:absolute;top:10px;font-family:var(--f-mono);font-size:11px;padding:4px 8px;background:rgba(11,9,8,.8);color:var(--ash)}
+.ba-view .lab.a{left:10px}.ba-view .lab.b{right:10px;color:var(--lime)}
+.ba-view:has(input:focus-visible){outline:2px solid var(--lime);outline-offset:3px}
+.ba figcaption{margin-top:10px;font-size:var(--t-sm);color:var(--ash-dim)}
+
+.index{margin-top:clamp(56px,10vh,120px);border-bottom:1px solid var(--line)}
+.ix{display:grid;grid-template-columns:minmax(0,15em) minmax(0,1fr) minmax(0,17em);gap:10px clamp(16px,3vw,48px);padding-block:26px;border-top:1px solid var(--line);align-items:start}
+.ix-name strong{display:block;font-family:var(--f-display);font-weight:900;font-size:clamp(34px,3.4vw,52px);line-height:.9;letter-spacing:.01em;text-transform:uppercase}
+.ix-name strong span{color:var(--gold)}
+.ix-name .kind{display:flex;align-items:center;gap:4px;margin-top:8px;font-size:var(--t-sm);color:var(--ash-dim)}
+.ix-text p{color:var(--ash-dim);max-width:36em}
+.ix-text details{margin-top:12px}
+.ix-text summary{display:inline-flex;align-items:center;gap:8px;min-height:44px;cursor:pointer;font-family:var(--f-mono);font-size:var(--t-xs);color:var(--ash-faint);letter-spacing:.06em;list-style:none}
+.ix-text summary::-webkit-details-marker{display:none}
+.ix-text summary::before{content:"+";display:inline-grid;place-items:center;width:16px;height:16px;border:1px solid currentColor;border-radius:3px;font-size:12px;line-height:1}
+.ix-text details[open] summary::before{content:"−"}
+.ix-text summary:hover{color:var(--ash)}
+.ix-text .pts{margin-top:10px}
+.ix-val{text-align:right}
+.ix-val .num{font-size:clamp(30px,3vw,46px);color:var(--ash);white-space:nowrap;font-variant-numeric:tabular-nums}
+.ix-val .num.long{font-size:clamp(24px,2.2vw,34px)}
+.ix-val .num em{font-style:normal;font-size:.55em;color:var(--ash-faint);margin:0 .08em}
+.ix-val p{margin-top:6px;font-size:var(--t-xs);color:var(--ash-faint);line-height:1.5}
+
+/* engine room */
+.engine{margin-top:clamp(56px,10vh,120px);display:grid}
+.eg{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:12px clamp(24px,5vw,80px);padding-block:clamp(28px,5vh,48px);border-top:1px solid var(--line)}
+.eg .num{font-size:var(--t-num);color:var(--ash);white-space:nowrap}
+.eg .num em{font-style:normal;color:var(--ash-faint);font-size:.5em;margin:0 .12em}
+.eg .num small{font-family:var(--f-mono);font-weight:400;font-size:14px;color:var(--ash-dim);margin-left:8px;letter-spacing:.04em}
+.eg h3{font-family:var(--f-head);font-size:var(--t-lg);line-height:1.34}
+.eg p{margin-top:10px;color:var(--ash-dim);max-width:36em}
+.eg .pts{margin-top:14px}
+
+/* ember AI quote */
+.quote{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:clamp(28px,5vw,88px);align-items:end;margin-top:clamp(28px,5vh,48px)}
+.quote blockquote{margin:0;font-family:var(--f-head);font-weight:700;font-size:clamp(34px,5.4vw,84px);line-height:1.16;letter-spacing:-.035em}
+.quote blockquote span{color:var(--lime)}
+.quote .side img{width:100%;max-width:400px;height:auto;margin-left:auto}
+.quote .side figcaption{margin-top:10px;font-size:var(--t-sm);color:var(--ash-dim);text-align:right}
+.ai-lead{margin-top:28px;max-width:34em;color:var(--ash-dim)}
+.caps{margin-top:clamp(36px,6vh,64px);display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--line)}
+.caps div{padding:16px 16px 18px 0;border-bottom:1px solid var(--line)}
+.caps dt{font-weight:700;font-size:var(--t-sm)}
+.caps dd{margin:4px 0 0;color:var(--ash-dim);font-size:var(--t-sm)}
+
+/* living ember */
+#living{max-width:1440px;margin-inline:auto}
+#living .sec-head{grid-template-columns:minmax(0,1fr);gap:12px}
+#living .sec-head h2{font-size:clamp(30px,3.4vw,48px);text-wrap:balance}
+#living .sec-head .note{max-width:none}
+.live{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:clamp(24px,3vw,40px);margin-top:28px;align-items:start}
+.vid{position:relative;background:#000}
+.vid video{width:100%;height:auto;aspect-ratio:1120/782;object-fit:cover}
+.vid .play{position:absolute;left:12px;bottom:12px;display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:7px 14px;font:500 var(--t-xs)/1 var(--f-mono);color:var(--ash);background:rgba(11,9,8,.82);border:1px solid var(--line-2);border-radius:4px;cursor:pointer}
+.vid figcaption,.live .small figcaption{margin-top:10px;font-size:var(--t-sm);color:var(--ash-dim)}
+.live .small{margin-top:24px;display:grid;grid-template-columns:minmax(100px,.8fr) minmax(0,1fr);gap:14px;align-items:start;background:transparent}
+.live .small figcaption{margin-top:0}
+.live .vid .play{top:12px;bottom:auto}
+.live video{display:block;object-fit:contain;border:1px solid var(--line);border-radius:10px}
+.live>.vid{background:transparent}
+.live-text h3{font-family:var(--f-head);font-size:var(--t-lg);line-height:1.34}
+.live-text p{margin-top:12px;color:var(--ash-dim)}
+.live-text .facts{margin-top:22px}
+
+/* app tour */
+.tour{display:grid;grid-template-columns:minmax(0,15em) minmax(0,1fr);gap:clamp(24px,4vw,64px);margin-top:clamp(36px,6vh,64px);align-items:start}
+.tabs{display:grid;border-top:1px solid var(--line)}
+.tabs button{display:grid;gap:2px;text-align:left;padding:14px 0 14px 14px;border:0;border-bottom:1px solid var(--line);border-left:2px solid transparent;background:none;color:var(--ash-dim);font:inherit;font-size:var(--t-sm);cursor:pointer}
+.tabs button b{color:var(--ash);font-weight:500;font-size:var(--t-md)}
+.tabs button[aria-selected="true"]{border-left-color:var(--gold);color:var(--ash)}
+.tabs button:hover b{color:var(--gold)}
+.panes{position:relative}
+.panes figure img{width:100%;height:auto;background:var(--ink-2);border:1px solid var(--line)}
+.panes figure.tall img{max-width:440px}
+.panes figure.wide img{max-width:760px}
+.panes figcaption{margin-top:10px;font-size:var(--t-sm);color:var(--ash-dim)}
+.lic{margin-top:clamp(36px,6vh,56px);display:grid;grid-template-columns:minmax(0,15em) minmax(0,1fr);gap:8px clamp(24px,4vw,64px);padding-top:20px;border-top:1px solid var(--line)}
+.lic h3{font-size:var(--t-md)}
+.lic p{color:var(--ash-dim);font-size:var(--t-sm);max-width:44em}
+.lic a{color:var(--gold)}
+
+/* more */
+.more{margin-top:clamp(36px,6vh,64px);display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:clamp(24px,5vw,80px)}
+.more div{display:grid;grid-template-columns:minmax(0,11em) minmax(0,1fr);gap:12px;padding:14px 0;border-top:1px solid var(--line)}
+.more dt{font-weight:700;font-size:var(--t-sm)}
+.more dd{margin:0;color:var(--ash-dim);font-size:var(--t-sm)}
+
+/* end (WebGL again) */
+.end{position:relative;min-height:170vh;display:grid;align-content:end;padding-block:0 clamp(40px,8vh,80px);background:linear-gradient(180deg,var(--ink) 0,rgba(11,9,8,0) 34vh)}
+.end-in{display:grid;gap:22px;max-width:min(36em,52vw);text-shadow:0 2px 20px rgba(11,9,8,.95)}
+.end h2{font-family:var(--f-head);font-size:var(--t-xl);line-height:1.14;letter-spacing:-.03em}
+.req{display:grid;font-size:var(--t-sm);color:var(--ash-dim);max-width:30em}
+.req li{display:flex;justify-content:space-between;gap:16px;padding:9px 0;border-top:1px solid var(--line)}
+.req li b{color:var(--ash);font-weight:500;text-align:right}
+.end-links{display:flex;flex-wrap:wrap;gap:8px 20px;font-size:var(--t-sm)}
+.end-links a{color:var(--ash-dim);text-underline-offset:3px}
+.end-links a:hover{color:var(--ash)}
+footer{position:relative;z-index:2;padding-block:28px calc(28px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line);background:var(--ink);display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px 24px;font-size:var(--t-xs);color:var(--ash-faint)}
+footer p{max-width:60em}
+.foot-links{display:flex;flex-wrap:wrap;gap:6px 18px}
+.foot-links a{color:var(--ash-dim);text-decoration:none}
+.foot-links a:hover{color:var(--ash)}
+
+/* ⓘ brand info (10-07 brandnames) */
+.finfo{position:relative;display:inline-grid;place-items:center;flex:none;width:18px;height:18px;margin:0 2px 0 4px;padding:0;border:1px solid currentColor;border-radius:50%;background:transparent;color:var(--ash-dim);font:600 11px/1 var(--f-mono);font-style:italic;letter-spacing:0;text-transform:none;vertical-align:-3px;cursor:help;transition:color .15s,background .15s}
+.finfo::after{content:"";position:absolute;inset:-13px}
+.finfo:hover,.finfo[aria-expanded="true"]{color:var(--ink);background:var(--gold);border-color:var(--gold)}
+.finfo-demo{display:inline-grid;place-items:center;width:16px;height:16px;border:1px solid currentColor;border-radius:50%;font:600 10px/1 var(--f-mono);font-style:italic;vertical-align:-2px}
+.ftip{position:fixed;z-index:40;left:16px;top:0;width:min(25em,calc(100vw - 32px));padding:14px 16px 12px;border-radius:8px;background:#17130f;border:1px solid var(--line-2);box-shadow:0 24px 60px -20px rgba(0,0,0,.85);color:var(--ash);font-size:var(--t-sm);line-height:1.55;opacity:0;visibility:hidden;transform:translateY(4px);transition:opacity .15s,transform .15s,visibility 0s .15s}
+.ftip.on{opacity:1;visibility:visible;transform:none;transition:opacity .15s,transform .15s}
+.ftip .fh{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px}
+.ftip .fh b{font-size:var(--t-md);font-weight:700}
+.ftip .fh span{color:var(--ash-faint);font-size:var(--t-xs)}
+.ftip .tl{margin-top:4px;color:var(--lime);font-size:var(--t-sm)}
+.ftip dl{margin:10px 0 0;padding-top:10px;border-top:1px solid var(--line);display:grid;grid-template-columns:3.6em minmax(0,1fr);gap:6px 10px}
+.ftip dt{font-family:var(--f-mono);font-size:var(--t-xs);color:var(--ash-faint);padding-top:2px}
+.ftip dd{margin:0;color:var(--ash-dim)}
+.bn{color:var(--ash);font-weight:500;white-space:nowrap}
+
+@media (max-width:1100px){
+  .nav ul{gap:16px}
+  .caps{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .ix{grid-template-columns:minmax(0,13em) minmax(0,1fr)}
+  .ix-val{grid-column:2;text-align:left}
+}
+.menu{display:none}
+@media (max-width:900px){
+  .nav ul{display:none}
+  .menu{display:inline-flex;align-items:center;gap:8px;min-height:44px;margin-left:auto;padding:0 12px;border:1px solid var(--line-2);border-radius:6px;background:rgba(11,9,8,.6);color:var(--ash);font:500 var(--t-sm)/1 var(--f-body);cursor:pointer}
+  .menu i{position:relative;display:block;width:14px;height:2px;background:currentColor;border-radius:1px}
+  .menu i::before,.menu i::after{content:"";position:absolute;left:0;width:14px;height:2px;background:currentColor;border-radius:1px}
+  .menu i::before{top:-5px}.menu i::after{top:5px}
+  .nav.open{background:rgba(11,9,8,.97);border-bottom-color:var(--line)}
+  .nav.open ul{position:absolute;top:100%;left:0;right:0;display:grid;padding:4px var(--gutter) 12px;background:rgba(11,9,8,.97);border-bottom:1px solid var(--line)}
+  .nav.open li a{display:flex;align-items:center;min-height:48px;border-top:1px solid var(--line);font-size:var(--t-md);color:var(--ash)}
+  .get{min-height:44px}
+  .end-links a,.foot-links a{display:inline-flex;align-items:center;min-height:44px}
+  .end-links,.foot-links{gap:0 18px}
+  .tabs button{min-height:48px}
+  .lg-game p,.lg-val p,.chips span,.ba-view .lab,.lg-scale,.hero-meta{font-size:12px}
+  .hint{display:none}
+  .hero .lead{font-size:15px}
+  .sec-head{grid-template-columns:minmax(0,1fr)}
+  .loa-grid,.flow,.quote,.live,.tour,.lic,.eg{grid-template-columns:minmax(0,1fr)}
+  .lg-head,.lg-row{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"game val" "axis axis"}
+  .lg-head .ax{display:none}
+  .lg-row.scale{grid-template-areas:"axis axis"}
+  .caps{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .more{grid-template-columns:minmax(0,1fr)}
+  .quote .side img{margin-left:0}
+  .quote .side figcaption{text-align:left}
+  .tabs{grid-template-columns:repeat(3,minmax(0,1fr));border-top:0;gap:0}
+  .tabs button{border-left:0;border-top:2px solid var(--line);border-bottom:0;padding:10px 8px 10px 0}
+  .tabs button[aria-selected="true"]{border-top-color:var(--gold)}
+  .tabs button span{display:none}
+  .lens{display:none}
+}
+@media (max-aspect-ratio:17/20){
+  /* 세로 화면(JS portrait 와 같은 기준 0.85): 주인공은 화면 위쪽 12~48%, 글은 멈춤 지점 아래 8vh(화면 58%)부터 */
+  .cap,.cap.r{top:calc(var(--t) + 30vh);left:var(--gutter);right:var(--gutter);max-width:none;padding:16px 0}
+  /* 글 뒤 어둠: 화면 끝까지 넓게, 위아래는 길게 녹여 상자 경계가 안 보이게 */
+  .cap::before{content:"";position:absolute;z-index:-1;pointer-events:none;left:calc(-1 * var(--gutter));right:calc(-1 * var(--gutter));top:-16vh;bottom:-18vh;background:linear-gradient(180deg,rgba(11,9,8,0),rgba(11,9,8,.5) 22%,rgba(11,9,8,.8) 40%,rgba(11,9,8,.8) 64%,rgba(11,9,8,.45) 82%,rgba(11,9,8,0))}
+  .hero{grid-template-columns:minmax(0,1fr);align-content:end}
+  /* 첫 화면 아래 어둠은 다음 장면까지 이어서 녹인다(띠 경계 없이) */
+  .hero::before{content:"";position:absolute;z-index:-1;pointer-events:none;left:0;right:0;top:0;bottom:-40vh;background:linear-gradient(180deg,rgba(11,9,8,0) 30%,rgba(11,9,8,.6) 42%,rgba(11,9,8,.86) 52%,rgba(11,9,8,.86) 64%,rgba(11,9,8,.5) 80%,rgba(11,9,8,0))}
+  .hero-copy,.hero-proof{max-width:none}
+  .hero h1{font-size:clamp(28px,3vw,44px)}
+  .hero-proof{justify-items:start;text-align:left}
+  .hero-proof .num{font-size:clamp(34px,9vw,54px)}
+  .ring-hold{top:545vh}
+  .ring-cap{max-width:none;padding-top:24px;background:linear-gradient(180deg,transparent,rgba(11,9,8,.86) 22%)}
+  .end-in{max-width:none}
+  .end{background:linear-gradient(180deg,var(--ink) 0,rgba(11,9,8,0) 34vh,rgba(11,9,8,0) 60%,rgba(11,9,8,.86) 76%)}
+}
+@media (max-aspect-ratio:17/20) and (max-height:700px){
+  /* 작은 휴대폰(iPhone SE 등): 첫 화면 글을 줄여 캐릭터 다리와 겹치지 않게 */
+  .hero .eyebrow{display:none}
+  .hero h1{font-size:clamp(22px,6.6vw,26px)}
+  .hero-copy{gap:10px}
+}
+@media (max-width:400px){
+  .lg-head,.lg-row{grid-template-columns:minmax(0,1fr);grid-template-areas:"game" "val" "axis"}
+  .lg-head .r{display:none}
+  .lg-row.scale{grid-template-areas:"axis"}
+  .lg-val{text-align:left}
+  .nav .opt{display:none}
+  .menu{width:44px;justify-content:center;padding:0}
+  .nav{gap:10px}
+}
+@media (pointer:coarse),(max-height:560px){.lens{display:none}}
+@media (max-width:560px){
+  .hero .lead{display:none}
+  .cad .cad-t{font-size:21px}
+  .ix{grid-template-columns:minmax(0,1fr)}
+  .ix-val{grid-column:auto}
+  .pts li{grid-template-columns:minmax(0,1fr);gap:2px}
+  .loa-shots{grid-template-columns:minmax(0,1fr)}
+  .loa-shots figure:nth-child(3){margin-top:0}
+  .lg-game{grid-template-columns:72px minmax(0,1fr)}
+  .lg-game img{width:72px;height:40px}
+  .more div{grid-template-columns:minmax(0,1fr);gap:2px}
+  .caps{grid-template-columns:minmax(0,1fr)}
+  .bleed .hudzoom{position:relative;left:auto;top:auto;width:auto;margin:12px var(--gutter) 0}
+  .brand{font-size:19px}
+  .get{padding:8px 12px}
+}
+@media (max-height:560px) and (min-aspect-ratio:17/20){
+  /* 가로로 눕힌 휴대폰: 높이 340~430px. 머리말·첫 화면 글을 줄여 화면 안에 들어오게 */
+  .nav{padding-block:calc(6px + env(safe-area-inset-top,0px)) 6px}
+  .hero{gap:12px 32px;padding-block:72px 16px}
+  .hero-copy{gap:8px}
+  .hero .eyebrow{display:none}
+  .hero h1{font-size:clamp(20px,5.4vh,26px)}
+  .hero .lead,.hint{display:none}
+  .hero-proof .num{font-size:min(clamp(28px,9vh,40px),calc((50vw - 18vh - var(--gutter) - 16px) / 7.4))}
+  .cap{gap:8px}
+  .cap h2{font-size:clamp(18px,5vh,22px)}
+  .cap p{font-size:var(--t-sm)}
+  .cap .bnums b{font-size:30px}
+  .mani-in{padding-block:64px 32px;gap:16px}
+  .mani .slogan{font-size:min(10.5vw,18vh)}
+  .mani .prose{font-size:min(20px,5vh)}
+  .ring-cap h2{font-size:clamp(18px,5vh,22px)}
+  .ring-cap p{display:none}
+  .end-in{max-width:min(36em,56vw);padding:16px 20px 16px 0;background:linear-gradient(90deg,rgba(11,9,8,.9) 80%,rgba(11,9,8,0))}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+</style>
+<link rel="stylesheet" href="../assets/site-shell.css">
+<link rel="stylesheet" href="../assets/compatibility.css">
+<script src="../assets/compatibility.js" defer></script>
+<script src="../assets/site-shell.js" defer></script>
+<meta name="theme-color" content="#0b0908">
+<meta name="color-scheme" content="dark">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<link rel="canonical" href="https://eunggg0.github.io/ember-site/zh-Hans/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Ember">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:title" content="Ember · Mac版Windows游戏启动器">
+<meta property="og:description" content="Ember，面向 Apple Silicon Mac 的 Windows 游戏启动器。查看亲测游戏的兼容性、启动设置和已知问题。">
+<meta property="og:url" content="https://eunggg0.github.io/ember-site/zh-Hans/">
+<meta property="og:image" content="https://eunggg0.github.io/ember-site/assets/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Ember角色与Mac版Windows游戏启动器。游戏兼容性和启动设置。">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Ember · Mac版Windows游戏启动器">
+<meta name="twitter:description" content="Ember，面向 Apple Silicon Mac 的 Windows 游戏启动器。查看亲测游戏的兼容性、启动设置和已知问题。">
+<meta name="twitter:image" content="https://eunggg0.github.io/ember-site/assets/og.jpg">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<link rel="alternate" hreflang="ko" href="https://eunggg0.github.io/ember-site/ko/">
+<link rel="alternate" hreflang="en" href="https://eunggg0.github.io/ember-site/en/">
+<link rel="alternate" hreflang="ja" href="https://eunggg0.github.io/ember-site/ja/">
+<link rel="alternate" hreflang="zh-Hans" href="https://eunggg0.github.io/ember-site/zh-Hans/">
+<link rel="alternate" hreflang="zh-Hant" href="https://eunggg0.github.io/ember-site/zh-Hant/">
+<link rel="alternate" hreflang="x-default" href="https://eunggg0.github.io/ember-site/">
+<script src="../assets/language.js" defer></script>
+</head>
+<body>
+<canvas id="stage" aria-hidden="true"></canvas>
+<div id="stage-fallback" aria-hidden="true"><span class="fw">EMBER</span><img src="../assets/ember-cutout.webp" alt="" width="871" height="1600"></div>
+<div class="grain" aria-hidden="true"></div>
+
+<header class="nav" id="nav">
+  <a class="brand" href="#top" aria-label="Ember 首页">
+    <svg viewBox="0 0 100 130" aria-hidden="true"><path fill="#ff8a3a" fill-rule="evenodd" d="M50 4C62 30 88 52 88 82C88 108 70 126 50 126C30 126 12 108 12 84C12 64 24 52 32 40C34 54 40 60 46 62C42 44 44 24 50 4ZM50 71a17 17 0 1 0 0.01 0Z"/></svg>
+    EMBER
+  </a>
+  <button class="menu" type="button" id="menubtn" aria-expanded="false" aria-controls="navlist" aria-label="菜单"><i aria-hidden="true"></i><span class="opt">菜单</span></button>
+  <ul id="navlist">
+    <li><a href="#screens">游戏兼容性</a></li>
+    <li><a href="#perf">测量说明</a></li>
+    <li><a href="#features">功能</a></li>
+    <li><a href="#ember">Ember</a></li>
+    <li><a href="#app">应用</a></li>
+    <li><a href="why.html">为什么开发 Ember</a></li>
+  </ul>
+  <a class="get" href="https://eunggg0.github.io/ember-releases/download/" data-link="download"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M6 10l6 6 6-6M4 20h16"/></svg><span class="opt">Mac 版 </span>下载</a>
+</header>
+
+<div class="lens off" id="lens" hidden aria-hidden="true"><canvas id="lensg" width="128" height="48"></canvas><span>本页内容</span><span><b id="lensfps">--</b> fps</span></div>
+
+<main id="top">
+  <section class="act" id="act" aria-labelledby="hero-title">
+    <div class="stop" data-stop="hero" style="top:50vh"></div>
+    <div class="stop" data-stop="side" style="top:130vh"></div>
+    <div class="stop" data-stop="back" style="top:210vh"></div>
+    <div class="stop" data-stop="front" style="top:290vh"></div>
+    <div class="stop" data-stop="sil" style="top:370vh"></div>
+    <div class="stop" data-stop="num" style="top:460vh"></div>
+    <div class="stop" data-stop="ring0" style="top:550vh"></div>
+    <div class="stop" data-stop="ring1" style="top:760vh"></div>
+    <div class="stop" data-stop="out" style="top:830vh"></div>
+
+    <div class="hero wrap">
+      <div class="hero-copy">
+        <p class="eyebrow">面向 Apple Silicon Mac 的 Windows 游戏启动器</p>
+        <h1 id="hero-title"><span class="sr">Ember. </span>在 Mac 上<br><em>畅玩 Windows 游戏。</em></h1>
+        <p class="lead">提供适合各款游戏的启动设置和 Ember Flow 补帧。遇到问题时，可以询问在 Mac 本地运行的 AI 助手。</p>
+        <div class="hero-row">
+          <a class="get" href="https://eunggg0.github.io/ember-releases/download/" data-link="download"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M6 10l6 6 6-6M4 20h16"/></svg>下载 Mac 版</a>
+          <span class="hero-meta">版本 <span data-cfg="version">1.0</span> · Apple Silicon · macOS 14 及以上</span>
+        </div>
+      </div>
+      <div class="hero-proof">
+        <span>亲测游戏记录</span>
+        <a class="compat-hero-link" href="#screens">游戏兼容性 <span aria-hidden="true">↗</span></a>
+        <span>启动设置 · 测试范围 · 已知问题</span>
+        <span class="hint"><span></span>向下滚动，Ember 会转过身来</span>
+      </div>
+    </div>
+
+    <div class="cap" style="--t:108vh">
+      <p class="eyebrow">轻松启动游戏</p>
+      <h2>安装、选好游戏，然后启动。</h2>
+      <p>Ember 是在 Apple Silicon Mac 上运行 Windows 游戏的启动器。它会为每款游戏预设合适的引擎和图形设置，你也可以随时手动更改。</p>
+    </div>
+    <div class="cap r" style="--t:188vh">
+      <p class="eyebrow">充分发挥 Mac 的性能</p>
+      <h2>让 GPU 和性能核心优先服务游戏。</h2>
+      <p>通过 Metal 处理图形，并设置游戏优先使用性能核心。</p>
+    </div>
+    <div class="cap" style="--t:268vh">
+      <p class="eyebrow">Ember 自研技术</p>
+      <h2>从补帧到画质提升。</h2>
+      <p>Ember Flow 生成中间帧，Ember Forge 提升画面清晰度，Ember Pulse 调整帧的显示间隔，使输出更加均匀。</p>
+    </div>
+    <div class="cap r" style="--t:432vh">
+      <p class="eyebrow lime">Ember Flow · 补帧</p>
+      <h2>在游戏帧之间&nbsp;补上一帧，让输出 fps&nbsp;翻倍。</h2>
+      <p class="bnums"><span>画面输出</span><span class="nw"><b>最高 2 倍</b></span></p>
+      <p>实际效果因游戏和设置而异。请在各游戏记录中同时查看补帧前的游戏 fps 和补帧后的画面输出 fps。</p>
+    </div>
+    <div class="ring-hold">
+      <div class="ring-cap">
+        <p class="eyebrow">Ember 的 11 项功能</p>
+        <h2>Ember 自主开发了 11 种引擎。</h2>
+        <p>Flow · Guard · Forge · Tone · Flare · Pulse · Boost · Kindle · Kiln · Spark · Lens。MetalFX、DXMT、D3DMetal 等第三方技术保留原名，只有 Ember 在其基础上自主开发的功能才使用 Ember 名称。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="mani wrap" id="mani" aria-label="Ember 简介">
+    <div class="mani-in">
+      <p class="slogan"><span>Windows 游戏，</span><span>在 Mac 上玩。</span></p>
+      <p class="prose" id="prose">Ember 是在 Apple Silicon Mac 上运行 Windows 游戏的启动器。它为每款游戏选择合适的引擎和图形转换器，若启动时崩溃，会换用其他转换器重试。同时提供自研的补帧、画质提升和帧间隔调整功能。下方列出了各游戏的测试范围及 M4 Pro 实测性能。</p>
+    </div>
+  </section>
+
+  <div class="sheet">
+  <!-- ===== 게임 호환성 ===== -->
+  <section class="sec wrap" id="screens" aria-labelledby="compat-title">
+    <div class="sec-head"><p class="eyebrow">游戏兼容性 · 测试记录</p><h2 id="compat-title">可以玩哪些游戏？</h2><p class="note">这里列出的游戏均已实际运行并记录。选择游戏可查看测试场景、启动设置、帧率及尚未解决的问题。</p></div>
+    <form class="compat-tools" role="search" aria-label="搜索游戏兼容性" hidden><div><label for="compat-query">查找游戏</label><input id="compat-query" type="search" placeholder="搜索游戏名称 · 韩文 / 英文" autocomplete="off" aria-controls="compat-list"></div><div><label for="compat-filter">测试结果</label><select id="compat-filter" aria-controls="compat-list"><option value="all">全部结果</option><option value="play">已验证游玩</option><option value="issues">存在问题</option><option value="menu">已验证菜单</option><option value="blocked">启动失败</option></select></div><button type="reset">重置</button></form>
+    <div class="compat-meta"><p id="compat-count" role="status" aria-live="polite" aria-atomic="true">共 21 款游戏 · 按名称排序</p><span>网站更新日期 <span data-cfg="siteUpdated">2026-10-23</span></span></div>
+    <div class="compat-head" aria-hidden="true"><span>游戏</span><span>测试结果</span><span>启动设置</span><span>已验证范围</span><span></span></div>
+    <div id="compat-list"><details class="compat-game" id="game-l4d2" data-status="play" data-search="Left 4 Dead 2 L4D2 레프트 4 데드 2">
+      <summary><span class="compat-name"><strong>求生之路 2</strong><small>Steam</small></span><span class="compat-status play">已验证游玩</span><span class="compat-renderer">DXVK</span><span class="compat-scope">死亡中心 · 本地战役</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
+      <div class="compat-detail"><div><p class="compat-result">已在第一张地图的屋顶移动，验证了游玩情况。</p><dl><div><dt>测试环境</dt><dd>M4 Pro · 1600×900 · 120Hz · 与电脑玩家游玩</dd></div><div><dt>帧率记录</dt><dd>游戏 128–146 fps · 平均约 138 fps</dd></div><div><dt>注意事项</dt><dd>此结果使用 Ember 修改的 DXVK 测得，其他 DXVK 版本的结果可能不同。</dd></div><div><dt>记录确认日期</dt><dd><time datetime="2026-09-28">2026-09-28</time> · 帧率数据可能来自另一次测试。</dd></div></dl><a class="compat-permalink" href="#game-l4d2">此游戏的直达链接 ↗</a></div></div>
+    </details>
+<details class="compat-game" id="game-lostark" data-status="play" data-search="Lost Ark 로스트아크">
+      <summary><span class="compat-name"><strong>失落的方舟</strong><small>STOVE</small></span><span class="compat-status play">已验证游玩</span><span class="compat-renderer">FEX · DXMT</span><span class="compat-scope">城镇移动 · 水上乐园</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
+      <div class="compat-detail"><div><p class="compat-result">已验证城镇移动和游玩。10月22日使用 FEX 连续运行了 3 小时 9 分钟，未记录到崩溃。</p><dl><div><dt>测试环境</dt><dd>本机（M4 Pro）· FEX · DXMT · QHD · MetalFX · Ember Flow · 游戏模式 · 各项分别测试</dd></div><div><dt>帧率记录</dt><dd>此前城镇测量：游戏 47–54 → 画面输出 94–107 fps · 拥挤场景游戏 fps +7%（50.2 → 53.7）· 另一次重排对比：每 1 秒最大帧时间的中位数约 23–29 → 17–20 ms</dd></div><div><dt>注意事项</dt><dd>首次启动时 FEX 需要新建缓存，可能耗时较长。游戏内网页仍有偶发错误。</dd></div><div><dt>记录确认日期</dt><dd><time datetime="2026-10-22">2026-10-22</time> · 连续运行 3 小时 9 分钟 · 帧率为单独测量 · 本机（M4 Pro）实测</dd></div></dl><a class="compat-permalink" href="#game-lostark">此游戏的直达链接 ↗</a></div><figure class="compat-shot"><a href="../assets/loa-town-fg.webp" target="_blank" rel="noopener"><img src="../assets/loa-town-fg.webp" alt="通过 Ember 运行的《失落的方舟》实机画面" loading="lazy" width="1600" height="900"></a><figcaption>10月23日画面 · 左上方为 Ember Lens · 点击查看原图</figcaption></figure></div>
+    </details>
+<details class="compat-game" id="game-lethal" data-status="play" data-search="Lethal Company 리썰 컴퍼니">
+      <summary><span class="compat-name"><strong>致命公司</strong><small>Steam</small></span><span class="compat-status play">已验证游玩</span><span class="compat-renderer">D3DMetal / DXMT</span><span class="compat-scope">局域网主机 · 飞船内部</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
+      <div class="compat-detail"><div><p class="compat-result">以局域网主机身份进入飞船，验证了画面和性能。</p><dl><div><dt>测试环境</dt><dd>M4 Pro · 60Hz · 进入飞船后 30 秒</dd></div><div><dt>帧率记录</dt><dd>游戏 60 fps · 此场景 GPU 使用率约 51% · 单独测量（Rosetta · DXMT · 4K · Ember Flow）：总延迟 51.5 → 43.0 ms · 10月21日 Rosetta · D3DMetal FHD：游戏约 120 → 画面输出约 139 fps · 10月17日 FEX · DXMT FHD：画面输出约 155 fps（最大帧时间 19.8 ms）</dd></div><div><dt>注意事项</dt><dd>此记录不涵盖互联网大厅和在线合作模式。麦克风名称中的韩文可能因游戏字体而显示为方框。</dd></div><div><dt>记录确认日期</dt><dd><time datetime="2026-10-19">2026-10-19</time> · DXMT 延迟测量 · 飞船内游玩验证于 2026-09-28 · 帧率数据可能来自另一次测试。</dd></div></dl><a class="compat-permalink" href="#game-lethal">此游戏的直达链接 ↗</a></div></div>
+    </details>
+<details class="compat-game" id="game-requiem" data-status="play" data-search="RESIDENT EVIL requiem 바이오하자드 레퀴엠">
+      <summary><span class="compat-name"><strong>生化危机：安魂曲</strong><small>Steam · 试玩版</small></span><span class="compat-status play">已验证游玩</span><span class="compat-renderer">D3DMetal</span><span class="compat-scope">试玩版 · 第一个房间</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
+      <div class="compat-detail"><div><p class="compat-result">已使用 D3DMetal 验证标题画面、菜单和第一个房间的游玩。10月21日也通过 D3DMetal 正常启动并测量了帧率。</p><dl><div><dt>测试环境</dt><dd>M4 Pro · 10月4日 120Hz 4K 显示器 · 10月21日 FHD</dd></div><div><dt>帧率记录</dt><dd>10月4日：静止约 83 fps · 移动约 70 fps · 移动时 p99 约 50 ms · 10月21日 FHD Ember Flow：游戏约 115 → 画面输出约 137 fps</dd></div><div><dt>注意事项</dt><dd>10月4日记录到移动时卡顿，10月21日测量未单独记录最大帧时间。DXMT 会出现黑屏，因此本游戏使用 Rosetta · D3DMetal 路径启动，不支持 FEX 引擎。</dd></div><div><dt>记录确认日期</dt><dd><time datetime="2026-10-21">2026-10-21</time> · FHD 帧率测量 · 第一个房间游玩于 2026-10-04 · 帧率数据可能来自另一次测试。</dd></div></dl><a class="compat-permalink" href="#game-requiem">此游戏的直达链接 ↗</a></div></div>
+    </details>
+<details class="compat-game" id="game-valheim" data-status="play" data-search="Valheim 발헤임">
+      <summary><span class="compat-name"><strong>英灵神殿</strong><small>Steam</small></span><span class="compat-status play">已验证游玩</span><span class="compat-renderer">DXMT / D3DMetal</span><span class="compat-scope">启动 · 60 秒帧率测量</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
+      <div class="compat-detail"><div><p class="compat-result">已验证开场视频和菜单，并分别使用 FEX · DXMT 和 Rosetta · DXMT 测量了 60 秒帧率。已修复在 Steam 提示窗口卡住的问题。</p><dl><div><dt>测试环境</dt><dd>本机（M4 Pro）· FEX · DXMT · FHD · 60 fps 上限 · 补帧关闭</dd></div><div><dt>帧率记录</dt><dd>60 fps · 低延迟显示队列自动调整：内部延迟 10.2 → 5.6 ms · 10月21日 FEX · DXMT FHD：游戏 60 → 画面输出 120 fps（Ember Flow，最大帧时间 28.9 ms）· 10月17日 Rosetta · DXMT：同为 120 fps（最大 18.6 ms）</dd></div><div><dt>注意事项</dt><dd>FEX 需要翻译新代码，最大帧时间比 Rosetta 长约 10 ms。记录未注明测量场景是菜单还是世界，因此不保证整个世界或多人游戏的稳定性。</dd></div><div><dt>记录确认日期</dt><dd><time datetime="2026-10-23">2026-10-23</time> · 已包含 Steam 提示窗口修复</dd></div></dl><a class="compat-permalink" href="#game-valheim">此游戏的直达链接 ↗</a></div></div>
+    </details>
+<details class="compat-game" id="game-stellar" data-status="play" data-search="Stellar Blade 스텔라 블레이드">
+      <summary><span class="compat-name"><strong>剑星</strong><small>Steam · 试玩版</small></span><span class="compat-status play">已验证游玩</span><span class="compat-renderer">D3DMetal / DXMT · FEX</span><span class="compat-scope">试玩版 · 营地与游戏内</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
+      <div class="compat-detail"><div><p class="compat-result">已使用 D3DMetal 验证游戏内游玩。FEX · DXMT 和 Rosetta · DXMT 也已在 FHD 下运行并测得约 60 fps（10月22日）。已修复 FEX 偶发画面冻结（9 次中 3 次 → 7 次中 0 次）。</p><dl><div><dt>测试环境</dt><dd>M4 Pro · 演示版 · 各图形路径分别测量</dd></div><div><dt>帧率记录</dt><dd>D3DMetal · Ember Flow · 144Hz：游戏 60 → 平均画面输出 116.7 fps · 4K D3DMetal（10月23日）：游戏约 34 → 画面输出约 55 fps · FHD DXMT（10月22日）：FEX、Rosetta 均约 60 fps · Rosetta D3DMetal 流畅方式的显示改进：FHD 延迟 24.2 → 14.1 ms · 输出 116.6 → 119.2 fps，QHD 延迟 24.2 → 15.8 ms · 输出 114.0 → 118.8 fps · 这些数值不构成稳定性保证</dd></div><div><dt>注意事项</dt><dd>此前 DXMT 路径记录过 GPU 卡死和使用 FSR3 时的画面异常，近期测量未复查。FEX 记录中约 290–307 ms 的最大帧时间，已确认是测量开始时首次将窗口置于前台造成的卡顿（Rosetta 也超过 600 ms）。请与 D3DMetal 结果区分。</dd></div><div><dt>记录确认日期</dt><dd><time datetime="2026-10-23">2026-10-23</time> · 4K 测量 · FHD 测量于 2026-10-22 · FEX 冻结修复确认于 2026-10-19 · 帧率数据可能来自另一次测试。</dd></div></dl><a class="compat-permalink" href="#game-stellar">此游戏的直达链接 ↗</a></div><figure class="compat-shot"><a href="../assets/stellar.webp" target="_blank" rel="noopener"><img src="../assets/stellar.webp" alt="通过 Ember 运行的《剑星》实机画面" loading="lazy" width="1600" height="900"></a><figcaption>此前测试画面 · 试玩版菜单 · 点击查看原图</figcaption></figure></div>
+    </details>
+<details class="compat-game" id="game-overwatch" data-status="play" data-search="Overwatch 오버워치">
+      <summary><span class="compat-name"><strong>守望先锋</strong><small>Steam</small></span><span class="compat-status play">已验证游玩</span><span class="compat-renderer">D3DMetal</span><span class="compat-scope">Steam 版 · 启动后游玩</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
+      <div class="compat-detail"><div><p class="compat-result">修复启动失败后，用户已确认游戏可通过 Rosetta · D3DMetal 运行。</p><dl><div><dt>测试环境</dt><dd>M4 Pro · Steam 版 · QHD · 用户游玩（10月10日）及帧率测量（10月15日）</dd></div><div><dt>帧率记录</dt><dd>QHD 测量（10月15日）：游戏约 56–60 fps · GPU 使用率 94–100%</dd></div><div><dt>注意事项</dt><dd>测量表明 QHD 下受 GPU 性能限制，约为 56–60 fps，并非 Ember 端瓶颈。FEX 引擎在10月15日未显示画面（GPU 约 1%），尚未确认可用。韩国 Battle.net 版另有记录，不能套用此结果。</dd></div><div><dt>记录确认日期</dt><dd><time datetime="2026-10-15">2026-10-15</time> · 用户确认运行于 2026-10-10 · 近期未重新测试。</dd></div></dl><a class="compat-permalink" href="#game-overwatch">此游戏的直达链接 ↗</a></div></div>
+    </details>
+<details class="compat-game" id="game-oncehuman" data-status="play" data-search="Once Human 원스 휴먼">
+      <summary><span class="compat-name"><strong>七日世界</strong><small>Steam</small></span><span class="compat-status play">已验证游玩</span><span class="compat-renderer">D3DMetal / DXMT</span><span class="compat-scope">野外移动 · 补帧对比</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
+      <div class="compat-detail"><div><p class="compat-result">已验证野外游玩和补帧。在 DXMT 下也比较了不同补帧方式的独立帧与重复帧。已修复麦克风权限窗口出现时游戏卡住的问题。</p><dl><div><dt>测试环境</dt><dd>M4 Pro · 各图形路径分别测量</dd></div><div><dt>帧率记录</dt><dd>此前 D3DMetal 测量：启用 Ember Flow 后画面输出约 114 fps · 10月16日 Rosetta · D3DMetal FHD：游戏约 53 → 画面输出约 78 fps · 10月17日 FEX · DXMT FHD：约 41 fps</dd></div><div><dt>注意事项</dt><dd>下方画面输出数值来自 D3DMetal 测量，请勿与 DXMT 结果合并比较。10月23日菜单测试中，麦克风权限窗口显示期间未出现超过 9 秒的停顿；登录后的世界性能未验证。</dd></div><div><dt>记录确认日期</dt><dd><time datetime="2026-10-23">2026-10-23</time> · 权限窗口等待测试仅验证到菜单</dd></div></dl><a class="compat-permalink" href="#game-oncehuman">此游戏的直达链接 ↗</a></div><figure class="compat-shot"><a href="../assets/oncehuman.webp" target="_blank" rel="noopener"><img src="../assets/oncehuman.webp" alt="通过 Ember 运行的《七日世界》实机画面" loading="lazy" width="1600" height="900"></a><figcaption>10月初测试画面 · DXMT · 点击查看原图</figcaption></figure></div>
+    </details>
+<details class="compat-game" id="game-witcher3" data-status="play" data-search="The Witcher 3 Wild Hunt 리마스터 위쳐 3: 와일드 헌트">
+      <summary><span class="compat-name"><strong>巫师 3：狂猎</strong><small>Steam · 重制版</small></span><span class="compat-status play">已验证游玩</span><span class="compat-renderer">Rosetta · D3DMetal</span><span class="compat-scope">DX12 版 · 白果园 13 分钟</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
+      <div class="compat-detail"><div><p class="compat-result">通过应用默认路径进入世界后，进行了 13 分钟的步行、镜头、水边、建筑、战斗姿态和菜单测试。本次未发生崩溃、卡死或画面异常。10月23日 FEX · DXMT 开启曲面细分后，地形、水、泥地及狼群战斗场景均正常显示。</p><dl><div><dt>测试环境</dt><dd>Rosetta · D3DMetal 3.0 记录：1080p · 中等画质 · 着色器转换防护 · 游玩 13 分钟。另有 FEX · DXMT 曲面细分验证</dd></div><div><dt>帧率记录</dt><dd>Rosetta · D3DMetal：44–50 fps（60 fps 上限）· FEX · DXMT 曲面细分开启：33–35 fps，关闭：37–40 fps</dd></div><div><dt>注意事项</dt><dd>开启曲面细分可恢复地形和水的正常显示，此场景帧率约降低 12%。仅在 FEX 下验证，Rosetta 路径未测量。</dd></div><div><dt>记录确认日期</dt><dd><time datetime="2026-10-23">2026-10-23</time> · 曲面细分画面与 fps 为 FEX 测试</dd></div></dl><a class="compat-permalink" href="#game-witcher3">此游戏的直达链接 ↗</a></div></div>
+    </details>
+<details class="compat-game" id="game-cs2" data-status="play" data-search="Counter-Strike 2 CS2 카운터 스트라이크 2">
+      <summary><span class="compat-name"><strong>反恐精英 2</strong><small>Steam</small></span><span class="compat-status play">已验证游玩</span><span class="compat-renderer">DXMT / D3DMetal</span><span class="compat-scope">炙热沙城 2 · 本地电脑对战</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
+      <div class="compat-detail"><div><p class="compat-result">已验证菜单、韩文、声音及电脑对战。FPS 游戏默认优先考虑延迟：自动转换器为 DXMT，Ember Flow 关闭，低延迟模式和 Ember Spark 开启。</p><dl><div><dt>测试环境</dt><dd>本机（M4 Pro）· Rosetta · FHD · 无边框全屏 · 垂直同步关闭 · 炙热沙城 2 离线，电脑玩家 0</dd></div><div><dt>帧率记录</dt><dd>输入→画面延迟中位数 DXMT 29.0 ms / D3DMetal 46.2 ms（相差约 17 ms）· 不同转换器的自动画质不同，因此不直接比较 fps。· 最大帧时间（FHD，10月）：FEX · DXMT 约 60 ms，Rosetta · DXMT 约 325 ms</dd></div><div><dt>注意事项</dt><dd>独占全屏模式下窗口不可见，请使用无边框全屏。未测试官方匹配和 VAC 服务器。</dd></div><div><dt>记录确认日期</dt><dd><time datetime="2026-10-20">2026-10-20</time> · 各项分别测试 · 本机（M4 Pro）实测</dd></div></dl><a class="compat-permalink" href="#game-cs2">此游戏的直达链接 ↗</a></div><figure class="compat-shot"><a href="../assets/cs2.webp" target="_blank" rel="noopener"><img src="../assets/cs2.webp" alt="通过 Ember 运行的《反恐精英 2》实机画面" loading="lazy" width="1600" height="900"></a><figcaption>9月30日测试画面 · D3DMetal 路径 · 点击查看原图</figcaption></figure></div>
+    </details>
+<details class="compat-game" id="game-tf2" data-status="play" data-search="Team Fortress 2 TF2 팀 포트리스 2">
+      <summary><span class="compat-name"><strong>军团要塞 2</strong><small>Steam · 64 位版</small></span><span class="compat-status play">已验证游玩</span><span class="compat-renderer">DXVK</span><span class="compat-scope">2Fort · 本地电脑对战</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
+      <div class="compat-detail"><div><p class="compat-result">已验证菜单、韩文、开场视频和本地地图游玩。已修复 FEX 引擎在初始化声音时卡住的问题。</p><dl><div><dt>测试环境</dt><dd>M4 Pro · 1920×1080 · 120Hz · VSync 关闭 · 8 名电脑玩家</dd></div><div><dt>帧率记录</dt><dd>游戏 170–190 fps · 无补帧 · 10月22日 FHD：FEX 约 258 fps（最大帧时间 23 ms），Rosetta 约 263 fps（54 ms）</dd></div><div><dt>注意事项</dt><dd>首次进入地图时可能因着色器处理而短暂停顿。未测试官方匹配和 VAC 服务器。</dd></div><div><dt>记录确认日期</dt><dd><time datetime="2026-10-22">2026-10-22</time> · 帧率数据可能来自另一次测试。</dd></div></dl><a class="compat-permalink" href="#game-tf2">此游戏的直达链接 ↗</a></div><figure class="compat-shot"><a href="../assets/tf2.webp" target="_blank" rel="noopener"><img src="../assets/tf2.webp" alt="通过 Ember 运行的《军团要塞 2》实机画面" loading="lazy" width="1600" height="900"></a><figcaption>此前测试画面 · 点击查看原图</figcaption></figure></div>
+    </details>
+<details class="compat-game" id="game-pragmata" data-status="play" data-search="PRAGMATA 프라그마타">
+      <summary><span class="compat-name"><strong>识质存在</strong><small>Steam · 演示版</small></span><span class="compat-status play">已验证游玩</span><span class="compat-renderer">D3DMetal</span><span class="compat-scope">演示版 · 教学战斗</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
+      <div class="compat-detail"><div><p class="compat-result">已通过 D3DMetal 验证韩文、过场动画和教学战斗。</p><dl><div><dt>测试环境</dt><dd>M4 Pro 24GB · 1080p · FSR3 性能模式 · 游戏内 FSR 帧生成</dd></div><div><dt>帧率记录</dt><dd>教学场景测量：画面输出 105–115 fps · 游戏内 FSR 帧生成</dd></div><div><dt>注意事项</dt><dd>DXMT 路径仍有黑屏问题。记录时使用了不同时开启游戏内帧生成与 Ember Flow 的设置。</dd></div><div><dt>记录确认日期</dt><dd><time datetime="2026-10-04">2026-10-04</time> · 帧率数据可能来自另一次测试。</dd></div></dl><a class="compat-permalink" href="#game-pragmata">此游戏的直达链接 ↗</a></div></div>
+    </details>
+<details class="compat-game" id="game-muck" data-status="play" data-search="Muck Muck">
+      <summary><span class="compat-name"><strong>Muck</strong><small>Steam · 免费／试玩版</small></span><span class="compat-status play">已验证游玩</span><span class="compat-renderer">Rosetta · DXMT</span><span class="compat-scope">首次启动 · 主菜单</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
+      <div class="compat-detail"><div><p class="compat-result">39 秒后进入主菜单。DXMT FHD 的 60 秒测量达到了显示上限 144 fps，最大帧时间为 14.6 ms。</p><dl><div><dt>测试环境</dt><dd>M4 Pro · 首次启动测试</dd></div><div><dt>注意事项</dt><dd>结果仅适用于已验证的场景和设置。未验证完整游玩或长时间稳定性。</dd></div><div><dt>记录确认日期</dt><dd><time datetime="2026-10-23">2026-10-23</time></dd></div></dl><a class="compat-permalink" href="#game-muck">此游戏的直达链接 ↗</a></div></div>
+    </details>
+<details class="compat-game" id="game-deltarune" data-status="play" data-search="DELTARUNE Demo DELTARUNE Demo">
+      <summary><span class="compat-name"><strong>DELTARUNE Demo</strong><small>Steam · 免费／试玩版</small></span><span class="compat-status play">已验证游玩</span><span class="compat-renderer">Rosetta · DXMT</span><span class="compat-scope">试玩版 · 首屏 · 32 位</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
+      <div class="compat-detail"><div><p class="compat-result">使用 32 位可执行文件验证。正常启动至首屏，记录到游戏自身上限 30 fps，最大帧时间 34.3 ms。</p><dl><div><dt>测试环境</dt><dd>M4 Pro · 首次启动测试</dd></div><div><dt>注意事项</dt><dd>结果仅适用于已验证的场景和设置。未验证完整游玩或长时间稳定性。</dd></div><div><dt>记录确认日期</dt><dd><time datetime="2026-10-23">2026-10-23</time></dd></div></dl><a class="compat-permalink" href="#game-deltarune">此游戏的直达链接 ↗</a></div></div>
+    </details>
+<details class="compat-game" id="game-yumenikki" data-status="play" data-search="Yume Nikki Yume Nikki">
+      <summary><span class="compat-name"><strong>Yume Nikki</strong><small>Steam · 免费／试玩版</small></span><span class="compat-status play">已验证游玩</span><span class="compat-renderer">Rosetta · Wine</span><span class="compat-scope">标题画面 · 32 位</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
+      <div class="compat-detail"><div><p class="compat-result">已验证这款 32 位 RPG Maker 2003 游戏的标题画面。由于使用 GDI 2D 路径，未测量帧率。</p><dl><div><dt>测试环境</dt><dd>M4 Pro · 首次启动测试</dd></div><div><dt>注意事项</dt><dd>结果仅适用于已验证的场景和设置。未验证完整游玩或长时间稳定性。</dd></div><div><dt>记录确认日期</dt><dd><time datetime="2026-10-23">2026-10-23</time></dd></div></dl><a class="compat-permalink" href="#game-yumenikki">此游戏的直达链接 ↗</a></div></div>
+    </details>
+<details class="compat-game" id="game-ddlc" data-status="play" data-search="Doki Doki Literature Club Doki Doki Literature Club">
+      <summary><span class="compat-name"><strong>Doki Doki Literature Club</strong><small>Steam · 免费／试玩版</small></span><span class="compat-status play">已验证游玩</span><span class="compat-renderer">Rosetta · Wine</span><span class="compat-scope">首屏 · 32 位</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
+      <div class="compat-detail"><div><p class="compat-result">初始警告画面正常显示，未测量帧率。</p><dl><div><dt>测试环境</dt><dd>M4 Pro · 首次启动测试</dd></div><div><dt>注意事项</dt><dd>结果仅适用于已验证的场景和设置。未验证完整游玩或长时间稳定性。</dd></div><div><dt>记录确认日期</dt><dd><time datetime="2026-10-23">2026-10-23</time></dd></div></dl><a class="compat-permalink" href="#game-ddlc">此游戏的直达链接 ↗</a></div></div>
+    </details>
+<details class="compat-game" id="game-deskjob" data-status="issues" data-search="Aperture Desk Job Aperture Desk Job">
+      <summary><span class="compat-name"><strong>Aperture Desk Job</strong><small>Steam · 免费／试玩版</small></span><span class="compat-status issues">存在问题</span><span class="compat-renderer">Rosetta · DXMT</span><span class="compat-scope">首个场景 · 控制器提示</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
+      <div class="compat-detail"><div><p class="compat-result">游戏在 Steam 控制器连接提示处等待。确认提示后，首个场景正常显示。需自行准备游戏要求的控制器。</p><dl><div><dt>测试环境</dt><dd>M4 Pro · 首次启动测试</dd></div><div><dt>注意事项</dt><dd>结果仅适用于已验证的场景和设置。未验证完整游玩或长时间稳定性。</dd></div><div><dt>记录确认日期</dt><dd><time datetime="2026-10-23">2026-10-23</time></dd></div></dl><a class="compat-permalink" href="#game-deskjob">此游戏的直达链接 ↗</a></div></div>
+    </details>
+<details class="compat-game" id="game-ghostrunner" data-status="menu" data-search="Ghostrunner Demo Ghostrunner Demo">
+      <summary><span class="compat-name"><strong>Ghostrunner Demo</strong><small>Steam · 免费／试玩版</small></span><span class="compat-status menu">已验证菜单</span><span class="compat-renderer">Rosetta · DXMT</span><span class="compat-scope">试玩版 · 开场视频</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
+      <div class="compat-detail"><div><p class="compat-result">已确认开场视频正常播放，未确认视频结束后能否进入菜单。</p><dl><div><dt>测试环境</dt><dd>M4 Pro · 首次启动测试</dd></div><div><dt>注意事项</dt><dd>结果仅适用于已验证的场景和设置。未验证完整游玩或长时间稳定性。</dd></div><div><dt>记录确认日期</dt><dd><time datetime="2026-10-23">2026-10-23</time></dd></div></dl><a class="compat-permalink" href="#game-ghostrunner">此游戏的直达链接 ↗</a></div></div>
+    </details>
+<details class="compat-game" id="game-domekeeper" data-status="issues" data-search="Dome Keeper Demo Dome Keeper Demo">
+      <summary><span class="compat-name"><strong>Dome Keeper Demo</strong><small>Steam · 免费／试玩版</small></span><span class="compat-status issues">存在问题</span><span class="compat-renderer">Rosetta · Wine / FEX · Wine</span><span class="compat-scope">试玩版 · 标题画面</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
+      <div class="compat-detail"><div><p class="compat-result">首个组合 Rosetta · Wine 在 15 秒后崩溃。FEX · Wine 保持了游戏窗口并记录到 93 fps，但韩文字体显示为方框。此组合通过自动查找发现，未保存设置。</p><dl><div><dt>测试环境</dt><dd>M4 Pro · 首次启动测试</dd></div><div><dt>注意事项</dt><dd>结果仅适用于已验证的场景和设置。未验证完整游玩或长时间稳定性。</dd></div><div><dt>记录确认日期</dt><dd><time datetime="2026-10-23">2026-10-23</time></dd></div></dl><a class="compat-permalink" href="#game-domekeeper">此游戏的直达链接 ↗</a></div></div>
+    </details>
+<details class="compat-game" id="game-warzone2100" data-status="issues" data-search="Warzone 2100 Warzone 2100">
+      <summary><span class="compat-name"><strong>Warzone 2100</strong><small>Steam · 免费／试玩版</small></span><span class="compat-status issues">存在问题</span><span class="compat-renderer">Rosetta · Wine</span><span class="compat-scope">等待启动提示</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
+      <div class="compat-detail"><div><p class="compat-result">游戏提示正在 Wine 环境下运行，并等待确认。未验证关闭提示后的实际游戏画面。</p><dl><div><dt>测试环境</dt><dd>M4 Pro · 首次启动测试</dd></div><div><dt>注意事项</dt><dd>结果仅适用于已验证的场景和设置。未验证完整游玩或长时间稳定性。</dd></div><div><dt>记录确认日期</dt><dd><time datetime="2026-10-23">2026-10-23</time></dd></div></dl><a class="compat-permalink" href="#game-warzone2100">此游戏的直达链接 ↗</a></div></div>
+    </details>
+<details class="compat-game" id="game-wukongbench" data-status="issues" data-search="Black Myth: Wukong Benchmark Tool Black Myth: Wukong Benchmark Tool">
+      <summary><span class="compat-name"><strong>Black Myth: Wukong Benchmark Tool</strong><small>Steam · 免费／试玩版</small></span><span class="compat-status issues">存在问题</span><span class="compat-renderer">Rosetta · D3DMetal</span><span class="compat-scope">基准测试启动 · 驱动警告</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
+      <div class="compat-detail"><div><p class="compat-result">基准测试程序已启动，但停在 Unreal Engine 的 AMD 显卡驱动警告窗口。未验证基准测试画面和性能。</p><dl><div><dt>测试环境</dt><dd>M4 Pro · 首次启动测试</dd></div><div><dt>注意事项</dt><dd>结果仅适用于已验证的场景和设置。未验证完整游玩或长时间稳定性。</dd></div><div><dt>记录确认日期</dt><dd><time datetime="2026-10-23">2026-10-23</time></dd></div></dl><a class="compat-permalink" href="#game-wukongbench">此游戏的直达链接 ↗</a></div></div>
+    </details></div>
+    <p class="compat-empty" hidden>没有符合条件的游戏，请更换搜索词或测试结果筛选条件。</p>
+    <p class="foot-note">游玩验证仅适用于列出的场景和设置，不保证所有内容或在线匹配均可运行。没有记录的游戏未列入列表。游戏名称及画面的权利归各开发商与发行商所有。</p>
+  </section>
+
+  <section class="sec wrap compat-guide" id="perf" aria-labelledby="perf-title">
+    <div class="sec-head"><p class="eyebrow">如何阅读帧率记录</p><h2 id="perf-title">请同时查看运行条件。</h2></div>
+    <p class="note">以下数值为本机（M4 Pro）实测，包含此前测量和截至10月23日的改动。结果随场景和设置变化，不构成延迟保证。</p>
+    <div class="compat-guide-grid"><div><h3>游戏 fps</h3><p>游戏实际渲染的帧数。同一款游戏也会因地图、分辨率和设置而变化。</p></div><div><h3>画面输出 fps</h3><p>启用帧生成时包含中间帧。Ember Flow 与游戏内帧生成会分别标注。</p></div><div><h3>测试范围</h3><p>菜单、本地电脑对战、试玩版和在线游玩会分开标注。即使平均 fps 较高，若有卡顿或卡死也会注明。</p></div></div>
+    <div class="sec-head" style="margin-top:40px"><p class="eyebrow">10月18–20日测量</p><h3>也关注响应与卡顿。</h3></div>
+    <div class="compat-guide-grid">
+      <div><h3>Ember Flow · 补帧</h3><p>Rosetta · D3DMetal 流畅方式在《剑星》演示版 FHD、MetalFX 关闭条件下，内部显示延迟为 24.2 → 14.1 ms。</p></div>
+      <div><h3>Ember Spark · 输入延迟管理</h3><p>DXMT 低延迟模式在游戏能达到帧率上限时将显示队列自动设为 2 帧，跟不上时设为 3 帧。GPU 负载合成测试中，输入→画面延迟中位数为 49.7 → 37.8 ms，游戏 fps +26%。《英灵神殿》FEX、FHD、60 fps 上限、补帧关闭时，内部延迟为 10.2 → 5.6 ms。</p></div>
+      <div><h3>失落的方舟 · 帧率改善</h3><p>更早获取 GPU 结果后，拥挤场景的游戏 fps 提升 +7%（50.2 → 53.7）。另一次重排对比中，每 1 秒最大帧时间的中位数从约 23–29 降至 17–20 ms。</p></div>
+    </div>
+    <p class="foot-note">本机（M4 Pro）实测。依据：10/18–19 smoothjob 显示测量、10/19 spinless、10/20 fpslat·realign A/b16 对比。DXMT 内部延迟测量的是渲染队列与显示环节，不等同于输入→画面延迟。输入→画面以捕获合成路径为基准，不包含显示器自身延迟。未将不同测试的改善幅度相加。 <a href="license.html#measure">查看测量条件</a></p>
+  </section>
+
+  <!-- ===== 기능 ===== -->
+  <section class="sec wrap" id="features" aria-labelledby="feat-title">
+    <div class="sec-head">
+      <p class="eyebrow">Ember 自研功能</p>
+      <h2 id="feat-title">不止于在 Mac 上运行</h2>
+      <p class="note">游戏启动后，Ember 自研引擎便开始工作。Ember Flow · Forge · Tone · Flare · Pulse · Boost · Kindle · Kiln · Spark · Lens · Guard。点击名称旁的 <span class="finfo-demo" aria-hidden="true">i</span>可查看原理及实测数据。</p>
+    </div>
+
+    <article class="flow" aria-labelledby="f-flow">
+      <div class="body">
+        <div class="bname"><strong id="f-flow">Ember <span>Flow</span></strong><span class="kind">补帧<button class="finfo" type="button" data-b="flow" aria-label="Ember Flow 说明" aria-expanded="false">i</button></span></div>
+        <h3>填补游戏帧之间的空隙，同时管理延迟</h3>
+        <p>Ember 自研补帧引擎在两个游戏帧之间绘制新帧。即使游戏在 60~100fps 之间波动，也会在显示器刷新率（如 120、144Hz）范围内均匀填充输出。</p>
+        <ul class="pts">
+          <li><b>按需补帧</b>只补足缺少的帧，不拖慢游戏本身。</li>
+          <li><b>运动补偿</b>沿物体的移动轨迹生成中间画面。</li>
+          <li><b>文字保护</b><span><span class="bn">Ember Guard</span><button class="finfo" type="button" data-b="guard" aria-label="Ember Guard 说明" aria-expanded="false">i</button> 防止名称标签与 HUD 文字模糊拖影。</span></li>
+          <li><b>延迟管理</b>清空队列并使用低延迟模式保持输入响应。若补帧拖慢显示，会暂停片刻以优先保证响应。《守望先锋》（D3DMetal）开启补帧后延迟为 44.5 → 25.2&nbsp;ms。《致命公司》（Rosetta · DXMT，4K）的内部延迟为 51.5 → 43.0&nbsp;ms。</li>
+          <li><b>均匀输出</b>已修复延迟短暂超限就停止补帧的问题。《剑星》（D3DMetal，144Hz）此前各次测试画面输出在 72~117&nbsp;fps 之间波动，平均值从 109.6 提升至 116.7&nbsp;fps，延迟增加控制在 1&nbsp;ms 以内。Rosetta D3DMetal 流畅方式改进显示方法后，《剑星》FHD 延迟为 24.2 → 14.1&nbsp;ms，输出 116.6 → 119.2&nbsp;fps(QHD 24.2 → 15.8&nbsp;ms, 114.0 → 118.8&nbsp;fps).</li>
+          <li><b>减少长时间卡顿</b>《七日世界》（Rosetta · D3DMetal · 4K）对比中，超过 50 ms 的卡顿从 6 次降至 0 次。这是单次会话结果，尚未确认整体输出波动有所改善。</li>
+          <li><b>HDR 色彩保护</b>D3DMetal 下的 HDR（PQ）游戏会停止补帧、显示原始帧，以保护色彩。已在《巫师 3》中确认无色彩或亮度异常。</li>
+          <li><b>补帧 HUD</b><span><span class="bn">Ember Lens</span><button class="finfo" type="button" data-b="lens" aria-label="Ember Lens 说明" aria-expanded="false">i</button> 在画面角落直接显示 FG ON 和 LAT（延迟）。补帧暂停时也会显示实际原因。</span></li>
+          <li><b>Flow 神经网络</b>Ember 训练的神经网络读取运动信息，生成中间画面。自动模式默认使用此方式，4K 开销约为原有方式的&nbsp;60%。</li>
+          <li><b>补帧引擎 1.6</b>《失落的方舟》（FEX · DXMT）中，神经补帧跳过次数从每 120 秒 76~133 次降至 0 次。</li>
+          <li><b>水波与草丛</b>即使场景中有细碎纹理，也能补帧，无需重复原始帧。</li>
+          <li><b>先补帧，再放大</b>与 MetalFX 配合时，以放大前的分辨率进行补帧，降低 GPU 负担。《失落的方舟》游戏 fps 提升了 10%。</li>
+          <li><b>轻量放大</b>补帧帧不经过 MetalFX，而是使用轻量的单次处理放大。《失落的方舟》游戏 49.7 → 51.6&nbsp;fps，文字和 HUD 保持不变。</li>
+          <li><b>Ember Prism</b>实验功能，默认关闭。启用后，Rosetta · D3DMetal 游戏会使用 Apple 补帧引擎，优先保证画质，延迟会略有增加。需在 macOS 26 及以上版本配合 Ember Flow 使用。</li>
+        </ul>
+      </div>
+      <div>
+        <figure class="cad">
+          <svg viewBox="0 0 560 202" role="img" aria-labelledby="cad-t">
+            <title id="cad-t">200 ms 内的帧：游戏每 20 ms 一帧，共 10 帧；画面每 10 ms 一帧，共 20 帧。画面偶数位置为真实帧，奇数位置为 Ember Flow 生成的帧</title>
+            <g class="cad-t" font-family="IBM Plex Mono, monospace" font-size="13" fill="#a89c91">
+              <text x="0" y="24">游戏 50 fps</text>
+              <text x="0" y="104">画面 100 fps</text>
+              <text x="0" y="196">0</text><text x="280" y="196" text-anchor="middle">100</text><text x="560" y="196" text-anchor="end">200 ms</text>
+            </g>
+            <line x1="0" y1="172" x2="560" y2="172" stroke="rgba(255,214,180,.24)" stroke-width="1"/>
+            <line x1="280" y1="168" x2="280" y2="176" stroke="rgba(255,214,180,.24)" stroke-width="1"/>
+            <g id="cad-real"></g><g id="cad-out"></g>
+            <rect id="cad-scan" x="0" y="32" width="2" height="128" fill="#efe6dc" opacity=".5"/>
+          </svg>
+          <figcaption>这是原理示例。游戏为 50 fps 时，每两个真实帧（金色）之间加入一个 Ember Flow 帧（橙色），画面输出恰好翻倍。</figcaption>
+          <p class="spec"><span><a href="#screens">查看各游戏实测记录 ↗</a></span></p>
+        </figure>
+        <figure class="ba" data-key="flow" hidden>
+          <div class="ba-view"><img class="ba-a" alt="普通补帧（混合前后两帧）生成的中间帧，弓和手臂出现重影"><img class="ba-b" alt="Ember Flow 神经网络生成的同一时刻中间帧，弓和手臂清晰，无重影"><span class="ba-line"></span><span class="lab a">普通补帧</span><span class="lab b">Ember Flow 神经网络</span><input type="range" id="ba-flow" min="0" max="100" value="50" aria-label="普通补帧与 Ember Flow 神经网络对比位置"></div>
+          <figcaption>《七日世界》中步行并转动镜头时，同一时刻的补帧帧。与真实帧比较，普通补帧为 24.6 dB，Ember Flow 神经网络为 26.8 dB。拖动滑块即可比较。</figcaption>
+        </figure>
+      </div>
+    </article>
+
+    <!-- 비교 슬라이더 자리(.ba[data-key]): assets/cmp/<이름>-a.webp(전)·<이름>-b.webp(후), 같은 장면 16:9 약 1600px. list.json 에 이름을 넣으면 나타남. flow=일반 보간(MC)/Ember Flow, guard=가드 없음/Ember Guard, forge=MetalFX만/+Ember Forge, tone=끔/켬. 개인정보는 가린 것만. -->
+    <div class="index">
+      <article class="ix">
+        <div class="ix-name"><strong>Ember <span>Guard</span></strong><span class="kind">文字与名称标签保护<button class="finfo" type="button" data-b="guard" aria-label="Ember Guard 说明" aria-expanded="false">i</button></span></div>
+        <div class="ix-text"><p>防止 Ember Flow 中间画面中的文字和名称标签模糊拖影。若前后原始帧相同位置都有清晰笔画，则保留原样。</p>
+          <details><summary>了解详情</summary><ul class="pts"><li><b>画质</b>《七日世界》8 个场景 PSNR 25.0 → 26.3 dB。</li><li><b>默认设置</b>开启 Ember Flow 时始终一同启用。</li></ul>
+          <figure class="ba" data-key="guard" hidden><div class="ba-view"><img class="ba-a" alt="未使用 Guard 的补帧文字"><img class="ba-b" alt="Ember Guard 保护的文字"><span class="ba-line"></span><span class="lab a">无 Guard</span><span class="lab b">Ember Guard</span><input type="range" id="ba-guard" min="0" max="100" value="50" aria-label="无 Guard 与 Ember Guard 对比位置"></div></figure></details></div>
+        <div class="ix-val"><p class="num">95<em>→</em>0%</p><p>失落的方舟水上乐园补帧跳过比例</p></div>
+      </article>
+      <article class="ix">
+        <div class="ix-name"><strong>Ember <span>Forge</span></strong><span class="kind">AI 细节恢复<button class="finfo" type="button" data-b="forge" aria-label="Ember Forge 说明" aria-expanded="false">i</button></span></div>
+        <div class="ix-text"><p>MetalFX 将画面放大两倍后，Ember 自研 AI 模型会修复模糊细节与过锐边缘，补足低分辨率运行时损失的细节。</p>
+          <details><summary>了解详情</summary><ul class="pts"><li><b>开销</b>FHD → 4K 时增加约 1.4 ms GPU 时间（M4 Pro）。</li><li><b>游戏实测</b>《七日世界》中，无论开关均保持 60 fps。</li><li><b>默认设置</b>关闭，可在游戏设置中开启。仅在 D3DMetal 下将 FHD 精确放大两倍至 4K 时生效。</li></ul>
+          <figure class="ba" data-key="forge" hidden><div class="ba-view"><img class="ba-a" alt="仅使用 MetalFX 放大的画面"><img class="ba-b" alt="使用 MetalFX 和 Ember Forge 放大的画面"><span class="ba-line"></span><span class="lab a">仅 MetalFX</span><span class="lab b">+ Ember Forge</span><input type="range" id="ba-forge" min="0" max="100" value="50" aria-label="仅 MetalFX 与 Ember Forge 对比位置"></div></figure></details></div>
+        <div class="ix-val"><p class="num">−33~57%</p><p>与原图的差异（LPIPS），对比仅使用 MetalFX</p></div>
+      </article>
+      <article class="ix">
+        <div class="ix-name"><strong>Ember <span>Tone</span></strong><span class="kind">AI 画质优化<button class="finfo" type="button" data-b="tone" aria-label="Ember Tone 说明" aria-expanded="false">i</button></span></div>
+        <div class="ix-text"><p>自然调整画面色彩与对比度。游戏启动时生成一次色彩查找表，此后每帧只需读取该表。</p>
+          <details><summary>了解详情</summary><ul class="pts"><li><b>搭配使用</b>《七日世界》中，即使与 Ember Flow 同时开启，仍保持 104 fps。</li><li><b>默认设置</b>关闭。启用电池模式后，使用电池供电时会自动关闭。</li></ul>
+          <figure class="ba" data-key="tone" hidden><div class="ba-view"><img class="ba-a" alt="Ember Tone 关闭"><img class="ba-b" alt="Ember Tone 开启"><span class="ba-line"></span><span class="lab a">Tone 关闭</span><span class="lab b">Tone 开启</span><input type="range" id="ba-tone" min="0" max="100" value="50" aria-label="Ember Tone 关闭与开启对比位置"></div></figure></details></div>
+        <div class="ix-val"><p class="num">0.3<em>ms</em></p><p>每帧 GPU 时间（QHD 0.3~0.4 ms）</p></div>
+      </article>
+      <article class="ix">
+        <div class="ix-name"><strong>Ember <span>Flare</span></strong><span class="kind">原生 HDR · AI 自动 HDR<button class="finfo" type="button" data-b="flare" aria-label="Ember Flare 说明" aria-expanded="false">i</button></span></div>
+        <div class="ix-text"><p>HDR 游戏将 HDR10（PQ）10 位输出直接送至 Mac 的 HDR 显示屏。SDR 游戏也能只增强高光部分以 HDR 显示，文字和菜单保持原样。</p>
+          <details><summary>了解详情</summary><ul class="pts"><li><b>准确亮度</b>SDR 的 100 nit 白色仍以 100 nit 显示。</li><li><b>亮度映射</b>超过显示器峰值亮度的部分会使用 BT.2390 进行映射。</li><li><b>两条路径均支持</b>在 DXMT 与 D3DMetal 下均可运行。</li><li><b>补帧与 HDR</b>D3DMetal 下的 HDR（PQ）游戏为保护色彩，会显示原始帧而不进行补帧。已在《巫师 3》中验证。</li><li><b>条件</b>需要支持 HDR 的显示器。自动 HDR 默认关闭，游戏自行开启 HDR 时，自动 HDR 会关闭。</li></ul></details></div>
+        <div class="ix-val"><p class="num">0.8<em>ms</em></p><p>4K 每帧 GPU 时间（1080p 为 0.3 ms）</p></div>
+      </article>
+      <article class="ix">
+        <div class="ix-name"><strong>Ember <span>Pulse</span></strong><span class="kind">帧节奏调整<button class="finfo" type="button" data-b="pulse" aria-label="Ember Pulse 说明" aria-expanded="false">i</button></span></div>
+        <div class="ix-text"><p>测量显示器接收下一帧的时机，并按时提交，使输出间隔均匀、延迟更低。</p>
+          <details><summary>了解详情</summary><ul class="pts"><li><b>延迟</b>《七日世界》12.6~15.3 → 4.5~6.4 ms。</li><li><b>默认设置</b>在 DXMT（D3D11）游戏中自动启用，GPU 使用率较高的场景会自动关闭。</li></ul></details></div>
+        <div class="ix-val"><p class="num long">55–101<em>→</em>4–10</p><p>七日世界超过 25 ms 的卡顿次数</p></div>
+      </article>
+      <article class="ix">
+        <div class="ix-name"><strong>Ember <span>Boost</span></strong><span class="kind">游戏模式加速<button class="finfo" type="button" data-b="boost" aria-label="Ember Boost 说明" aria-expanded="false">i</button></span></div>
+        <div class="ix-text"><p>调整启动方式，使 macOS 游戏模式能将通过 Ember 启动的游戏识别为游戏。设置优先级，让游戏线程和 Wine 服务器尽量留在性能核心上，是否启用则通过实测决定。</p>
+          <details><summary>了解详情</summary><ul class="pts"><li><b>关闭 · 开启 · 自动</b>自动模式使用 Frame Check 实测开关两种状态，选择更快的一项。</li><li><b>运行中切换</b>无需退出游戏即可切换。</li><li><b>性能核心</b>后台进行视频编码时，游戏留在性能核心的时间占比从 81 提升至 94%。</li><li><b>把电力留给 GPU</b>修复空转的 Windows 计时器线程，将省下的 CPU 功耗空间交给 GPU。《失落的方舟》同一场景为 44.2 → 46.4&nbsp;fps.</li><li><b>准确计时</b>Sleep 平均误差 5&nbsp;ms → 0.04&nbsp;ms. 60&nbsp;限帧游戏的迟到帧比例 32% → 2%。</li><li><b>失落的方舟</b>FEX 引擎开启游戏模式后提升约 +7%，计时器修复提升 +4.7%。</li></ul></details></div>
+        <div class="ix-val"><p class="num">61.2<em>→</em>64.0</p><p>后台视频编码时的失落的方舟 fps</p></div>
+      </article>
+      <article class="ix">
+        <div class="ix-name"><strong>Ember <span>Kindle</span></strong><span class="kind">预先翻译<button class="finfo" type="button" data-b="kindle" aria-label="Ember Kindle 说明" aria-expanded="false">i</button></span></div>
+        <div class="ix-text"><p>利用此前运行收集的代码清单，在 Mac 空闲时预先填充 FEX 翻译缓存，减少启动初期卡顿。</p>
+          <details><summary>了解详情</summary><ul class="pts"><li><b>卡顿</b>超过 50 ms 的卡顿次数 4 → 1。</li><li><b>默认设置</b>对 FEX 引擎游戏自动生效。仅在接通电源时运行，启动游戏即停止。</li></ul></details></div>
+        <div class="ix-val"><p class="num long">4.1–4.3<em>→</em>2.3–2.4</p><p>失落的方舟网页出现前的秒数</p></div>
+      </article>
+      <article class="ix">
+        <div class="ix-name"><strong>Ember <span>Kiln</span></strong><span class="kind">预备着色器<button class="finfo" type="button" data-b="kiln" aria-label="Ember Kiln 说明" aria-expanded="false">i</button></span></div>
+        <div class="ix-text"><p>在游戏关闭时提前准备着色器，减少新场景或首次战斗中处理着色器造成的卡顿。</p>
+          <details><summary>了解详情</summary><ul class="pts"><li><b>七日世界</b>Rosetta 首次进入时停顿 11.8 秒 → 0.8 秒。</li><li><b>进入城镇的前 45 秒</b>失落的方舟游戏 fps 50 → 59。</li><li><b>大量着色器游戏</b>即使是《失落的方舟》这样拥有 1 万 6 千个着色器的游戏，也会分批准备。传送后原本在 25 秒内反复出现的 0.6~1.3 秒停顿，变为抵达时仅一次；新区域最初几分钟超过 100 ms 的停顿为 0 次。</li><li><b>默认设置</b>DXMT 游戏默认开启。在退出游戏后准备，因此游玩时不会执行此任务。</li></ul></details></div>
+        <div class="ix-val"><p class="num long">30.5<em>→</em>0.6</p><p>失落的方舟首次启动时因着色器停顿的秒数</p></div>
+      </article>
+      <article class="ix">
+        <div class="ix-name"><strong>Ember <span>Spark</span></strong><span class="kind">降低输入延迟<button class="finfo" type="button" data-b="spark" aria-label="Ember Spark 说明" aria-expanded="false">i</button></span></div>
+        <div class="ix-text"><p>短暂阻止游戏过早开始下一帧，使帧能够包含更新的输入，缩短操作结果显示到画面上的时间。</p>
+          <details><summary>了解详情</summary><ul class="pts"><li><b>致命公司</b>60 fps 上限时输入延迟 37~39 → 18~29 ms。</li><li><b>性能影响</b>fps 与显示 p99 保持不变。</li><li><b>默认设置</b>DXMT 游戏默认开启，启用 Ember Flow 时会自动关闭。</li></ul></details></div>
+        <div class="ix-val"><p class="num long">35–39<em>→</em>26–28</p><p>英灵神殿 60 fps 上限时输入延迟，ms</p></div>
+      </article>
+      <article class="ix">
+        <div class="ix-name"><strong>Ember <span>Lens</span></strong><span class="kind">游戏内 HUD<button class="finfo" type="button" data-b="lens" aria-label="Ember Lens 说明" aria-expanded="false">i</button></span></div>
+        <div class="ix-text"><p>直接在游戏帧内绘制 fps、延迟、补帧状态、首领面板和 Ember 对话气泡，无需另开窗口。</p>
+          <details><summary>了解详情</summary><ul class="pts"><li><b>开销</b>2 个面板的 GPU 时间为 0.03~0.06 ms（4K）。</li><li><b>延迟</b>比独立窗口缩短 1.3~1.7 ms（七日&nbsp;世界）。</li><li><b>默认设置</b>在游戏画面内绘制。无法直接绘制的游戏（D3D12、DXVK 等）会自动切换为独立窗口。</li></ul></details></div>
+        <div class="ix-val"><p class="num">+1.5–1.8</p><p>比独立窗口更高的 fps（七日世界）</p></div>
+      </article>
+    </div>
+
+    <div class="engine" aria-label="底层引擎">
+      <article class="eg">
+        <p class="num">27<em>→</em>5<small>ns</small></p>
+        <div><p class="eyebrow">ARM 翻译引擎</p><h3>不依赖 Rosetta，让 ARM 翻译更快</h3><p>FEX 将 x86 游戏代码翻译为 ARM 指令，Ember 在此基础上加入预先翻译和快速调用路径。</p>
+          <ul class="pts"><li><b>快速 API 切换</b>每次系统调用 27 ns → 5 ns。</li><li><b>缩短绘制路径</b>D3D 绘制调用 0.294 → 0.158 µs。</li><li><b>预先翻译</b><span><span class="bn">Ember Kindle</span><button class="finfo" type="button" data-b="kindle" aria-label="Ember Kindle 说明" aria-expanded="false">i</button> 空闲时预先翻译，减少首次启动卡顿。</span></li><li><b>保存翻译结果</b>将 Unity（Mono）游戏每次启动都要重新翻译的代码保存到磁盘。《英灵神殿》最大帧时间从 27.8 降至 18.9~20.4 ms，与 Rosetta 相当。FEX 翻译保存改进测试中，首次翻译快了 2.7~13 倍，退出时未保存的缓存块比例从 20% 降至 0%（离线测试）。</li><li><b>失落的方舟</b>每 5 秒区间最大帧时间的中位数 38 → 22 ms。</li><li><b>启动器</b>Epic Games Launcher 也能在 FEX 下进入登录画面，重复测试 8 次全部正常。EA app 和 GOG GALAXY 也能进入登录画面，GOG GALAXY 的窗口出现耗时 16 秒。</li><li><b>Steam 游戏启动</b>已修复 Steam 游戏在启动前公告画面卡住的问题。《巫师 3》从 16 次中卡住 6 次变为 23 次中 0 次。</li><li><b>稳定性</b>修复了多项 FEX 卡死和崩溃问题，包括线程持锁退出导致的游戏卡死。《剑星》偶发画面冻结从 9 次中 3 次降至 7 次中 0 次，《军团要塞 2》声音初始化卡死也已解决。</li><li><b>架构</b>将 x86-64 代码翻译为 ARM64，可为各款游戏分别选择引擎。</li></ul></div>
+      </article>
+      <article class="eg">
+        <p class="num">DX9–12</p>
+        <div><p class="eyebrow">自动选择转换器 · 自动恢复</p><h3>为游戏选择最快的转换器，崩溃时换用其他转换器</h3><p>Ember 从将 DirectX 图形转换为 Metal 的 DXMT、D3DMetal、DXVK 中选择适合游戏的一项。若启动时崩溃，会换用其他转换器重试，也可以按游戏手动选择。</p>
+          <p class="spec" style="margin-top:16px"><span><b>DX9 – DX12 → Metal</b></span><span>已安装 Apple 游戏移植工具包时，会检测并使用其中的 D3DMetal</span></p></div>
+      </article>
+      <article class="eg">
+        <p class="num">97.5<small>%</small></p>
+        <div><p class="eyebrow">失落的方舟首领机制</p><h3>在游戏画面内提前提示下一项机制</h3><p>团本中在 Mac 本地读取画面上的首领名称和血条数，再通过 Ember Lens 在游戏画面内醒目地提示下一项机制。</p>
+          <ul class="pts"><li><b>首领攻略</b>33 个。</li><li><b>识别</b>首领名称 97.5%，血条数 94.6%（11 个测试视频）。</li><li><b>安全性</b>仅读取屏幕文字，不触及游戏内存或输入。使用时须遵守游戏条款。</li></ul></div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== 엠버 AI ===== -->
+  <section class="sec wrap" id="ember" aria-labelledby="ai-title">
+    <div class="sec-head">
+      <p class="eyebrow lime">本地 AI 助手 · Ember</p>
+      <h2 id="ai-title" class="sr">Ember</h2>
+    </div>
+    <div class="quote">
+      <div>
+        <blockquote><span>“Ember，</span> 启动失落的方舟，30 分钟后&nbsp;提醒我。”</blockquote>
+        <p class="ai-lead">开口即可一次处理多步骤指令。语音识别和回答生成均在 Mac 本地完成。</p>
+      </div>
+      <figure class="side"><img src="../assets/ui-coach.webp" alt="游戏上方的 Ember 对话气泡：聆听、设置更改回复与机制提醒" loading="lazy" width="900" height="1047"><figcaption>游戏上方的 Ember 对话气泡</figcaption></figure>
+    </div>
+    <dl class="caps">
+      <div><dt>游戏</dt><dd>启动、退出和测量 fps</dd></div>
+      <div><dt>时间</dt><dd>计时器与提醒</dd></div>
+      <div><dt>Mac 状态</dt><dd>查看温度与内存</dd></div>
+      <div><dt>设置</dt><dd>更改与还原</dd></div>
+      <div><dt>画面</dt><dd>翻译与解释游戏画面</dd></div>
+      <div><dt>声音</dt><dd>自然的合成语音</dd></div>
+      <div><dt>聆听</dt><dd>游戏音效中也能识别韩语唤醒词“Ember-ya”</dd></div>
+      <div><dt>故障排查</dt><dd>依据运行记录说明原因和处理办法；依据不足时，先说明如何确认</dd></div>
+      <div><dt>对话</dt><dd>可接着说“MetalFX 也开”“反过来”等后续指令</dd></div>
+      <div><dt>主动提醒</dt><dd>fps 下降或温度升高时主动告知</dd></div>
+      <div><dt>为什么卡顿</dt><dd>根据测量结果指出原因和改进办法</dd></div>
+      <div><dt>轻量</dt><dd>每 5 秒检查一次，仅用 0.3&nbsp;ms</dd></div>
+    </dl>
+    <p class="spec" style="margin-top:20px;border-top:0"><span><b>游戏音效中 32 次呼唤，识别 32 次</b></span><span>全部在本地处理</span><span>唤醒词需要 macOS 26 及以上</span><span>故障排查回答 48 题自评 5.2 → 8.6 分／10</span></p>
+  </section>
+
+  <!-- ===== 앱 안의 엠버 ===== -->
+  <section class="sec wrap" id="living" aria-labelledby="live-title">
+    <div class="sec-head">
+      <p class="eyebrow">应用中的 Ember · 动态背景</p>
+      <h2 id="live-title">在应用中活动的 Ember</h2>
+      <p class="note">以下视频直接录制自 Ember 应用。仅在录制时缩短了外出走动和切换标签的间隔。</p>
+    </div>
+    <div class="live">
+      <figure class="vid">
+        <video muted loop playsinline preload="none" poster="../assets/media/app-mascot-walk.webp" width="1120" height="782" aria-label="Ember 主界面中，3D Ember 在顶部游戏图片上行走的录像">
+          <source src="../assets/media/app-mascot-walk.mp4" type="video/mp4"><source src="../assets/media/app-mascot-walk.webm" type="video/webm">
+        </video>
+        <button class="play" type="button" hidden>播放</button>
+        <figcaption>平时待在侧栏下方，每 1~2 分钟出来走走。</figcaption>
+      </figure>
+      <div class="live-text">
+        <h3>Ember 在画面各处走动。</h3>
+        <p>它会从卡片后探头、坐在图片边缘，或跟随标签切换移动。也可以用鼠标抓起并挪动它。</p>
+        <ul class="facts">
+          <li>动作<b>16 种</b></li>
+          <li>应用 CPU 使用率（以单核计）<b>平均约 17%</b></li>
+          <li>游戏启动时<b>隐藏并暂停</b></li>
+          <li>关闭<b>设置 → 通用 → 画面</b></li>
+        </ul>
+        <figure class="small vid">
+          <video muted loop playsinline preload="none" poster="../assets/media/app-mascot-tabs.webp" width="1120" height="782" aria-label="切换标签时 Ember 跟随移动、背景中火星飘动的应用录像">
+            <source src="../assets/media/app-mascot-tabs.mp4" type="video/mp4"><source src="../assets/media/app-mascot-tabs.webm" type="video/webm">
+          </video>
+          <button class="play" type="button" hidden>播放</button>
+          <figcaption>跟随标签移动的 Ember 与动态背景。游戏运行或窗口被遮挡时会暂停，开启减弱动态效果或低电量模式时也不播放。</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 앱 둘러보기 ===== -->
+  <section class="sec wrap" id="app" aria-labelledby="gal-title">
+    <div class="sec-head">
+      <p class="eyebrow">浏览应用</p>
+      <h2 id="gal-title">多种功能，整合于一款应用</h2>
+      <p class="note">游戏、设置、故障排查和 Ember 都整合在同一款应用中。详细设置默认折叠，功能丰富也保持画面简洁。按钮采用橙色玻璃胶囊样式，选项指示像水滴一样滑向所选位置。</p>
+    </div>
+    <div class="tour">
+      <div class="tabs" role="tablist" aria-label="应用截图">
+        <button role="tab" id="tab-0" aria-controls="pane-0" aria-selected="true"><b>首页</b><span>一览最近游戏与 Mac 状态</span></button>
+        <button role="tab" id="tab-1" aria-controls="pane-1" aria-selected="false" tabindex="-1"><b>游戏详情</b><span>为各游戏选择引擎和转换器</span></button>
+        <button role="tab" id="tab-2" aria-controls="pane-2" aria-selected="false" tabindex="-1"><b>启动选项</b><span>画面与 Ember Flow 分组</span></button>
+        <button role="tab" id="tab-3" aria-controls="pane-3" aria-selected="false" tabindex="-1"><b>故障排查</b><span>实时性能与 Ember 对话</span></button>
+        <button role="tab" id="tab-4" aria-controls="pane-4" aria-selected="false" tabindex="-1"><b>Ember 对话气泡</b><span>聆听、调整、告知</span></button>
+        <button role="tab" id="tab-5" aria-controls="pane-5" aria-selected="false" tabindex="-1"><b>首领机制面板</b><span>当前与下一项机制</span></button>
+      </div>
+      <div class="panes">
+        <figure role="tabpanel" id="pane-0" aria-labelledby="tab-0"><img src="../assets/ui-home.webp" alt="Ember 主界面：最近启动的失落的方舟、游戏库、系统状态" loading="lazy" width="1400" height="894"><figcaption>首页 · 一览最近游戏与 Mac 状态</figcaption></figure>
+        <figure role="tabpanel" id="pane-1" aria-labelledby="tab-1" hidden><img src="../assets/ui-game.webp" alt="失落的方舟游戏页面：引擎和图形转换器选择" loading="lazy" width="1400" height="875"><figcaption>游戏详情 · 为各游戏选择引擎和转换器</figcaption></figure>
+        <figure role="tabpanel" id="pane-2" aria-labelledby="tab-2" hidden><img src="../assets/ui-options.webp" alt="启动选项：画面分组中的分辨率与放大，Ember Flow 分组中的计算方式与补帧方式" loading="lazy" width="1400" height="875"><figcaption>启动选项 · 分组设置分辨率、放大及 Ember Flow</figcaption></figure>
+        <figure role="tabpanel" id="pane-3" aria-labelledby="tab-3" hidden><img src="../assets/ui-troubleshoot.webp" alt="故障排查页面：实时性能与向 Ember 提问" loading="lazy" width="1400" height="875"><figcaption>故障排查 · 实时性能与 Ember 对话</figcaption></figure>
+        <figure role="tabpanel" id="pane-4" aria-labelledby="tab-4" class="tall" hidden><img src="../assets/ui-coach.webp" alt="游戏上方的 Ember 对话气泡：聆听、设置更改回复与机制提醒" loading="lazy" width="900" height="1047"><figcaption>Ember 对话气泡 · 聆听、调整、告知</figcaption></figure>
+        <figure role="tabpanel" id="pane-5" aria-labelledby="tab-5" class="wide" hidden><img src="../assets/ui-boss.webp" alt="首领机制面板：首领名称、血条数、当前与下一项机制" loading="lazy" width="1200" height="448"><figcaption>首领机制面板 · 当前与下一项机制</figcaption></figure>
+      </div>
+    </div>
+    <div class="lic">
+      <h3>许可与声明标签</h3>
+      <p>应用的“设置 → 许可与声明”中列出了 Ember 所含开源软件、Ember 修改的 LGPL 组件，以及单独安装组件的声明和源代码说明。同样内容也刊载于 <a href="license.html">许可与声明</a> 页面。</p>
+    </div>
+
+    <h3 class="sr" id="more-title">其他功能</h3>
+    <dl class="more" aria-labelledby="more-title">
+      <div><dt>Ember Wayfinder</dt><dd>为无法启动的游戏依次查找启动组合，并可保存。先尝试已知启动选项和推荐转换器，再检查其他支持的转换器与引擎。Steam 游戏在 Rosetta 下崩溃时，也会自动检查共用同一安装的 FEX 路径。 <details><summary>查找、保存、还原</summary><p>关闭附加功能，仅在已安装的容器中尝试。游戏或 Wine 启动器运行时不会开始，也不尝试反作弊游戏。每次尝试后会关闭其打开的游戏与启动器，并还原测试中修改的文件。</p><p>已在《英灵神殿》和《巫师 3》中验证启动成功判定、设置保存及还原。《巫师 3》的成功判定依据 D3DMetal 钩子、游戏窗口和 CPU 活动等间接证据，不保证实际游玩或长时间稳定性。</p><p>找到启动组合后，必须点击“保存此设置”才会保存。附加功能会保留，也可以开启后重新验证。已保存的配置可通过“还原设置”撤回。</p></details></dd></div>
+      <div><dt>Frame Check</dt><dd>在同一场景仅更改设置后测量，用数值展示哪种更快。</dd></div>
+      <div><dt>着色器缓存</dt><dd>保留已生成的着色器，减少第二次启动及以后的卡顿。</dd></div>
+      <div><dt>快速同步（msync）</dt><dd>在 Ember 内直接处理 Windows 程序同步，速度提升至 22 倍。</dd></div>
+      <div><dt>启动器支持</dt><dd>在 Ember 内运行 Steam、Epic、Battle.net 和 STOVE，并保留 Steam 登录状态。EA app、GOG GALAXY 已验证到登录画面，完成登录、安装和启动游戏仍需另行验证。已安装的游戏会显示在首页。也修复了 FEX Steam 启动阶段卡住的问题：《巫师 3》启动测试从 16 次中卡住 6 次降至 23 次中 0 次（并非成功游玩次数）。</dd></div>
+      <div><dt>卸载游戏</dt><dd>通过“游玩”旁的 ⋯ 菜单卸载。Steam、STOVE 和 Battle.net 使用启动器的官方卸载流程，其他游戏移至废纸篓。操作前会显示路径和大小。</dd></div>
+      <div><dt>老游戏过场动画</dt><dd>内置 AVI 视频编解码器，避免老游戏过场动画出现黑屏。</dd></div>
+      <div><dt>老游戏声音</dt><dd>使用 DirectSound 的老游戏也能正常播放声音。</dd></div>
+      <div><dt>韩文字体</dt><dd>自动配置后备字体，避免 Windows 程序中的韩文显示为方框。</dd></div>
+      <div><dt>兼容环境</dt><dd>可为各游戏选择 Windows 11、10、7 环境。使用 FEX 运行 32 位游戏属于实验功能，需在设置中开启。</dd></div>
+      <div><dt>从文件夹或 ZIP 添加游戏</dt><dd>没有安装程序的游戏，也可通过选择文件夹或打开 ZIP 文件添加到游戏库。</dd></div>
+      <div><dt>提示窗口通知</dt><dd>游戏在提示或确认窗口等待时，Ember 会通知你。请自行查看窗口后继续。</dd></div>
+      <div><dt>麦克风权限窗口</dt><dd>限制语音输入初始化时间，避免麦克风权限窗口导致游戏无响应。权限窗口等待期间，麦克风输入可能尚未就绪。</dd></div>
+      <div><dt>各游戏启动选项</dt><dd>为各游戏分别设置帧率上限、分辨率（FHD·QHD·4K）和画面放大。选项按画面、Ember Flow、帧率与延迟、画质优化、实验、高级分组。</dd></div>
+      <div><dt>运行记录</dt><dd>可直接查看错误记录，并就此向 Ember 提问。Ember AI 会结合游戏与近期设置更改提出处理建议，应用过的设置会保留还原记录。</dd></div>
+      <div><dt>Ember 更新</dt><dd>自动更新进度条展示从检查新版本到下载、安装的全过程。</dd></div>
+      <div><dt>发送问题日志</dt><dd>选择要发送的项目，查看已遮蔽个人信息的预览，只有同意后才会发送。保存为文件时仅保留在 Mac 本地。 <a href="privacy.html">隐私政策</a>中说明了保留和删除标准。</dd></div>
+      <div><dt>电池与发热</dt><dd>电池模式按需开启，默认优先保证性能。</dd></div>
+      <div><dt>提前准备</dt><dd>不玩游戏时，Ember Kindle 预备翻译，Ember Kiln 预备着色器。</dd></div>
+    </dl>
+  </section>
+  <div style="height:clamp(88px,15vh,170px)"></div>
+  </div>
+
+  <section class="end wrap" id="download" aria-labelledby="end-title">
+    <div class="stop" data-stop="end0" style="top:0"></div>
+    <div class="stop" data-stop="end" style="top:80vh"></div>
+    <div class="end-in">
+      <p class="eyebrow">Ember <span data-cfg="version">1.0</span></p>
+      <h2 id="end-title">在 Mac 上畅玩 Windows 游戏。</h2>
+      <p><a class="get lg" href="https://eunggg0.github.io/ember-releases/download/" data-link="download"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M6 10l6 6 6-6M4 20h16"/></svg>下载 Mac 版</a></p>
+      <ul class="req" aria-label="系统要求">
+        <li>Mac<b>Apple Silicon（M1 及后续型号）</b></li>
+        <li>macOS<b>14 Sonoma 及以上</b></li>
+        <li>韩语唤醒词“Ember-ya”<b>macOS 26 及以上</b></li>
+        <li>D3DMetal 路径<b>安装 Apple 游戏移植工具包后</b></li>
+      </ul>
+      <p class="end-links"><a href="mailto:realnoma@naver.com" data-link="contact">联系</a><a href="why.html">为什么开发 Ember</a><a href="license.html">许可与声明</a><a href="terms.html" data-link="terms">使用条款</a><a href="privacy.html">隐私政策</a></p>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap">
+  <p>Ember 是独立项目，与 Apple、Microsoft 及各游戏公司无关联。游戏名称及画面的权利归各权利人所有。© 2026 Ember</p>
+  <nav class="foot-links" aria-label="页脚"><a href="why.html">为什么开发 Ember</a><a href="license.html">许可与声明</a><a href="terms.html" data-link="terms">使用条款</a><a href="privacy.html">隐私政策</a><a href="mailto:realnoma@naver.com" data-link="contact">联系</a></nav>
+</footer>
+
+<div class="ftip" id="ftip" role="tooltip" aria-hidden="true"></div>
+
+<script>
+/* 링크·값은 assets/site-config.json 한곳에서 읽는다 (출시 때 실제 주소로 교체). 못 읽으면 HTML 기본값을 그대로 둔다. */
+fetch('../assets/site-config.json').then((r) => { if (!r.ok) throw new Error('config'); return r.json(); }).then((c) => {
+  document.querySelectorAll('[data-link]').forEach((a) => { const v = c[a.dataset.link]; if (v) a.setAttribute('href', v.replace('https://eunggg0.github.io/ember-site/', './').replace(/^\.\/(?=#)/, '')); });
+  document.querySelectorAll('[data-cfg]').forEach((el) => { const v = c[el.dataset.cfg]; if (v) el.textContent = v; });
+}).catch(() => {});
+</script>
+
+<script>
+(() => {
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* nav: 첫 막이 끝나면 바탕을 깐다 */
+const nav = document.getElementById('nav'), act = document.getElementById('act');
+const navUpd = () => nav.classList.toggle('solid', act.getBoundingClientRect().bottom < 80);
+addEventListener('scroll', navUpd, { passive: true }); navUpd();
+{ const mb = document.getElementById('menubtn'); const set = (o) => { nav.classList.toggle('open', o); mb.setAttribute('aria-expanded', o); };
+  mb.addEventListener('click', () => set(!nav.classList.contains('open')));
+  document.getElementById('navlist').addEventListener('click', (e) => { if (e.target.closest('a')) set(false); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && nav.classList.contains('open')) { set(false); mb.focus(); } });
+  document.addEventListener('pointerdown', (e) => { if (!nav.contains(e.target)) set(false); });
+  document.addEventListener('focusin', (e) => { if (!nav.contains(e.target)) set(false); });
+  matchMedia('(max-width:900px)').addEventListener('change', () => set(false)); }
+
+/* manifesto: 스크롤을 따라 낱말이 하나씩 켜진다 */
+const mani = document.getElementById('mani'), prose = document.getElementById('prose');
+if (!reduce) {
+  prose.innerHTML = prose.textContent.trim().split(/\s+/).map((w) => '<span class="w">' + w + '</span>').join(' ');
+  const ws = [...prose.querySelectorAll('.w')]; mani.classList.add('js');
+  const upd = () => {
+    const r = mani.getBoundingClientRect(); const total = mani.offsetHeight - innerHeight;
+    const p = Math.min(1, Math.max(0, (-r.top + innerHeight * 0.35) / (total * 0.8)));
+    const k = Math.round(p * ws.length); ws.forEach((w, i) => w.classList.toggle('on', i < k));
+  };
+  addEventListener('scroll', upd, { passive: true }); addEventListener('resize', upd); upd();
+}
+
+/* ledger: 0–200 fps 한 축 */
+document.querySelectorAll('.axis').forEach((ax) => {
+  [60, 120, 180].forEach((v) => { const t = document.createElement('span'); t.className = 'tick'; t.style.left = (v / 200 * 100) + '%'; ax.prepend(t); });
+  ax.querySelectorAll('.bar').forEach((b) => { const [a, z] = b.dataset.r.split(',').map(Number); b.style.left = 'calc(' + (a / 200 * 100) + '% - 4px)'; b.style.width = 'calc(' + ((z - a) / 200 * 100) + '% + 8px)'; });
+});
+
+/* Flow cadence: 200 ms, 게임 20 ms 간격, 화면 10 ms 간격 */
+{
+  const NS = 'http://www.w3.org/2000/svg', x0 = 0, W = 560; const X = (ms) => x0 + ms / 200 * W;
+  const mk = (g, x, y, w, h, fill) => { const r = document.createElementNS(NS, 'rect'); Object.entries({ x, y, width: w, height: h, rx: 2, fill }).forEach(([k, v]) => r.setAttribute(k, v)); g.appendChild(r); };
+  const gr = document.getElementById('cad-real'), go = document.getElementById('cad-out');
+  for (let i = 0; i < 10; i++) mk(gr, X(i * 20) + 1, 34, W / 10 - 4, 38, '#ffb547');
+  for (let i = 0; i < 20; i++) mk(go, X(i * 10) + 1, 114, W / 20 - 3, 38, i % 2 ? '#ff6a1f' : '#ffb547');
+  const scan = document.getElementById('cad-scan');
+  if (reduce) scan.remove();
+  else { let t0 = performance.now(), on = false; const tick = (t) => { if (!on) return; const ms = ((t - t0) / 12) % 200; scan.setAttribute('x', X(ms)); requestAnimationFrame(tick); };
+    new IntersectionObserver((es) => { const v = es[0].isIntersecting; if (v && !on) { on = true; requestAnimationFrame(tick); } else if (!v) on = false; }).observe(scan.ownerSVGElement); }   // 화면 밖이면 멈춤
+}
+
+/* before/after: 두 그림이 다 있을 때만 보인다. assets/cmp/<이름>-a.webp(전)·<이름>-b.webp(후) */
+/* assets/cmp/list.json 에 ["flow","guard","forge","tone"] 처럼 준비된 비교의 이름을 적으면 그 칸만 불러온다 */
+fetch('../assets/cmp/list.json').then((r) => r.ok ? r.json() : []).catch(() => []).then((keys) => {
+  document.querySelectorAll('.ba[data-key]').forEach((f) => {
+    if (!keys.includes(f.dataset.key)) return;
+    const a = f.querySelector('.ba-a'), b = f.querySelector('.ba-b'), v = f.querySelector('.ba-view'), inp = f.querySelector('input');
+    let n = 0; const ok = () => { if (++n === 2) f.hidden = false; };
+    a.onload = ok; b.onload = ok; a.src = '../assets/cmp/' + f.dataset.key + '-a.webp'; b.src = '../assets/cmp/' + f.dataset.key + '-b.webp';
+    inp.addEventListener('input', () => v.style.setProperty('--p', inp.value + '%'));
+  });
+});
+
+/* app tour tabs */
+{
+  const tabs = [...document.querySelectorAll('.tabs [role=tab]')];
+  const sel = (t, focus) => { tabs.forEach((x) => { const on = x === t; x.setAttribute('aria-selected', on); x.tabIndex = on ? 0 : -1; document.getElementById(x.getAttribute('aria-controls')).hidden = !on; }); if (focus) t.focus(); };
+  tabs.forEach((t, i) => {
+    t.addEventListener('click', () => sel(t));
+    t.addEventListener('keydown', (e) => { if (e.key === 'Home' || e.key === 'End') { e.preventDefault(); sel(e.key === 'Home' ? tabs[0] : tabs[tabs.length - 1], true); return; } const d = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 }[e.key]; if (d) { e.preventDefault(); sel(tabs[(i + d + tabs.length) % tabs.length], true); } });
+  });
+}
+
+/* Videos retain an accessible pause/retry action, including autoplay failures. */
+document.querySelectorAll('.vid').forEach((f) => {
+  const v = f.querySelector('video'), btn = f.querySelector('.play');
+  let visible = false, userPaused = false, userStarted = false;
+  btn.hidden = false;
+  const label = () => { btn.textContent = v.paused ? "播放" : "暂停"; btn.setAttribute('aria-label', v.paused ? "播放视频" : "暂停视频"); };
+  const play = () => { v.preload = 'auto'; v.play().catch(() => { label(); }); };
+  const sync = () => { if (visible && !document.hidden && !userPaused && (!reduce || userStarted)) play(); else v.pause(); };
+  v.addEventListener('play', label); v.addEventListener('pause', label); v.addEventListener('error', label);
+  btn.addEventListener('click', () => { if (v.paused) { userPaused = false; userStarted = true; play(); } else { userPaused = true; v.pause(); } });
+  new IntersectionObserver((es) => { visible = es[0].isIntersecting; sync(); }, {threshold:0.25}).observe(v);
+  document.addEventListener('visibilitychange', sync); label();
+});
+})();
+</script>
+
+<script>
+(() => {
+/* Ember 고유 기능 설명 판 — 앱의 FeatureInfo(EmberBrand.lines)와 같은 글. 수치는 실측만. */
+const D = {
+  flow:   ['Ember Flow',"补帧","生成中间帧，将画面输出 fps 提升至最高两倍",["游戏帧不足时填补间隙，画面帧数最高翻倍。","GPU 找出物体在前后帧间的运动轨迹，再沿轨迹绘制新的中间画面。","补帧引擎 1.6：《失落的方舟》（FEX·DXMT）神经补帧跳过次数从每 120 秒 76~133 次降至 0 次。失落的方舟 QHD 47~54 → 94~107 fps。FHD GPU 时间约 1 ms。即使 GPU 满载的《守望先锋》QHD，流畅方式也从 60 → 116 fps。《剑星》（144Hz）平均画面输出 109.6 → 116.7 fps。延迟因游戏和场景而异。","默认关闭。游戏 fps 达到显示刷新率时不工作，过慢时也会暂停，并在屏幕上显示原因。D3DMetal 的 HDR（PQ）游戏会显示原始帧以保护色彩。"]],
+  forge:  ['Ember Forge',"AI 细节恢复","让放大画面的细节更清晰",["让 MetalFX 放大画面中的草地、文字和边缘重新清晰。","Ember 训练的小型神经网络重新修饰放大画面，使其更接近原生 4K。","与原图的差异比仅使用 MetalFX 减少 33~57%。FHD → 4K 增加 1.4 ms GPU 时间。","默认关闭，仅在 D3DMetal 下将 FHD 精确放大两倍至 4K 时生效。"]],
+  tone:   ['Ember Tone',"AI 画质优化","自然提升色彩与对比度",["自然调整游戏画面的色彩和对比度。","启动游戏时神经网络生成一次色彩查找表，此后每帧只需读取该表。","每帧 GPU 0.3~0.4 ms（QHD）。《七日世界》与 Ember Flow 同时开启也保持 104 fps。","默认关闭，启用电池模式后，电池供电时自动关闭。"]],
+  flare:  ['Ember Flare',"AI 自动 HDR","将 SDR 游戏高光呈现为 HDR",["在 HDR 显示屏上，让 SDR 游戏中的太阳、火焰等高光更加明亮。","小型神经网络估算高光原本的亮度，只提升这些区域，文字与菜单保持原样。","每帧 GPU 时间：1080p 0.3 ms，4K 0.8 ms。","默认关闭，仅在显示器已开启 HDR 时生效。游戏自行开启 HDR 后自动 HDR 会关闭。D3DMetal 的 HDR（PQ）游戏会以原始帧代替补帧，以保护色彩。已在《巫师 3》中验证。"]],
+  pulse:  ['Ember Pulse',"帧节奏调整","配合显示周期均匀提交帧，降低延迟",["减少帧输出间隔不均造成的卡顿与延迟。","测量显示器接收下一帧的时机，并按时提交。","《七日世界》中超过 25 ms 的卡顿次数为 55~101 → 4~10，延迟为 12.6~15.3 → 4.5~6.4 ms。","在 DXMT（D3D11）游戏中自动启用，GPU 使用率较高的场景会自动关闭。"]],
+  boost:  ['Ember Boost',"游戏模式加速","让游戏优先使用性能核心，其他应用靠后",["让游戏线程优先进入性能核心，其他应用后置。","游戏模式开启时提高游戏线程优先级，同时提高 Wine 服务器优先级。","后台视频编码时，失落的方舟为 61.2 → 64.0 fps。留在性能核心的时间占比为 81 → 94%。","仅在游戏模式开启时生效，自动模式会实测，仅在无性能损失时启用。"]],
+  kindle: ['Ember Kindle',"预先翻译","启动前预先翻译，减少初次运行卡顿",["减少初次启动时等待翻译造成的卡顿。","利用此前运行收集的代码清单，在 Mac 空闲时预先填充 FEX 翻译缓存。","失落的方舟网页出现耗时 4.1~4.3 秒 → 2.3~2.4 秒，超过 50 ms 的卡顿次数 4 → 1。","对 FEX 引擎游戏自动生效。仅在接通电源时运行，启动游戏即停止。"]],
+  kiln:   ['Ember Kiln',"预备着色器","预备着色器，减少首次战斗卡顿",["在游戏关闭时提前准备着色器，减少新场景卡顿。","记录游戏创建的管线清单，退出游戏后依照清单预先生成适用于本机的 GPU 代码。","着色器造成的停顿：失落的方舟（FEX）30.5 秒 → 0.6 秒，七日世界（Rosetta）11.8 秒 → 0.8 秒。失落的方舟进入城镇前 45 秒，游戏 fps 50 → 59。即使 1 万 6 千个着色器也分批准备，传送后停顿缩减为抵达时一次。","DXMT 游戏默认开启。游玩时不会运行着色器预备任务。"]],
+  spark:  ['Ember Spark',"降低输入延迟","缩短操作结果显示到画面上的时间",["缩短操作结果显示到画面上的时间。","短暂阻止游戏过早开始下一帧，让更新的输入反映到帧中。","60 fps 上限时输入延迟：英灵神殿 35~39 → 26~28 ms，致命公司 37~39 → 18~29 ms。fps 和显示 p99 不变。","DXMT 游戏默认开启，启用 Ember Flow 时会自动关闭。"]],
+  lens:   ['Ember Lens',"游戏内 HUD","在游戏内显示 fps、延迟和补帧状态",["在游戏内显示 fps、延迟、补帧状态、首领面板和对话气泡。","不另开窗口，直接绘制在游戏最终输出帧上。","2 个面板 GPU 时间为 0.03~0.06 ms（4K）。比独立窗口高 1.5~1.8 fps，延迟低 1.3~1.7 ms。","默认绘制在游戏内，不支持的游戏（D3D12、DXVK 等）会自动改用独立窗口。"]],
+  guard:  ['Ember Guard',"文字与名称标签保护","防止文字和名称标签模糊拖影",["防止 Ember Flow 中间画面中的文字和名称标签模糊拖影。","若前后原始帧相同位置存在清晰笔画，则保留原样。无法用运动解释的场景会整体使用原始帧。","七日世界 8 个场景画质（PSNR）25.0 → 26.3 dB。失落的方舟水上乐园补帧跳过比例 95% → 0%。","开启 Ember Flow 时始终一同启用，无需单独关闭。"]],
+};
+const L = ["作用","原理","实测","默认设置"];
+const tip = document.getElementById('ftip');
+let cur = null, pinned = false, tOpen = 0, tClose = 0;
+const esc = (t) => t.replace(/[&<>]/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+function fill(b) {
+  const d = D[b]; if (!d) return false;
+  tip.innerHTML = '<div class="fh"><b>' + d[0] + '</b><span>' + d[1] + '</span></div><p class="tl">' + esc(d[2]) + '</p><dl>' +
+    d[3].map((t, i) => '<dt>' + L[i] + '</dt><dd>' + esc(t) + '</dd>').join('') + '</dl>';
+  return true;
+}
+function place() {
+  if (!cur) return;
+  const r = cur.getBoundingClientRect(), vw = document.documentElement.clientWidth, vh = innerHeight;
+  const w = tip.offsetWidth, h = tip.offsetHeight;
+  let x = Math.round(r.left + r.width / 2 - w / 2); x = Math.max(16, Math.min(x, vw - w - 16));
+  let y = r.bottom + 10; if (y + h > vh - 12 && r.top - h - 10 > 12) y = r.top - h - 10;
+  const minY = Math.max(12, (document.querySelector('header.nav')?.getBoundingClientRect().bottom || 0) + 8);
+  y = Math.max(minY, Math.min(y, vh - h - 12));
+  tip.style.left = x + 'px'; tip.style.top = Math.round(y) + 'px';
+}
+function open(btn, pin) {
+  clearTimeout(tOpen); clearTimeout(tClose);
+  if (cur && cur !== btn) { cur.setAttribute('aria-expanded', 'false'); cur.removeAttribute('aria-describedby'); }
+  if (!fill(btn.dataset.b)) return;
+  cur = btn; pinned = !!pin;
+  btn.setAttribute('aria-expanded', 'true'); btn.setAttribute('aria-describedby', 'ftip');
+  tip.classList.add('on'); tip.setAttribute('aria-hidden', 'false'); place();
+}
+function close() {
+  clearTimeout(tOpen); clearTimeout(tClose);
+  if (cur) { cur.setAttribute('aria-expanded', 'false'); cur.removeAttribute('aria-describedby'); }
+  cur = null; pinned = false; tip.classList.remove('on'); tip.setAttribute('aria-hidden', 'true');
+}
+const later = () => { clearTimeout(tClose); tClose = setTimeout(() => { if (!pinned) close(); }, 180); };
+document.querySelectorAll('.finfo[data-b]').forEach((btn) => {
+  btn.addEventListener('pointerenter', (e) => { if (e.pointerType !== 'mouse') return; clearTimeout(tClose); if (cur === btn) return; tOpen = setTimeout(() => open(btn, false), 250); });
+  btn.addEventListener('pointerleave', (e) => { if (e.pointerType !== 'mouse') return; clearTimeout(tOpen); if (!pinned) later(); });
+  btn.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); (cur === btn && pinned) ? close() : open(btn, true); });
+  btn.addEventListener('focus', () => { if (btn.matches(':focus-visible') && cur !== btn) open(btn, false); });
+  btn.addEventListener('blur', () => { if (!pinned) later(); });
+});
+tip.addEventListener('pointerenter', () => clearTimeout(tClose));
+tip.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse' && !pinned) later(); });
+document.addEventListener('pointerdown', (e) => { if (cur && !tip.contains(e.target) && !e.target.closest('.finfo')) close(); });
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && cur) { const b = cur; close(); b.focus({ preventScroll: true }); } });
+addEventListener('scroll', place, { passive: true }); addEventListener('resize', place);
+})();
+</script>
+
+<script type="importmap">
+{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}
+</script>
+<script type="module">
+/* 첫 막: 거대한 EMBER 글자(카메라에 붙은 판) 앞의 3D 엠버 → 스크롤로 한 바퀴 궤도 → 발끝부터 불씨로 타서 실루엣 → ×2 → 유리 고리 사이를 지나며 열 이름.
+   끝 구간에서 다시 불씨가 모여 엠버가 돌아온다. 화면 밖이면 그리지 않는다. */
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
+import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+
+async function initStage() {
+const CFG = {
+  glb: '../assets/ember.gltf.json',      // 3D 엠버 (data-URI glTF, 기본색 4096)
+  glbLow: '../assets/ember-mobile.gltf.json', // 휴대폰·저사양: 텍스처 전부 2048 (GPU 메모리 약 270MB → 67MB)
+  cutout: '../assets/ember-cutout.webp', // 실루엣 불씨·대체 그림
+  draco: '../assets/draco/',
+  H: 3.2,
+  clipIdle: /idle|breath|stand/i,
+  clipWave: /wave|hello|greet|hi\b/i,
+};
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const coarse = matchMedia('(pointer: coarse)').matches;
+const LOW = coarse || Math.min(innerWidth, innerHeight) < 700;
+const COLS = 256, ROWS = LOW ? 40 : 128, N = COLS * ROWS;   // 10,240 / 32,768 불씨
+const TAU = Math.PI * 2;
+
+const canvas = document.getElementById('stage');
+let renderer;
+try {
+  renderer = new THREE.WebGLRenderer({ canvas, antialias: false, powerPreference: 'high-performance', alpha: false });
+  if (!renderer.capabilities.isWebGL2) throw new Error('webgl2');
+} catch (e) { canvas.hidden = true; document.getElementById('stage-fallback').hidden = false; throw e; }
+/* 무대 크기 = 캔버스 CSS 크기(100lvh). iOS 주소창이 접혀도 그대로라 다시 만들 일이 없다 */
+const SZ = () => [canvas.clientWidth || innerWidth, canvas.clientHeight || innerHeight];
+const ST = window.__emberStage = { LOW: false, N: 0, DPR: 0, glb: '', lost: false, degraded: 0, fallback: '' };
+let dead = false;
+function toFallback(why) {   // WebGL 이 죽거나 너무 느리면 정지 그림으로 (글은 그대로)
+  if (dead) return; dead = true; ST.fallback = why; running = false;
+  canvas.hidden = true; document.getElementById('stage-fallback').hidden = false; document.getElementById('lens')?.classList.add('off');
+}
+canvas.addEventListener('webglcontextlost', (e) => { e.preventDefault(); ST.lost = true; toFallback('context-lost'); }, false);
+let DPR = Math.min(devicePixelRatio || 1, LOW ? 1.5 : 1.75);
+renderer.setPixelRatio(DPR); renderer.setSize(...SZ(), false);
+Object.assign(ST, { LOW, N, DPR });
+renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.0;
+renderer.setClearColor(0x0b0908, 1);
+
+const scene = new THREE.Scene();
+scene.fog = new THREE.FogExp2(0x0b0908, 0.03);
+const camera = new THREE.PerspectiveCamera(32, SZ()[0] / SZ()[1], 0.05, 200);
+scene.add(camera);
+
+/* environment: dark forge, orange and gold panels */
+{
+  const env = new THREE.Scene(); env.background = new THREE.Color(0x050302);
+  const box = (w, h, color, k, pos, rot) => { const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ color: new THREE.Color(color).multiplyScalar(k), side: THREE.DoubleSide })); m.position.set(...pos); if (rot) m.rotation.set(...rot); env.add(m); };
+  box(6, 3, 0xff8a3d, 3.2, [-5, 2, 3], [0, Math.PI / 3, 0]);
+  box(2, 6, 0xffb547, 1.6, [5, 1, -3], [0, -Math.PI / 2.5, 0]);
+  box(8, 2, 0xfff1e0, 1.6, [0, 6, 0], [Math.PI / 2, 0, 0]);
+  box(10, 1, 0xff6a1f, 1.2, [0, -3, -5]);
+  box(3, 3, 0x9fd8ff, 0.8, [0, 2, -6]);
+  const pm = new THREE.PMREMGenerator(renderer); scene.environment = pm.fromScene(env, 0.04).texture;
+}
+
+/* lights for the GLB */
+const charLights = new THREE.Group();
+charLights.add(new THREE.HemisphereLight(0xe8e2dc, 0x1a0c06, 0.55));
+const key = new THREE.DirectionalLight(0xfff0e4, 2.7); charLights.add(key);
+const back = new THREE.DirectionalLight(0xffb27a, 1.1); charLights.add(back);
+const up = new THREE.PointLight(0xff7a2e, 1.4, 5, 1.6); charLights.add(up);
+const LP = [[key, -1.4, 3.8, 5.5], [back, 0.6, 4, -5], [up, 0, 0.3, 1.4]];
+function placeLights(az) { const c = Math.cos(az), s = Math.sin(az); for (const [l, x, y, z] of LP) l.position.set(c * x + s * z, y, -s * x + c * z); }
+
+/* ---------- giant word, fixed to the camera ---------- */
+const wordMat = new THREE.MeshBasicMaterial({ transparent: true, depthWrite: false, toneMapped: false, fog: false, opacity: 1 });
+const word = new THREE.Mesh(new THREE.PlaneGeometry(1, 0.3125), wordMat); word.renderOrder = -2; camera.add(word);
+function drawWord() {
+  const c = document.createElement('canvas'); c.width = 4096; c.height = 1280; const g = c.getContext('2d');
+  g.textAlign = 'center'; g.textBaseline = 'alphabetic'; g.font = '900 1240px "Big Shoulders Display", Impact, sans-serif';
+  if ('letterSpacing' in g) g.letterSpacing = '24px';
+  const gr = g.createLinearGradient(0, 120, 0, 1180); gr.addColorStop(0, '#efe3d6'); gr.addColorStop(0.55, '#cdb39b'); gr.addColorStop(1, 'rgba(120,52,20,0.25)');
+  g.fillStyle = gr; g.fillText('EMBER', 2048 + 12, 1160);
+  g.globalCompositeOperation = 'source-atop';
+  for (let i = 0; i < 9000; i++) { g.fillStyle = `rgba(0,0,0,${Math.random() * 0.22})`; g.fillRect(Math.random() * 4096, Math.random() * 1280, 3, 3); }
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4; wordMat.map = t; wordMat.color.setScalar(0.78); wordMat.needsUpdate = true;
+}
+const WD = 18;
+function placeWord() {
+  const visH = 2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * WD, visW = visH * camera.aspect;
+  const w = visW * 0.97; word.scale.set(w, w, 1);
+  const h = w * 0.3125; word.position.set(0, portrait ? visH * 0.5 - h * 0.5 - visH * 0.14 : visH * 0.5 - h * 0.5 - visH * 0.12, -WD);
+}
+
+/* ---------- particles ---------- */
+const F = { SWIRL: 0, SIL: 1, NUM: 2, RING: 3 }; const NF = 4;
+const data = new Float32Array(N * NF * 4);
+const rnd = (() => { let s = 1337; return () => (s = (s * 16807) % 2147483647) / 2147483647; })();
+const gauss = () => { let u = 0, v = 0; while (!u) u = rnd(); while (!v) v = rnd(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(TAU * v); };
+const put = (f, i, x, y, z, w = 0) => { const o = (f * N + i) * 4; data[o] = x; data[o + 1] = y; data[o + 2] = z; data[o + 3] = w; };
+const fillF = (f, fn) => { for (let i = 0; i < N; i++) { const p = fn(i); put(f, i, p[0], p[1], p[2], p[3] || 0); } };
+function sampleCanvas(c, worldW, depth, tint) {
+  const g = c.getContext('2d'), w = c.width, h = c.height; const px = g.getImageData(0, 0, w, h).data; const pts = [];
+  for (let y = 0; y < h; y += 2) for (let x = 0; x < w; x += 2) { const o = (y * w + x) * 4; if (px[o + 3] > 140 && px[o] + px[o + 1] + px[o + 2] > 0) pts.push(x, y, o); }
+  const sc = worldW / w; const out = [];
+  for (let i = 0; i < N; i++) { const k = Math.floor(rnd() * (pts.length / 3)) * 3; const o = pts[k + 2];
+    out.push([(pts[k] + rnd() * 2 - w / 2) * sc, (h - pts[k + 1] - rnd() * 2) * sc, gauss() * depth, tint(px[o], px[o + 1], px[o + 2])]); }
+  return out;
+}
+async function buildFormations() {
+  fillF(F.SWIRL, () => { const r = 0.75 + Math.pow(rnd(), 1.6) * 3.6; return [r, rnd(), rnd() * TAU, rnd() < 0.06 ? 1 : 0]; });
+  // silhouette from the cutout (x centred, feet at y=0)
+  try {
+    const img = new Image(); img.src = CFG.cutout; await img.decode();
+    const c = document.createElement('canvas'); c.width = 218; c.height = 400; c.getContext('2d').drawImage(img, 0, 0, 218, 400);
+    const s = sampleCanvas(c, CFG.H * 218 / 400, 0.07, (r, g, b) => (g > r * 0.92 && g > b + 40 ? 1 : (rnd() < 0.04 ? 1 : 0)));
+    fillF(F.SIL, (i) => s[i]);
+  } catch (e) { fillF(F.SIL, () => [gauss() * 0.35, rnd() * CFG.H, gauss() * 0.2, 0]); }
+  // ×2
+  {
+    const c = document.createElement('canvas'); c.width = 1100; c.height = 620; const g = c.getContext('2d');
+    g.fillStyle = '#fff'; g.textAlign = 'center'; g.textBaseline = 'alphabetic'; g.font = '900 640px "Big Shoulders Display", Impact, sans-serif';
+    g.fillText('×2', 550, 590);
+    const s = sampleCanvas(c, 5.2, 0.06, () => (rnd() < 0.05 ? 1 : 0));
+    fillF(F.NUM, (i) => { const p = s[i]; p[1] -= 1.55; if (p[0] > 0.2 && rnd() < 0.55) p[3] = 1; return p; });
+  }
+  // ring dust
+  fillF(F.RING, () => { const a = rnd() * TAU, r = 5.5 + gauss() * 1.6; return [Math.sin(a) * r, gauss() * 1.3, Math.cos(a) * r, rnd() < 0.07 ? 1 : 0]; });
+}
+const posTex = new THREE.DataTexture(data, COLS, ROWS * NF, THREE.RGBAFormat, THREE.FloatType); posTex.minFilter = posTex.magFilter = THREE.NearestFilter;
+const geo = new THREE.BufferGeometry();
+{ const idx = new Float32Array(N), seed = new Float32Array(N * 4); for (let i = 0; i < N; i++) { idx[i] = i; for (let k = 0; k < 4; k++) seed[i * 4 + k] = Math.random(); }
+  geo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(N * 3), 3)); geo.setAttribute('aIdx', new THREE.BufferAttribute(idx, 1)); geo.setAttribute('aSeed', new THREE.BufferAttribute(seed, 4)); }
+const PU = {
+  uPos: { value: posTex }, uTime: { value: 0 }, uMix: { value: 0 }, uFrom: { value: 0 }, uTo: { value: 0 },
+  uOffA: { value: new THREE.Vector3() }, uOffB: { value: new THREE.Vector3() }, uSclA: { value: 1 }, uSclB: { value: 1 },
+  uScatter: { value: 0 }, uSize: { value: LOW ? 20 : 14 }, uPR: { value: DPR }, uMouse: { value: new THREE.Vector2(9, 9) }, uAspect: { value: 1 }, uBright: { value: 1 }, uLime: { value: 0 },
+};
+const pmat = new THREE.ShaderMaterial({
+  uniforms: PU, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+  vertexShader: /* glsl */`
+    uniform sampler2D uPos; uniform float uTime, uMix, uFrom, uTo, uSclA, uSclB, uScatter, uSize, uPR, uAspect, uBright, uLime;
+    uniform vec3 uOffA, uOffB; uniform vec2 uMouse;
+    attribute float aIdx; attribute vec4 aSeed; varying vec3 vCol; varying float vA;
+    const float ROWS = ${ROWS.toFixed(1)}; const float COLS = ${COLS.toFixed(1)};
+    vec4 fetchF(float f){ ivec2 c = ivec2(int(mod(aIdx, COLS)), int(f * ROWS + floor(aIdx / COLS))); return texelFetch(uPos, c, 0); }
+    vec3 rotY(vec3 p, float a){ float c = cos(a), s = sin(a); return vec3(c*p.x + s*p.z, p.y, -s*p.x + c*p.z); }
+    vec3 animate(float f, vec4 d, out float alpha){
+      alpha = 1.0; vec3 p = d.xyz; float t = uTime;
+      if (f < 0.5) {
+        float yf = fract(d.y + t * (0.022 + aSeed.x * 0.045)); float th = d.z + t * (0.16 + 0.45 / d.x);
+        float r = d.x * (1.0 + 0.12 * sin(t * 0.7 + aSeed.y * 6.28));
+        p = vec3(cos(th) * r, yf * 5.4 - 0.3, sin(th) * r); alpha = smoothstep(0.0, 0.12, yf) * (1.0 - smoothstep(0.55, 1.0, yf));
+      } else if (f < 1.5) { p.y += sin(t * 0.8 + aSeed.y * 6.28) * 0.02; alpha = 0.85; }
+      else if (f > 2.5) { p = rotY(p, t * 0.04); p.y += sin(t * 0.4 + aSeed.z * 6.28) * 0.25; alpha = 0.7; }
+      p += 0.022 * vec3(sin(t * 0.9 + aSeed.x * 40.0), cos(t * 0.8 + aSeed.y * 40.0), sin(t * 0.7 + aSeed.z * 40.0));
+      return p;
+    }
+    void main(){
+      vec4 dA = fetchF(uFrom), dB = fetchF(uTo); float aA, aB;
+      vec3 pA = animate(uFrom, dA, aA) * uSclA + uOffA, pB = animate(uTo, dB, aB) * uSclB + uOffB;
+      float m = clamp(uMix * 1.4 - aSeed.x * 0.4, 0.0, 1.0); m = m * m * (3.0 - 2.0 * m);
+      vec3 p = mix(pA, pB, m); float sc = sin(3.14159 * m) * uScatter;
+      vec3 dir = normalize(vec3(aSeed.y - 0.5, aSeed.z - 0.5 + 0.35, aSeed.w - 0.5) + 1e-4);
+      p += dir * sc * (1.0 + aSeed.x * 2.4);
+      vec4 mv = modelViewMatrix * vec4(p, 1.0); vec4 cp = projectionMatrix * mv; vec2 nd = cp.xy / cp.w;
+      vec2 dd = (nd - uMouse) * vec2(uAspect, 1.0); float fr = exp(-dot(dd, dd) * 22.0);
+      mv.xy += normalize(dd + 1e-4) * fr * 0.05 * -mv.z; gl_Position = projectionMatrix * mv;
+      float tint = mix(min(dA.w, 1.0), min(dB.w, 1.0), m);
+      vec3 ember = vec3(1.0, 0.36, 0.08), gold = vec3(1.0, 0.68, 0.28), lime = vec3(1.0, 0.68, 0.28);
+      vec3 c = mix(ember, gold, aSeed.y); c = mix(c, lime, clamp(tint + uLime * step(0.8, aSeed.z), 0.0, 1.0));
+      float tw = 0.7 + 0.3 * sin(uTime * (2.0 + aSeed.w * 4.0) + aSeed.x * 60.0);
+      vA = mix(aA, aB, m) * tw * uBright * (1.0 + fr * 0.6); vCol = c * (1.35 + fr * 0.8);
+      gl_PointSize = uSize * uPR * (0.35 + aSeed.z * 0.9) / -mv.z * (1.0 + sc * 0.4);
+    }`,
+  fragmentShader: /* glsl */`
+    varying vec3 vCol; varying float vA;
+    void main(){ vec2 c = gl_PointCoord - 0.5; float d = length(c); float a = smoothstep(0.5, 0.0, d); a *= a; float core = smoothstep(0.16, 0.0, d);
+      gl_FragColor = vec4(vCol * (0.6 + core * 1.6), (a * 0.85 + core) * vA); }`,
+});
+const points = new THREE.Points(geo, pmat); points.frustumCulled = false; points.renderOrder = 5; scene.add(points);
+
+/* far dust */
+{ const M = LOW ? 1200 : 3000; const a = new Float32Array(M * 3);
+  for (let i = 0; i < M; i++) { const r = 20 + Math.random() * 50, t = Math.random() * TAU, u = Math.random() * 2 - 1; a[i * 3] = Math.cos(t) * Math.sqrt(1 - u * u) * r; a[i * 3 + 1] = u * r * 0.6 + 6; a[i * 3 + 2] = Math.sin(t) * Math.sqrt(1 - u * u) * r; }
+  const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(a, 3));
+  scene.add(new THREE.Points(g, new THREE.PointsMaterial({ color: 0x8a5a3a, size: 0.12, transparent: true, opacity: 0.5, depthWrite: false, fog: false }))); }
+
+/* floor pool of warm light */
+const floor = new THREE.Mesh(new THREE.CircleGeometry(16, 96), new THREE.ShaderMaterial({
+  transparent: true, depthWrite: false, uniforms: { uTime: { value: 0 }, uO: { value: 1 } },
+  vertexShader: `varying vec2 vP; void main(){ vP = position.xy; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
+  fragmentShader: `varying vec2 vP; uniform float uTime, uO; void main(){ float r = length(vP);
+    float glow = exp(-r * 0.9) * 0.2; float core = exp(-r * r * 3.0) * 0.22;
+    float ring = smoothstep(0.03, 0.0, abs(fract(r * 0.8 - uTime * 0.05) - 0.5) - 0.47) * exp(-r * 0.25) * 0.08;
+    float shadow = smoothstep(0.9, 0.0, r) * 0.75; vec3 col = vec3(1.0, 0.4, 0.12) * (glow + ring) + vec3(1.0, 0.6, 0.3) * core * 0.4;
+    float a = clamp(glow + ring + core, 0.0, 1.0) * smoothstep(16.0, 6.0, r) * uO; col *= 1.0 - shadow * 0.85; gl_FragColor = vec4(col, a); }`,
+}));
+floor.rotation.x = -Math.PI / 2; scene.add(floor);
+
+/* ---------- glass ring: nine names in refracting iridescent slabs ---------- */
+const C = new THREE.Vector3(0, 1.8, 0), R = 5.5;
+const SLABS = [
+  ['FLOW', "补帧", '×2', "加入中间帧，提高画面输出"],
+  ['GUARD', "文字与名称标签保护", '95→0%', "水上乐园补帧跳过比例"],
+  ['FORGE', "AI 细节恢复", '−57%', "与原图的差异减少 33~57%（LPIPS）"],
+  ['TONE', "AI 画质优化", '0.3ms', "QHD 每帧 GPU 时间"],
+  ['FLARE', "AI 自动 HDR", '0.8ms', "4K 每帧 GPU 时间"],
+  ['PULSE', "帧节奏调整", '4–10', "超过 25 ms 的卡顿（此前 55–101 次）"],
+  ['BOOST', "游戏模式加速", '94%', "留在性能核心的比例（此前 81%）"],
+  ['KINDLE', "预先翻译", '2.3s', "网页出现耗时（此前 4.1–4.3 秒）"],
+  ['KILN', "预备着色器", '0.6s', "着色器停顿（此前 30.5 秒）"],
+  ['SPARK', "降低输入延迟", '−10ms', "英灵神殿输入延迟（60 fps 上限）"],
+  ['LENS', "游戏内 HUD", '+1.8', "比独立窗口 fps +1.5–1.8"],
+];
+const glass = new THREE.Group(); glass.visible = false; scene.add(glass);
+const slabAngle = (k) => Math.PI + k * TAU / SLABS.length;
+const glassMat = LOW
+  ? new THREE.MeshPhysicalMaterial({ color: 0x1c1612, roughness: 0.18, metalness: 0, transparent: true, opacity: 0.66, depthWrite: false, iridescence: 1, iridescenceIOR: 1.3, iridescenceThicknessRange: [200, 700], clearcoat: 1, clearcoatRoughness: 0.05, envMapIntensity: 1.2 })
+  : new THREE.MeshPhysicalMaterial({ color: 0xffffff, roughness: 0.06, metalness: 0, transmission: 1, thickness: 0.9, ior: 1.5, dispersion: 4, iridescence: 1, iridescenceIOR: 1.3, iridescenceThicknessRange: [180, 720], clearcoat: 1, clearcoatRoughness: 0.04, envMapIntensity: 1.6, attenuationColor: new THREE.Color(0xffe2c8), attenuationDistance: 4, depthWrite: false });
+function slabTexture([name, kind, big, small], k) {
+  const c = document.createElement('canvas'); c.width = 1024; c.height = 1336; const g = c.getContext('2d');
+  g.textBaseline = 'alphabetic';
+  g.fillStyle = '#ffb547'; g.font = '500 40px "IBM Plex Mono", monospace'; g.fillText('EMBER', 70, 120);
+  g.fillStyle = '#efe6dc'; g.font = '900 ' + (name.length > 5 ? 300 : 340) + 'px "Big Shoulders Display", Impact, sans-serif'; if ('letterSpacing' in g) g.letterSpacing = '6px';
+  g.fillText(name, 62, 470); if ('letterSpacing' in g) g.letterSpacing = '0px';
+  g.fillStyle = '#d9cbbd'; g.font = '500 58px "IBM Plex Sans KR", sans-serif'; g.fillText(kind, 70, 570);
+  g.fillStyle = k === 0 ? '#ffb547' : '#ffb547'; g.font = '900 300px "Big Shoulders Display", Impact, sans-serif'; g.fillText(big, 62, 1110);
+  g.fillStyle = '#bfb2a6'; g.font = '400 44px "IBM Plex Sans KR", sans-serif'; g.fillText(small, 70, 1210);
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; return t;
+}
+function buildGlass() {
+  const sg = new RoundedBoxGeometry(2.5, 3.26, 0.34, 5, 0.14);
+  SLABS.forEach((s, k) => {
+    const a = slabAngle(k); const grp = new THREE.Group(); grp.position.set(C.x + Math.sin(a) * R, C.y, C.z + Math.cos(a) * R); grp.lookAt(C);
+    const slab = new THREE.Mesh(sg, glassMat); slab.renderOrder = 8; grp.add(slab);
+    const tm = LOW ? new THREE.MeshBasicMaterial({ map: slabTexture(s, k), transparent: true, depthWrite: false, toneMapped: false, fog: false })
+                   : new THREE.MeshBasicMaterial({ map: slabTexture(s, k), alphaTest: 0.35, toneMapped: false, fog: false });
+    const txt = new THREE.Mesh(new THREE.PlaneGeometry(2.1, 2.74), tm); txt.position.z = LOW ? 0.18 : -0.02; grp.add(txt);   // 저전력 유리는 반투명 판이라 글자를 앞에 둔다
+    grp.userData.base = grp.quaternion.clone(); grp.userData.k = k; glass.add(grp);
+  });
+}
+
+/* ---------- character: GLB with an ember-burn dissolve, else cutout card ---------- */
+const charRoot = new THREE.Group(); scene.add(charRoot);
+const H = CFG.H; let headY = H * 0.9, mixer = null, glbReady = false;
+const DU = { uDiss: { value: 0 }, uLimeGlow: { value: 1.3 } };
+const Anim = {
+  model: null, clips: [], idle: null, wave: null, busy: false, pending: false, b: 0, bTarget: 0, waveW: 0.7,
+  attach(model, clips) { this.model = model; Look.find(model); this.add(clips); },
+  add(clips) {
+    if (!this.model || !clips.length) return;
+    if (!mixer) { mixer = new THREE.AnimationMixer(this.model); mixer.addEventListener('finished', (e) => { if (e.action === this.wave) this.bTarget = 0; }); }
+    this.clips.push(...clips); const find = (re) => this.clips.find((c) => re.test(c.name));
+    if (!this.idle) { const c = find(CFG.clipIdle) || this.clips.find((c) => !CFG.clipWave.test(c.name)); if (c) { this.idle = mixer.clipAction(c); this.idle.play(); } }
+    if (!this.wave) { const c = find(CFG.clipWave); if (c) { this.wave = mixer.clipAction(c); this.wave.setLoop(THREE.LoopOnce, 1); this.wave.clampWhenFinished = true; if (this.pending) { this.pending = false; this.playWave(); } } }
+  },
+  playWave() { if (reduce) return; if (!this.wave) { this.pending = true; return; } if (this.busy) return; this.busy = true; this.wave.reset().play(); this.bTarget = 1; },
+  update(dt) {
+    if (!mixer) return; this.b += (this.bTarget - this.b) * (1 - Math.exp(-dt * 6));
+    if (this.idle) this.idle.setEffectiveWeight(1 - this.waveW * this.b);
+    if (this.wave) { this.wave.setEffectiveWeight(this.waveW * this.b); if (this.bTarget === 0 && this.b < 0.01 && this.busy) { this.wave.stop(); this.busy = false; } }
+  },
+};
+const Look = {
+  bones: [], rest: new Map(), qa: new THREE.Quaternion(), qb: new THREE.Quaternion(), qp: new THREE.Quaternion(), axY: new THREE.Vector3(0, 1, 0), axX: new THREE.Vector3(),
+  find(model) {
+    const pick = (re) => { let b = null; model.traverse((o) => { if (!b && o.isBone && re.test(o.name)) b = o; }); return b; };
+    const head = pick(/^(head|mixamorig:?head)$/i) || pick(/head(?!_?end|front|top)/i), neck = pick(/neck/i), chest = pick(/spine0?2|spine2|chest|upperchest/i);
+    this.bones = [[head, 0.45, 0.25], [neck, 0.3, 0.15], [chest, 0.2, 0.06]].filter((b) => b[0]); this.bones.forEach(([b]) => this.rest.set(b, b.quaternion.clone()));
+  },
+  restore() { for (const [b] of this.bones) b.quaternion.copy(this.rest.get(b)); },
+  apply(yaw, pitch) {
+    if (!this.bones.length) return; this.axX.set(1, 0, 0).applyQuaternion(camera.quaternion);
+    for (const [b, ky, kp] of this.bones) {
+      this.rest.get(b).copy(b.quaternion); b.parent.getWorldQuaternion(this.qp);
+      this.qa.setFromAxisAngle(this.axY, yaw * ky).multiply(this.qb.setFromAxisAngle(this.axX, -pitch * kp));
+      const inv = this.qp.clone().invert(); this.qa.premultiply(inv).multiply(this.qp); b.quaternion.premultiply(this.qa);
+    }
+  },
+};
+const cardMat = new THREE.MeshBasicMaterial({ transparent: true, alphaTest: 0.05, opacity: 0 });
+const card = new THREE.Mesh(new THREE.PlaneGeometry(H * 871 / 1600, H), cardMat); card.position.y = H / 2; charRoot.add(card);
+new THREE.TextureLoader().load(CFG.cutout, (t) => { t.colorSpace = THREE.SRGBColorSpace; cardMat.map = t; cardMat.needsUpdate = true; if (!glbReady) cardMat.opacity = 1; });
+const NOISE = `varying vec3 vDW; float dEdge = 1.0;
+  float dh(vec3 p){ p = fract(p * 0.3183099 + 0.1); p *= 17.0; return fract(p.x * p.y * p.z * (p.x + p.y + p.z)); }
+  float dn(vec3 x){ vec3 i = floor(x), f = fract(x); f = f * f * (3.0 - 2.0 * f);
+    return mix(mix(mix(dh(i), dh(i + vec3(1,0,0)), f.x), mix(dh(i + vec3(0,1,0)), dh(i + vec3(1,1,0)), f.x), f.y),
+               mix(mix(dh(i + vec3(0,0,1)), dh(i + vec3(1,0,1)), f.x), mix(dh(i + vec3(0,1,1)), dh(i + vec3(1,1,1)), f.x), f.y), f.z); }
+  uniform float uDiss; uniform float uLimeGlow;\n`;
+function loadGlb() {
+  if (loadGlb.started || dead) return; loadGlb.started = true;
+  const url = LOW || renderer.capabilities.maxTextureSize < 4096 ? CFG.glbLow : CFG.glb; ST.glb = url;
+  const loader = new GLTFLoader().setDRACOLoader(new DRACOLoader().setDecoderPath(CFG.draco)).setMeshoptDecoder(MeshoptDecoder);
+  loader.load(url, (gltf) => {
+    const model = gltf.scene; model.updateMatrixWorld(true);
+    const box = new THREE.Box3().setFromObject(model); const size = box.getSize(new THREE.Vector3());
+    model.scale.setScalar(H / (size.y || 1)); model.updateMatrixWorld(true);
+    box.setFromObject(model); const ctr = box.getCenter(new THREE.Vector3()); model.position.x -= ctr.x; model.position.z -= ctr.z; model.position.y -= box.min.y;
+    model.traverse((o) => {
+      if (!o.isMesh) return; o.frustumCulled = false;
+      (Array.isArray(o.material) ? o.material : [o.material]).forEach((m) => {
+        if ('envMapIntensity' in m) m.envMapIntensity = 0.55;
+        if ('metalness' in m) { m.metalness = Math.min(m.metalness, 0.35); m.roughness = Math.max(m.roughness, 0.2); }
+        m.onBeforeCompile = (sh) => {
+          sh.uniforms.uDiss = DU.uDiss; sh.uniforms.uLimeGlow = DU.uLimeGlow;
+          sh.vertexShader = 'varying vec3 vDW;\n' + sh.vertexShader.replace('#include <skinning_vertex>', '#include <skinning_vertex>\n vDW = (modelMatrix * vec4(transformed, 1.0)).xyz;');
+          sh.fragmentShader = NOISE + sh.fragmentShader
+            .replace('#include <clipping_planes_fragment>', `#include <clipping_planes_fragment>
+              { float n = dn(vDW * 5.0) * 0.6 + dn(vDW * 14.0) * 0.4; dEdge = vDW.y / ${H.toFixed(2)} + n * 0.32 - (uDiss * 1.62 - 0.3); if (dEdge < 0.0) discard; }`)
+            .replace('#include <emissivemap_fragment>', `#include <emissivemap_fragment>
+              { vec3 bc = diffuseColor.rgb; float limeMask = smoothstep(0.06, 0.2, bc.g - max(bc.r * 0.9, bc.b)) * smoothstep(0.12, 0.3, bc.g);
+                totalEmissiveRadiance += bc * limeMask * uLimeGlow;
+                vec3 gn = nonPerturbedNormal * inversesqrt(max(dot(nonPerturbedNormal, nonPerturbedNormal), 1e-8)); vec3 vd = vViewPosition * inversesqrt(max(dot(vViewPosition, vViewPosition), 1e-8)); float ndv = clamp(abs(dot(gn, vd)), 0.0, 1.0);
+                float rimF = pow(1.0 - ndv, 4.0); float side = smoothstep(0.15, 0.75, gn.x);
+                totalEmissiveRadiance += mix(vec3(1.0, 0.4, 0.12), vec3(1.0, 0.68, 0.28), side) * rimF * 1.1;
+                totalEmissiveRadiance += vec3(1.0, 0.42, 0.1) * smoothstep(0.07, 0.0, dEdge) * 7.0 * step(0.002, uDiss); }`);
+        };
+        m.needsUpdate = true;
+      });
+    });
+    Anim.attach(model, gltf.animations || []);
+    charRoot.add(model); card.visible = false; scene.add(charLights); glbReady = true;
+  }, undefined, () => {});
+}
+
+/* ---------- post ---------- */
+const composer = new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene, camera));
+/* 깨진 값(NaN·무한대) 지우기 — 엠버가 어떤 자세에서 한 픽셀 NaN 을 내면 블룸이 가로·세로로 퍼뜨려 엠버 둘레가 검은 정사각형으로 번쩍였다(10-08, 240Hz 에서 120장 중 5장). 블룸 전에 0 으로. */
+composer.addPass(new ShaderPass({
+  uniforms: { tDiffuse: { value: null } },
+  vertexShader: `varying vec2 vU; void main(){ vU = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
+  fragmentShader: `uniform sampler2D tDiffuse; varying vec2 vU;
+    void main(){ vec4 c = texture2D(tDiffuse, vU);
+      if (any(isnan(c)) || any(isinf(c))) c = vec4(0.0, 0.0, 0.0, 1.0);
+      gl_FragColor = vec4(min(c.rgb, vec3(64.0)), c.a); }`,
+}));
+const bloom = new UnrealBloomPass(new THREE.Vector2(SZ()[0] / 2, SZ()[1] / 2), LOW ? 0.6 : 0.72, 0.45, 0.88); composer.addPass(bloom);
+const finalPass = new ShaderPass({
+  uniforms: { tDiffuse: { value: null }, uCA: { value: 0.0015 }, uFade: { value: 0 } },
+  vertexShader: `varying vec2 vU; void main(){ vU = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
+  fragmentShader: `uniform sampler2D tDiffuse; uniform float uCA, uFade; varying vec2 vU;
+    void main(){ vec2 d = vU - 0.5; float r2 = dot(d, d);
+      vec3 c = vec3(texture2D(tDiffuse, vU + d * uCA * r2 * 8.0).r, texture2D(tDiffuse, vU).g, texture2D(tDiffuse, vU - d * uCA * r2 * 8.0).b);
+      c *= 1.0 - r2 * 1.1; c = mix(c, vec3(0.043, 0.035, 0.031), uFade); gl_FragColor = vec4(c, 1.0); }`,
+});
+composer.addPass(finalPass); composer.addPass(new OutputPass());
+
+/* ---------- keyframes (one per scroll stop) ---------- */
+let portrait = innerWidth / innerHeight < 0.85;
+const KF = {};
+/* 화면 안전 구역: 글이 놓이는 쪽의 반대편에 주인공을 둔다. 이동량은 그 순간의 보이는 폭(세계 단위)에 대한 비율로 정해
+   어느 창 크기에서도 같은 화면 비율 자리에 온다. 세로 화면은 주인공을 위쪽 절반에, 글은 아래쪽 절반에(CSS .cap 쪽). */
+const visW = (r, fov) => 2 * Math.tan(THREE.MathUtils.degToRad(fov / 2)) * r * camera.aspect;
+const RING_D = 6.8;          // 고리 안 카메라에서 앞 유리판까지 거리
+let ringShift = 0, ringLift = 0;
+function buildKeyframes() {
+  portrait = innerWidth / innerHeight < 0.85; const P = portrait;
+  const TAB = P && camera.aspect > 0.62;   // 세로 태블릿: 화면이 넓어 조금 더 크게
+  const RP = P ? (TAB ? 10.5 : 13) : 7.6, FP = P ? 40 : 32, TY = P ? (TAB ? 0.3 : -0.2) : 1.62;   // 세로: 13 거리·눈높이 -0.2 → 주인공이 화면 위쪽 12~48%
+  const sx = (frac, r, fov) => (P ? 0 : frac * visW(r, fov));
+  const base = { sx: 0, tgt: [0, TY, 0], az: 0, el: 0.05, r: RP, fov: FP, word: 1, diss: 0, form: F.SWIRL, bright: 1, lime: 0, scatter: 0.6, ring: 0, ra: Math.PI, fade: 0, glass: 0 };
+  const k = (o) => Object.assign({}, base, o);
+  const RF = P ? 54 : 47;
+  Object.assign(KF, {
+    hero:  k({}),                                                                              // 가운데. 글은 CSS로 가운데 띠 밖에
+    side:  k({ sx: sx(0.2, 7.0, 32), tgt: [0, P ? TY : 1.7, 0], az: Math.PI / 2, el: 0.12, r: P ? RP : 7.0, scatter: 1.0, word: 0.4 }),   // 글 왼쪽 → 주인공 화면 70%
+    back:  k({ sx: sx(-0.2, 7.2, 32), tgt: [0, P ? TY : 1.75, 0], az: Math.PI, el: 0.07, r: P ? RP : 7.2, word: 0.4 }),                 // 글 오른쪽 → 30%
+    front: k({ sx: sx(0.18, 7.9, 32), az: TAU, r: P ? RP : 7.9, word: 0.4 }),                                                          // 글 왼쪽 → 68%
+    sil:   k({ az: TAU, r: P ? RP : 7.9, diss: 1, form: F.SIL, word: 0.08, bright: 1.0, scatter: 1.1 }),
+    num:   k({ tgt: [0, P ? 2.2 : 1.75, 0], az: TAU, el: 0.03, r: P ? 12 : 8.8, diss: 1, form: F.NUM, word: 0, bright: 1.3, scatter: 1.5, lime: 0.05 }),
+    ring0: k({ az: TAU, diss: 1, form: F.RING, word: 0, ring: 1, ra: Math.PI, fov: RF, scatter: 1.1, glass: 1, bright: 0.9 }),
+    ring1: k({ az: TAU, diss: 1, form: F.RING, word: 0, ring: 1, ra: slabAngle(SLABS.length - 1), fov: RF, scatter: 0.4, glass: 1, bright: 0.9 }),
+    out:   k({ az: TAU, diss: 1, form: F.RING, word: 0, ring: 1, ra: slabAngle(SLABS.length - 1) + 0.35, fov: RF, glass: 1, fade: 1, bright: 0.6 }),
+    end0:  k({ sx: sx(0.22, 7.8, 32), az: TAU + 0.3, r: P ? RP : 7.8, diss: 1, form: F.SIL, scatter: 0.8, word: 1 }),          // 글 왼쪽 → 72%
+    end:   k({ sx: sx(0.22, 7.8, 32), az: TAU + 0.3, r: P ? RP : 7.8, diss: 0, form: F.SWIRL, scatter: 1.0, word: 1 }),
+  });
+  // 고리: 앞 유리판을 화면 64% 자리로(왼쪽 아래 글 피함), 세로 화면은 가운데에서 위로
+  ringShift = P ? 0 : 0.14 * visW(RING_D, RF);
+  ringLift = P ? 0.8 : 0.35;
+}
+const XF = {};
+function buildXforms() {
+  const P = portrait;
+  XF[F.SWIRL] = { off: new THREE.Vector3(0, 0, 0), s: 1 };
+  XF[F.SIL] = { off: new THREE.Vector3(0, 0, 0), s: 1 };
+  // ×2(원래 폭 5.2, 높이 2.93): 가로 화면은 보이는 폭의 왼쪽 42% 안(가운데 -27%), 세로 화면은 폭 75% 이하로 위쪽
+  const n = KF.num, vw = visW(n.r, n.fov), vh = vw / camera.aspect;
+  const s = P ? Math.min(0.55, 0.75 * vw / 5.2) : Math.min(1, 0.42 * vw / 5.2, 0.6 * vh / 2.93);
+  XF[F.NUM] = { off: new THREE.Vector3(P ? 0 : -0.27 * vw, P ? 4.3 : 1.8, 0), s };
+  XF[F.RING] = { off: C.clone(), s: 1 };
+}
+let stops = [];
+function measureStops() { stops = [...document.querySelectorAll('[data-stop]')].map((el) => ({ name: el.dataset.stop, y: el.getBoundingClientRect().top + scrollY })).filter((s) => KF[s.name]).sort((a, b) => a.y - b.y); }
+function sceneT() {
+  if (!stops.length) return 0; const c = scrollY + innerHeight / 2;
+  if (c <= stops[0].y) return 0;
+  for (let i = 0; i < stops.length - 1; i++) if (c < stops[i + 1].y) return i + (c - stops[i].y) / (stops[i + 1].y - stops[i].y);
+  return stops.length - 1;
+}
+
+/* ---------- input ---------- */
+const mouse = new THREE.Vector2(), mouseS = new THREE.Vector2(); let mouseActive = false;
+addEventListener('pointermove', (e) => { mouse.set(e.clientX / innerWidth * 2 - 1, -(e.clientY / innerHeight * 2 - 1)); mouseActive = e.pointerType === 'mouse'; }, { passive: true });
+
+/* ---------- loop ---------- */
+const P_ = ['sx', 'az', 'el', 'r', 'fov', 'word', 'diss', 'bright', 'lime', 'ring', 'ra', 'fade', 'glass'];
+const cur = { tx: 0, ty: 1.6, tz: 0, s: 0 }; P_.forEach((p) => cur[p] = 0);
+let first = true;
+const lerp = (a, b, t) => a + (b - a) * t, ease = (t) => t * t * (3 - 2 * t);
+const vA = new THREE.Vector3(), vB = new THREE.Vector3(), tA = new THREE.Vector3(), tB = new THREE.Vector3(), dirv = new THREE.Vector3();
+let lastSz = [0, 0];
+function resize() {
+  const [w, h] = SZ();
+  if (w === lastSz[0] && Math.abs(h - lastSz[1]) < 2) { measureStops(); return; }   // 주소창만 움직임: 자리만 다시 잰다
+  lastSz = [w, h];
+  renderer.setSize(w, h, false); composer.setSize(w, h); bloom.resolution.set(w / 2, h / 2);
+  camera.aspect = w / h; camera.updateProjectionMatrix(); PU.uAspect.value = camera.aspect;
+  buildKeyframes(); buildXforms(); measureStops(); placeWord(); first = true;
+}
+const ringCap = document.querySelector('.ring-cap');
+const debugFPS = new URLSearchParams(location.search).get('debug') === 'fps';
+const lens = document.getElementById('lens'), lensFps = document.getElementById('lensfps');
+const lg = debugFPS ? document.getElementById('lensg').getContext('2d') : null;
+lens.hidden = !debugFPS;
+const clock = new THREE.Clock(); let t = 0, acc = 0, frames = 0, slowFor = 0, degraded = false, running = false, visAct = true, visEnd = false, waveStop = ''; const ft = [];
+function frame() {
+  if (!running || dead) return;
+  const dt = Math.min(clock.getDelta(), 0.1); if (!reduce) t += dt;
+  const sT = sceneT(); cur.s = first || reduce ? sT : lerp(cur.s, sT, 1 - Math.exp(-dt * 5));
+  const i = Math.min(Math.floor(cur.s), stops.length - 1), fr = cur.s - i;
+  const A = KF[stops[i]?.name] || KF.hero, B = KF[stops[Math.min(i + 1, stops.length - 1)]?.name] || A;
+  const e = ease(Math.min(1, Math.max(0, fr))); const k = first || reduce ? 1 : 1 - Math.exp(-dt * 6);
+  cur.tx = lerp(cur.tx, lerp(A.tgt[0], B.tgt[0], e), k); cur.ty = lerp(cur.ty, lerp(A.tgt[1], B.tgt[1], e), k); cur.tz = lerp(cur.tz, lerp(A.tgt[2], B.tgt[2], e), k);
+  for (const p of P_) cur[p] = lerp(cur[p], lerp(A[p], B[p], p === 'diss' ? Math.min(1, Math.max(0, fr * 1.15)) : e), k);
+  first = false;
+
+  mouseS.lerp(mouse, 1 - Math.exp(-dt * 3)); const mx = reduce ? 0 : mouseS.x, my = reduce ? 0 : mouseS.y;
+  // orbit camera
+  const az = cur.az + mx * 0.06, el = cur.el + my * 0.03;
+  const stx = cur.tx - Math.cos(cur.az) * cur.sx, stz = cur.tz + Math.sin(cur.az) * cur.sx;
+  vA.set(stx + Math.sin(az) * Math.cos(el) * cur.r, cur.ty + Math.sin(el) * cur.r, stz + Math.cos(az) * Math.cos(el) * cur.r); tA.set(stx, cur.ty, stz);
+  // ring camera (inside the ring, looking out at one slab)
+  if (cur.ring > 0.001) {
+    const ra = cur.ra + mx * 0.08; dirv.set(Math.sin(ra), 0, Math.cos(ra));
+    vB.copy(C).addScaledVector(dirv, -1.3).add(new THREE.Vector3(0, my * 0.15, 0));
+    // 보는 점을 왼쪽·아래로 → 앞 유리판이 오른쪽·위로(글 자리 비움). 왼쪽 = (cos, 0, -sin)
+    tB.copy(C).addScaledVector(dirv, R).add(new THREE.Vector3(Math.cos(ra) * ringShift, -ringLift, -Math.sin(ra) * ringShift));
+    const w = ease(Math.min(1, cur.ring)); vA.lerp(vB, w); tA.lerp(tB, w);
+  }
+  camera.position.copy(vA); camera.lookAt(tA);
+  if (Math.abs(camera.fov - cur.fov) > 0.01) { camera.fov = cur.fov; camera.updateProjectionMatrix(); placeWord(); }
+
+  // particles
+  const fA = A.form, fB = B.form; const mixv = fA === fB ? 0 : Math.min(1, Math.max(0, (fr - 0.08) / 0.8));
+  PU.uFrom.value = fA; PU.uTo.value = fB; PU.uMix.value = mixv; PU.uOffA.value.copy(XF[fA].off); PU.uOffB.value.copy(XF[fB].off); PU.uSclA.value = XF[fA].s; PU.uSclB.value = XF[fB].s;
+  PU.uScatter.value = reduce ? 0 : (fA === fB ? 0 : B.scatter); PU.uTime.value = t; PU.uBright.value = cur.bright; PU.uLime.value = cur.lime;
+  if (mouseActive && !reduce) PU.uMouse.value.copy(mouseS); else PU.uMouse.value.set(9, 9);
+
+  // character
+  DU.uDiss.value = cur.diss; charRoot.visible = cur.diss < 0.995;
+  const camAz = Math.atan2(camera.position.x, camera.position.z);
+  if (glbReady) { charRoot.rotation.y = lerp(charRoot.rotation.y, mx * (Look.bones.length ? 0.12 : 0.35), 1 - Math.exp(-dt * 4)); placeLights(camAz - charRoot.rotation.y * 0.5); }
+  else { card.rotation.y = camAz + mx * 0.12; cardMat.opacity = 1 - cur.diss; }
+  if (glbReady) Look.restore(); if (mixer) { Anim.update(dt); mixer.update(reduce ? 0 : dt); }
+  if (glbReady && charRoot.visible) { charRoot.updateMatrixWorld(true); Look.apply(mx * 0.7, my * 0.5); }
+  { const near = stops[Math.round(cur.s)]?.name || 'hero'; const want = (near === 'hero' || near === 'end') && Math.abs(cur.s - Math.round(cur.s)) < 0.15 ? near : '';
+    if (want && want !== waveStop && glbReady) Anim.playWave(); if (want || Math.abs(cur.s - Math.round(cur.s)) > 0.4) waveStop = want; }
+
+  wordMat.opacity = cur.word; word.visible = cur.word > 0.01;
+  floor.material.uniforms.uTime.value = t; floor.material.uniforms.uO.value = 1 - cur.ring;
+  glass.visible = cur.glass > 0.01;
+  if (glass.visible) { const s = 0.4 + 0.6 * ease(Math.min(1, cur.glass)); glass.children.forEach((g) => { g.scale.setScalar(s); g.quaternion.copy(g.userData.base); g.rotateY(Math.sin(t * 0.35 + g.userData.k) * 0.12); g.rotateX(Math.sin(t * 0.27 + g.userData.k * 1.7) * 0.05); }); }
+  finalPass.uniforms.uFade.value = cur.fade;
+  if (ringCap) { const r0 = stops.findIndex((s) => s.name === 'ring0'); const o = r0 < 0 ? 1 : Math.max(0, Math.min(1, (cur.s - r0 + 0.55) / 0.3, 1 - (cur.s - r0 - 0.35) / 0.3)); ringCap.style.opacity = o.toFixed(3); }
+
+  if (degraded) renderer.render(scene, camera); else composer.render(dt);
+
+  ft.push(dt * 1000); if (ft.length > 32) ft.shift(); acc += dt; frames++;
+  if (acc > 0.5) {
+    const fps = frames / acc; if (debugFPS) lensFps.textContent = Math.round(fps); acc = 0; frames = 0;
+    if (fps < 50 && t > 3) { if (++slowFor >= 4) { slowFor = 0; if (DPR > 1) { DPR = 1; renderer.setPixelRatio(1); composer.setPixelRatio(1); PU.uPR.value = 1; lastSz = [0, 0]; resize(); Object.assign(ST, { DPR: 1, degraded: 1 }); } else if (!degraded) { degraded = true; ST.degraded = 2; } else if (geo.drawRange.count === Infinity || geo.drawRange.count > N / 2) { geo.setDrawRange(0, Math.floor(N / 2)); ST.degraded = 3; } else if (fps < 20) toFallback('slow'); } } else slowFor = 0;
+    if (lg) {
+    lg.clearRect(0, 0, 128, 48); lg.strokeStyle = '#ffb547'; lg.lineWidth = 2; lg.beginPath();
+    ft.forEach((v, j) => { const x = j * 4, y = 46 - Math.min(44, v / 33.3 * 44); j ? lg.lineTo(x, y) : lg.moveTo(x, y); }); lg.stroke();
+    lg.strokeStyle = 'rgba(255,181,71,.35)'; lg.lineWidth = 1; lg.beginPath(); lg.moveTo(0, 46 - 22); lg.lineTo(128, 46 - 22); lg.stroke();
+    }
+  }
+  requestAnimationFrame(frame);
+}
+function setRunning() {
+  const want = (visAct || visEnd) && !document.hidden && !dead;
+  canvas.style.visibility = (visAct || visEnd) ? 'visible' : 'hidden';
+  lens.classList.toggle('off', !debugFPS || !visAct);
+  if (want && !running) { running = true; first = true; clock.getDelta(); requestAnimationFrame(frame); } else if (!want) running = false;
+}
+async function start() {
+  try { await Promise.race([Promise.all(['900 200px "Big Shoulders Display"', '500 58px "IBM Plex Sans KR"', '500 40px "IBM Plex Mono"'].map((f) => document.fonts.load(f, "EMBER 帧 0"))), new Promise((r) => setTimeout(r, 2500))]); } catch (e) {}
+  const fontsAtDraw = ['900 200px "Big Shoulders Display"', '500 58px "IBM Plex Sans KR"'].every((f) => document.fonts.check(f, 'EMBER'));
+  await buildFormations(); posTex.needsUpdate = true; drawWord(); buildGlass(); resize();
+  if (!fontsAtDraw) document.fonts.ready.then(() => { drawWord(); glass.children.forEach((g) => { const m = g.children[1]?.material; if (m?.map) { const old = m.map; m.map = slabTexture(SLABS[g.userData.k], g.userData.k); m.needsUpdate = true; old.dispose(); } }); });
+  // 3D 모델(휴대폰 5.7MB · 데스크톱 6.6MB)은 페이지가 다 뜬 뒤, 첫 막이 화면 근처일 때 받는다. 그동안은 그림 카드가 서 있다
+  const goGlb = () => new IntersectionObserver((es, io) => { if (es.some((e) => e.isIntersecting)) { io.disconnect(); loadGlb(); } }, { rootMargin: '50% 0px' }).observe(document.getElementById('act'));
+  let goOnce = false; const go = () => { if (!goOnce) { goOnce = true; goGlb(); } };
+  if (document.readyState === 'complete') go(); else { addEventListener('load', go, { once: true }); setTimeout(go, 4000); }   // 느린 글꼴·그림이 load 를 붙잡아도 4초 뒤엔 받기 시작
+  addEventListener('resize', resize); addEventListener('load', measureStops);
+  new ResizeObserver(() => measureStops()).observe(document.querySelector('main'));
+  new IntersectionObserver((es) => es.forEach((en) => { if (en.target.id === 'act') visAct = en.isIntersecting; else visEnd = en.isIntersecting; setRunning(); }), { rootMargin: '0px' })
+    .observe(document.getElementById('act'));
+  new IntersectionObserver((es) => es.forEach((en) => { visEnd = en.isIntersecting; setRunning(); })).observe(document.getElementById('download'));
+  document.addEventListener('visibilitychange', setRunning);
+  setRunning();
+}
+await start();
+if (!dead) document.getElementById('stage-fallback').hidden = true;
+}
+initStage().catch(() => {
+  document.getElementById('stage').hidden = true;
+  document.getElementById('stage-fallback').hidden = false;
+  document.getElementById('lens').hidden = true;
+  window.__emberStage = {...window.__emberStage, fallback:'unavailable'};
+});
+</script>
+</body>
+</html>

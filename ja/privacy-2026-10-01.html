@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b0908">
+<meta name="color-scheme" content="dark">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<link rel="canonical" href="https://eunggg0.github.io/ember-site/ja/privacy-2026-10-01.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Ember">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:title" content="Ember プライバシーポリシー">
+<meta property="og:description" content="Ember は個人情報を収集しません。Mac 内で扱う情報、インターネット接続、権限について説明します。">
+<meta property="og:url" content="https://eunggg0.github.io/ember-site/ja/privacy-2026-10-01.html">
+<meta property="og:image" content="https://eunggg0.github.io/ember-site/assets/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="EmberのキャラクターとMac用Windowsゲームランチャー。ゲームの互換性と起動設定。">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Ember プライバシーポリシー">
+<meta name="twitter:description" content="Ember は個人情報を収集しません。Mac 内で扱う情報、インターネット接続、権限について説明します。">
+<meta name="twitter:image" content="https://eunggg0.github.io/ember-site/assets/og.jpg">
+<meta name="robots" content="noindex">
+<title>Ember プライバシーポリシー</title>
+<meta name="description" content="Ember は個人情報を収集しません。Mac 内で扱う情報、インターネット接続、権限について説明します。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Hahmlet:wght@500;700&family=IBM+Plex+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column over a quiet ember-spark backdrop; same tokens as the main page. Single committed dark look. */
+:root{
+  color-scheme:dark;
+  --ink:#0a0706; --ink-2:#14100d; --ash:#efe6dc; --ash-dim:#b2a79c; --ash-faint:#998d82;
+  --ember:#ff6a1f; --gold:#ffb547; --lime:#c6ff3d;
+  --glass:rgba(255,236,220,.05); --line:rgba(255,214,180,.14);
+  --f-display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
+  --f-body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+  --gutter:clamp(16px,5vw,72px);
+  --t-xs:12px; --t-sm:14px; --t-md:16.5px; --t-lg:clamp(21px,2.2vw,27px); --t-xl:clamp(32px,5vw,62px);
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box}
+html{background:var(--ink);scroll-behavior:smooth}
+body{margin:0;background:var(--ink);color:var(--ash);font-family:var(--f-body);font-size:var(--t-md);line-height:1.72;-webkit-font-smoothing:antialiased;overflow-x:hidden;word-break:keep-all;overflow-wrap:break-word}
+a{color:var(--gold);text-underline-offset:3px}
+a:hover{color:var(--ash)}
+:focus-visible{outline:2px solid var(--lime);outline-offset:3px;border-radius:6px}
+h1,h2,h3{margin:0;text-wrap:balance;font-weight:700;letter-spacing:-.01em}
+p{margin:0}
+[hidden]{display:none!important}
+#sparks{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.glow{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(60% 45% at 75% 0%,rgba(255,106,31,.16),transparent 70%),radial-gradient(40% 35% at 0% 100%,rgba(198,255,61,.05),transparent 70%)}
+.nav,main,footer{position:relative;z-index:2}
+.nav{position:sticky;top:0;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px var(--gutter);background:rgba(10,7,6,.96);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ash);font-family:var(--f-display);font-weight:900;font-size:21px;letter-spacing:.14em}
+.brand svg{width:19px;height:25px}
+.nav ul{display:flex;flex-wrap:wrap;gap:2px;list-style:none;margin:0;padding:0}
+.nav li a{display:block;padding:7px 12px;border-radius:999px;font-size:var(--t-sm);text-decoration:none;color:var(--ash-dim)}
+.nav li a:hover{color:var(--ash);background:var(--glass)}
+.nav li a[aria-current="page"]{color:var(--ash);background:rgba(255,181,71,.12)}
+.wrap{padding-inline:var(--gutter)}
+.col{max-width:820px;margin-inline:auto}
+.eyebrow{font-family:var(--f-mono);font-size:var(--t-xs);letter-spacing:.08em;color:var(--gold)}
+.page-head{padding-block:clamp(56px,10vh,110px) 40px}
+.page-head h1{font-size:var(--t-xl);line-height:1.16;margin-top:14px}
+.page-head .lead{margin-top:18px;color:var(--ash-dim);max-width:38em}
+.muted{color:var(--ash-dim)}
+footer{margin-top:80px;padding-block:28px 32px;border-top:1px solid var(--line);background:rgba(10,7,6,.85);display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px 24px;font-size:var(--t-xs);color:var(--ash-faint)}
+footer nav{display:flex;flex-wrap:wrap;gap:6px 18px}
+footer a{color:var(--ash-dim);text-decoration:none}
+footer a:hover{color:var(--ash)}
+@media (max-width:760px){ .nav{flex-wrap:wrap} .nav ul{width:100%;overflow-x:auto;flex-wrap:nowrap;margin-inline:-6px} .nav li a{white-space:nowrap} }
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto} *{animation:none!important;transition:none!important}}
+
+.toc{display:flex;flex-wrap:wrap;gap:8px;margin-top:26px}
+.toc a{display:inline-block;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--glass);color:var(--ash-dim);text-decoration:none;font-size:var(--t-sm)}
+.toc a:hover{color:var(--ash)}
+.sec{padding-block:44px 8px;border-top:1px solid var(--line);scroll-margin-top:80px}
+.sec h2{display:flex;align-items:baseline;gap:14px;font-size:var(--t-lg);line-height:1.35}
+.sec h2 .k{font-family:var(--f-display);font-weight:900;font-size:1.5em;color:var(--gold);min-width:1.4em}
+.sec .txt{margin-top:14px;display:grid;gap:12px;color:var(--ash-dim);max-width:44em}
+.sec .txt strong{color:var(--ash);font-weight:500}
+.tbl{margin-top:18px;overflow-x:auto;border:1px solid var(--line);border-radius:16px;background:rgba(20,16,13,.6);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+table{width:100%;border-collapse:collapse;font-size:var(--t-sm);min-width:560px}
+th,td{text-align:left;vertical-align:top;padding:10px 14px;border-bottom:1px solid var(--line)}
+thead th{font-family:var(--f-mono);font-size:var(--t-xs);font-weight:500;letter-spacing:.04em;color:var(--gold);background:rgba(255,181,71,.05)}
+tbody tr:last-child td{border-bottom:0}
+td b{color:var(--ash);font-weight:500}
+td{color:var(--ash-dim)}
+tr.grp th{font-size:var(--t-xs);color:var(--ash);background:rgba(255,236,220,.04);font-weight:500;letter-spacing:.02em}
+.ob{display:inline-block;padding:2px 8px;border-radius:999px;font-size:11px;font-family:var(--f-mono);white-space:nowrap}
+.ob.src{color:var(--lime);border:1px solid rgba(198,255,61,.35)}
+.ob.ntc{color:var(--ash-dim);border:1px solid var(--line)}
+.legend{margin-top:10px;font-size:var(--t-xs);color:var(--ash-faint)}
+ol.restr{margin:6px 0 0;padding-left:1.4em;display:grid;gap:4px;font-size:var(--t-sm)}
+.callout{margin-top:16px;padding:16px 18px;border-radius:16px;border:1px solid rgba(198,255,61,.25);background:rgba(198,255,61,.04);color:var(--ash-dim);font-size:var(--t-sm)}
+.btn{display:inline-flex;align-items:center;gap:8px;margin-top:6px;padding:10px 16px;border-radius:999px;border:1px solid rgba(198,255,61,.4);color:var(--lime);text-decoration:none;font-size:var(--t-sm);background:rgba(198,255,61,.06);width:max-content}
+
+.sum{margin-top:26px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:10px}
+.sum div{padding:16px 18px;border-radius:16px;background:var(--glass);border:1px solid var(--line)}
+.sum b{display:block;color:var(--ash);font-weight:500}
+.sum span{display:block;margin-top:4px;font-size:var(--t-sm);color:var(--ash-dim)}
+.na{display:inline-block;margin-left:8px;padding:2px 8px;border-radius:999px;font-family:var(--f-mono);font-size:11px;color:var(--ash-dim);border:1px solid var(--line);vertical-align:middle}
+
+
+/* 10-07 siteredesign: 첫 페이지와 같은 제목 서체(Hahmlet) */
+:root{--f-head:"Hahmlet","Noto Serif KR","AppleMyungjo",serif}
+.page-head h1,.chap h2,.sec h2{font-family:var(--f-head);letter-spacing:-.025em}
+
+/* 10-08 ghpages: 누름 자리 44px 이상(휴대폰), 좌우 안전 영역 */
+@media (pointer:coarse){.nav li a{padding-block:12px}footer a,footer nav a{display:inline-flex;align-items:center;min-height:44px}.brand{min-height:44px}}
+:root{--gutter:max(clamp(16px,5vw,72px),env(safe-area-inset-left,0px),env(safe-area-inset-right,0px))}
+</style>
+<link rel="stylesheet" href="../assets/site-shell.css">
+<script src="../assets/site-shell.js" defer></script>
+
+<link rel="alternate" hreflang="ko" href="https://eunggg0.github.io/ember-site/ko/privacy-2026-10-01.html">
+<link rel="alternate" hreflang="en" href="https://eunggg0.github.io/ember-site/en/privacy-2026-10-01.html">
+<link rel="alternate" hreflang="ja" href="https://eunggg0.github.io/ember-site/ja/privacy-2026-10-01.html">
+<link rel="alternate" hreflang="zh-Hans" href="https://eunggg0.github.io/ember-site/zh-Hans/privacy-2026-10-01.html">
+<link rel="alternate" hreflang="zh-Hant" href="https://eunggg0.github.io/ember-site/zh-Hant/privacy-2026-10-01.html">
+<link rel="alternate" hreflang="x-default" href="https://eunggg0.github.io/ember-site/privacy-2026-10-01.html">
+<script src="../assets/language.js" defer></script>
+</head>
+<body>
+<canvas id="sparks" aria-hidden="true"></canvas><div class="glow" aria-hidden="true"></div>
+<header class="nav">
+  <a class="brand" href="index.html" aria-label="Ember ホームへ">
+    <svg viewBox="0 0 100 130" aria-hidden="true"><path fill="url(#fl)" fill-rule="evenodd" d="M50 4C62 30 88 52 88 82C88 108 70 126 50 126C30 126 12 108 12 84C12 64 24 52 32 40C34 54 40 60 46 62C42 44 44 24 50 4ZM50 71a17 17 0 1 0 0.01 0Z"/><defs><linearGradient id="fl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffb547"/><stop offset="1" stop-color="#ff6a1f"/></linearGradient></defs></svg>
+    EMBER
+  </a>
+  <ul>
+    <li><a href="index.html#perf">性能</a></li>
+    <li><a href="index.html#features">機能</a></li>
+    <li><a href="why.html">開発の理由</a></li>
+    <li><a href="license.html">ライセンス</a></li>
+    <li><a href="privacy.html" aria-current="page">プライバシー</a></li>
+  </ul>
+</header>
+<main>
+
+<section class="page-head wrap"><div class="col"><span id="en" aria-hidden="true"></span><p class="legal-notice">韓国語の原文が優先されます。翻訳は参考用です。</p>
+  <p class="eyebrow">プライバシーポリシー</p>
+  <h1>Ember は個人情報を収集しません</h1>
+  <p class="lead">Ember には会員登録、広告、アクセス解析、遠隔での情報収集はありません。Ember AI の音声・画面・会話の処理はすべて Mac 内で行います。Mac 内に何が残り、いつインターネットに接続するかを以下に説明します。</p>
+  <div class="sum">
+    <div><b>送信しません</b><span>Ember 開発者のサーバーへ送られる個人情報はありません。</span></div>
+    <div><b>Mac の中だけで</b><span>音声認識、回答、音声合成、画面解析をすべて機器内で処理します。</span></div>
+    <div><b>削除できます</b><span>Mac 内に残る記録は、いつでもご自身で削除できます。</span></div>
+  </div>
+  <nav class="toc" aria-label="このページの目次">
+    <a href="#purpose">目的・項目</a><a href="#local">Mac 内で扱う情報</a><a href="#keep">保存・削除</a><a href="#third">第三者への提供</a><a href="#outsourcing">取扱いの委託</a>
+    <a href="#network">インターネット接続</a><a href="#perm">権限</a><a href="#rights">利用者の権利</a><a href="#safety">安全対策</a><a href="#web">このウェブサイト</a><a href="#officer">責任者・お問い合わせ</a><a href="#date">施行日</a>
+  </nav>
+</div></section>
+<div class="wrap"><div class="col">
+<section class="sec" id="purpose"><h2><span class="k">1</span>個人情報を扱う目的と項目<span class=na>該当なし</span></h2><div class="txt"><p>Ember 開発者は利用者の個人情報を収集しないため、取扱いの目的・項目はありません。会員登録、広告識別子、利用統計、エラーレポートの自動送信もありません。</p></div></section>
+<section class="sec" id="local"><h2><span class="k">2</span>Mac 内だけで扱う情報</h2><div class="txt"><p>以下の情報は、機能の利用中に Mac 内だけで処理され、Ember 開発者には送られません。</p></div><div class="tbl "><table><thead><tr><th scope="col">情報</th><th scope="col">用途</th><th scope="col">処理方法</th></tr></thead><tbody><tr><td><b>マイクの音声</b></td><td>Ember AI の呼びかけ（「엠버야」）と音声コマンドの認識</td><td>Mac 内の音声認識だけで処理します。録音ファイルは保存しません。</td></tr><tr><td><b>Ember AI との会話・記憶</b></td><td>会話の継続、利用者が伝えた内容の記憶</td><td>回答は Mac 内のモデル（Apple Foundation Models または利用者がダウンロードした Gemma）が生成します。記憶は Ember データフォルダ（Coach）だけに保存され、いつでも削除できます。</td></tr><tr><td><b>ゲーム画面</b></td><td>ボス HUD、ゲーム画面の翻訳・説明、カクつきの原因表示</td><td>画面収録の権限でゲームウィンドウを Mac 内で解析し、すぐに破棄します。保存も送信もしません。</td></tr><tr><td><b>音声合成</b></td><td>Ember AI の回答の読み上げ</td><td>Mac 内で合成します。</td></tr><tr><td><b>実行ログ・測定記録・設定</b></td><td>問題解決、Frame Check による性能比較、ゲームごとの設定の記憶</td><td>Ember データフォルダ（Logs、framecheck など）だけに保存します。利用者が自ら共有しない限り、外へ出ることはありません。</td></tr><tr><td><b>ゲーム・ランチャーのアカウント</b></td><td>各ランチャーへのログイン</td><td>Steam など各ランチャーが直接扱います。Ember はアカウント情報を保存・送信しません。</td></tr></tbody></table></div></section>
+<section class="sec" id="keep"><h2><span class="k">3</span>保存期間と削除</h2><div class="txt"><p>Ember 開発者が保存する個人情報はありません。</p><p>会話の記憶、実行ログ、測定記録、設定は、利用者が削除するまで Mac 内だけに残ります。該当ファイルや Ember データフォルダを削除するとすぐに消え、Ember の削除時にデータフォルダも削除すれば何も残りません。録音ファイルや画面キャプチャは最初から保存しません。</p></div></section>
+<section class="sec" id="third"><h2><span class="k">4</span>個人情報の第三者提供<span class=na>該当なし</span></h2><div class="txt"><p>Ember は利用者の個人情報を第三者へ提供しません。</p></div></section>
+<section class="sec" id="outsourcing"><h2><span class="k">5</span>個人情報の取扱いの委託<span class=na>該当なし</span></h2><div class="txt"><p>個人情報の取扱いは外部へ委託しません。</p></div></section>
+<section class="sec" id="network"><h2><span class="k">6</span>Ember がインターネットに接続する場合</h2><div class="txt"><p>Ember がインターネットへ接続するのは以下の場合だけです。接続先サーバーには IP アドレス、接続時刻、機器・アプリの種類などの一般的な接続情報が伝わることがあり、各サービスの方針に従って扱われます。</p></div><div class="tbl "><table><thead><tr><th scope="col">タイミング</th><th scope="col">接続先</th><th scope="col">内容</th></tr></thead><tbody><tr><td><b>AI モデルのダウンロード（「ダウンロード」を押したとき）</b></td><td>Hugging Face</td><td>Gemma、Supertonic、Whisper のモデルファイル</td></tr><tr><td><b>VC++ ランタイムのインストール</b></td><td>Microsoft</td><td>ゲームに必要なランタイムのインストーラ</td></tr><tr><td><b>Ember ランタイムの更新確認</b></td><td>GitHub API</td><td>新しいランタイムの有無を確認</td></tr><tr><td><b>ランチャー・ゲームの実行</b></td><td>各ランチャー・ゲームのサービス</td><td>各サービス自体の通信（そのサービスのプライバシーポリシーに従います）</td></tr><tr><td><b>ボスガイドの出典リンクを開く</b></td><td>リンク先のウェブサイト（ブラウザで開きます）</td><td>利用者が押したリンク</td></tr></tbody></table></div></section>
+<section class="sec" id="perm"><h2><span class="k">7</span>Mac の権限と用途</h2><div class="txt"><p>権限は該当機能を有効にするときに macOS が確認します。 <strong>システム設定 › プライバシーとセキュリティ</strong>でいつでも無効にできます。無効にするとその機能だけが使えなくなり、ゲームの起動には影響しません。</p></div><div class="tbl "><table><thead><tr><th scope="col">権限</th><th scope="col">用途</th><th scope="col">確認するタイミング</th></tr></thead><tbody><tr><td><b>マイク</b></td><td>「엠버야」の呼びかけと音声コマンド</td><td>Ember AI の音声機能を有効にしたときだけ</td></tr><tr><td><b>音声認識</b></td><td>音声の文字起こし（Mac 内だけ）</td><td>〃</td></tr><tr><td><b>画面収録</b></td><td>ボス HUD、ゲーム画面の翻訳・説明</td><td>該当機能を有効にしたときだけ</td></tr><tr><td><b>ローカルネットワーク</b></td><td>ランチャー・ゲームが同じネットワーク上の機器と通信するとき</td><td>初回に macOS が確認</td></tr><tr><td><b>通知</b></td><td>ゲームモードの切り替えやインストール完了などの通知</td><td>〃</td></tr></tbody></table></div></section>
+<section class="sec" id="rights"><h2><span class="k">8</span>利用者の権利</h2><div class="txt"><p>Ember 開発者は利用者の情報を保有していないため、開示・訂正・削除請求の対象となる情報はありません。Mac 内の記録はご自身で確認・削除でき、権限もいつでも取り消せます。</p></div></section>
+<section class="sec" id="safety"><h2><span class="k">9</span>安全性を確保するための措置</h2><div class="txt"><p>音声・画面・会話を Mac の外へ送らない構造です。ダウンロードする AI モデルは、指定のバージョンとファイルハッシュを確認してから使用します。Ember AI の高度な回答エンジンはこの Mac 内（127.0.0.1）だけで待ち受け、外部からは接続できません。</p></div></section>
+<section class="sec" id="web"><h2><span class="k">10</span>このウェブサイト</h2><div class="txt"><p>このウェブサイトは Cookie やアクセス解析を使用しません。</p><p>ページ表示のため、Google Fonts からフォントを、jsDelivr からスクリプトを読み込み、その際に各サーバーへ一般的な接続情報が伝わります。ホスティングサービスも一般的なアクセス記録を残す場合があり、各サービスの方針に従います。</p></div></section>
+<section class="sec" id="officer"><h2><span class="k">11</span>個人情報保護責任者とお問い合わせ</h2><div class="txt"><p>Ember は個人情報を扱いませんが、本方針へのご質問はお問い合わせ窓口で受け付けます。</p></div><a class="btn" href="mailto:realnoma@naver.com" data-link="contact">お問い合わせ</a></section>
+<section class="sec" id="date"><h2><span class="k">12</span>施行日と変更</h2><div class="txt"><p>本方針は <span>2026年10月1日</span>から施行します。内容を変更した場合は、このページで変更日とともにお知らせします。</p><p>本方針は2026年10月20日の改定により更新されました。 <a href="privacy.html">現在のプライバシーポリシーを見る</a></p></div></section>
+</div></div>
+</main>
+<footer class="wrap">
+  <p>Ember は Apple、Microsoft、各ゲーム会社とは関係のない独立したプロジェクトです。ゲーム名や画面の権利は、それぞれの権利者に帰属します。</p>
+  <nav aria-label="フッター"><a href="index.html">Ember</a><a href="why.html">開発の理由</a><a href="license.html">ライセンスと告知</a><a href="terms.html" data-link="terms">利用規約</a><a href="privacy.html">プライバシーポリシー</a></nav>
+</footer>
+<script>
+(() => {
+  const c = document.getElementById('sparks'); const g = c.getContext('2d');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let W, H, dpr, P = [];
+  function size() {
+    dpr = Math.min(devicePixelRatio || 1, 1.5); W = innerWidth; H = innerHeight; c.width = W * dpr; c.height = H * dpr; g.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const n = Math.round(Math.min(120, W * H / 14000)); P = Array.from({ length: n }, () => spawn(true));
+  }
+  function spawn(any) { return { x: Math.random() * W, y: any ? Math.random() * H : H + 10, r: 0.6 + Math.random() * 1.8, v: 8 + Math.random() * 26, s: Math.random() * 6.28, lime: Math.random() < 0.08, a: 0.25 + Math.random() * 0.6 }; }
+  let last = performance.now();
+  function draw(now) {
+    const dt = Math.min(0.05, (now - last) / 1000); last = now;
+    g.clearRect(0, 0, W, H); g.globalCompositeOperation = 'lighter';
+    for (const p of P) {
+      if (!reduce) { p.y -= p.v * dt; p.s += dt; p.x += Math.sin(p.s * 0.8) * 6 * dt; if (p.y < -10) Object.assign(p, spawn(false)); }
+      const fade = Math.min(1, p.y / (H * 0.35));
+      const col = p.lime ? '198,255,61' : (p.r > 1.6 ? '255,181,71' : '255,106,31');
+      const grd = g.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 5);
+      grd.addColorStop(0, `rgba(${col},${p.a * fade})`); grd.addColorStop(1, `rgba(${col},0)`);
+      g.fillStyle = grd; g.beginPath(); g.arc(p.x, p.y, p.r * 5, 0, 6.283); g.fill();
+    }
+    if (!reduce) requestAnimationFrame(draw);
+  }
+  size(); addEventListener('resize', () => { size(); if (reduce) draw(performance.now()); });
+  requestAnimationFrame(draw);
+})();
+</script>
+<script>
+/* 링크·값은 assets/site-config.json 한곳에서 읽는다 (출시 때 실제 주소로 교체). 못 읽으면 HTML 기본값을 그대로 둔다. */
+fetch('../assets/site-config.json').then((r) => { if (!r.ok) throw new Error('config'); return r.json(); }).then((c) => {
+  document.querySelectorAll('[data-link]').forEach((a) => { const v = c[a.dataset.link]; if (v) a.setAttribute('href', v.replace('https://eunggg0.github.io/ember-site/', './')); });
+  document.querySelectorAll('[data-cfg]').forEach((el) => { const v = c[el.dataset.cfg]; if (v) el.textContent = v; });
+}).catch(() => {});
+</script>
+</body>
+</html>

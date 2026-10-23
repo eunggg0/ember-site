@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b0908">
+<meta name="color-scheme" content="dark">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<link rel="canonical" href="https://eunggg0.github.io/ember-site/en/source.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Ember">
+<meta property="og:locale" content="en_US">
+<meta property="og:title" content="Ember source code">
+<meta property="og:description" content="Source code for open-source components modified by Ember, including Wine, DXMT, and FEX, will be published here on release day. This page explains what will be available.">
+<meta property="og:url" content="https://eunggg0.github.io/ember-site/en/source.html">
+<meta property="og:image" content="https://eunggg0.github.io/ember-site/assets/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Ember character and Windows game launcher for Mac. Game compatibility and launch settings.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Ember source code">
+<meta name="twitter:description" content="Source code for open-source components modified by Ember, including Wine, DXMT, and FEX, will be published here on release day. This page explains what will be available.">
+<meta name="twitter:image" content="https://eunggg0.github.io/ember-site/assets/og.jpg">
+<title>Ember source code</title>
+<meta name="description" content="Source code for open-source components modified by Ember, including Wine, DXMT, and FEX, will be published here on release day. This page explains what will be available.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Hahmlet:wght@500;700&family=IBM+Plex+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column over a quiet ember-spark backdrop; same tokens as the main page. Single committed dark look. */
+:root{
+  color-scheme:dark;
+  --ink:#0a0706; --ink-2:#14100d; --ash:#efe6dc; --ash-dim:#b2a79c; --ash-faint:#998d82;
+  --ember:#ff6a1f; --gold:#ffb547; --lime:#ffb547;
+  --glass:rgba(255,236,220,.05); --line:rgba(255,214,180,.14);
+  --f-display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
+  --f-body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+  --gutter:clamp(16px,5vw,72px);
+  --t-xs:12px; --t-sm:14px; --t-md:16.5px; --t-lg:clamp(21px,2.2vw,27px); --t-xl:clamp(32px,5vw,62px);
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box}
+html{background:var(--ink);scroll-behavior:smooth}
+body{margin:0;background:var(--ink);color:var(--ash);font-family:var(--f-body);font-size:var(--t-md);line-height:1.72;-webkit-font-smoothing:antialiased;overflow-x:hidden;word-break:keep-all;overflow-wrap:break-word}
+a{color:var(--gold);text-underline-offset:3px}
+a:hover{color:var(--ash)}
+:focus-visible{outline:2px solid var(--lime);outline-offset:3px;border-radius:6px}
+h1,h2,h3{margin:0;text-wrap:balance;font-weight:700;letter-spacing:-.01em}
+p{margin:0}
+[hidden]{display:none!important}
+#sparks{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.glow{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(60% 45% at 75% 0%,rgba(255,106,31,.16),transparent 70%),radial-gradient(40% 35% at 0% 100%,rgba(255,181,71,.05),transparent 70%)}
+.nav,main,footer{position:relative;z-index:2}
+.nav{position:sticky;top:0;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px var(--gutter);background:rgba(10,7,6,.96);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ash);font-family:var(--f-display);font-weight:900;font-size:21px;letter-spacing:.14em}
+.brand svg{width:19px;height:25px}
+.nav ul{display:flex;flex-wrap:wrap;gap:2px;list-style:none;margin:0;padding:0}
+.nav li a{display:block;padding:7px 12px;border-radius:999px;font-size:var(--t-sm);text-decoration:none;color:var(--ash-dim)}
+.nav li a:hover{color:var(--ash);background:var(--glass)}
+.nav li a[aria-current="page"]{color:var(--ash);background:rgba(255,181,71,.12)}
+.wrap{padding-inline:var(--gutter)}
+.col{max-width:820px;margin-inline:auto}
+.eyebrow{font-family:var(--f-mono);font-size:var(--t-xs);letter-spacing:.08em;color:var(--gold)}
+.page-head{padding-block:clamp(56px,10vh,110px) 40px}
+.page-head h1{font-size:var(--t-xl);line-height:1.16;margin-top:14px}
+.page-head .lead{margin-top:18px;color:var(--ash-dim);max-width:38em}
+.muted{color:var(--ash-dim)}
+footer{margin-top:80px;padding-block:28px 32px;border-top:1px solid var(--line);background:rgba(10,7,6,.85);display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px 24px;font-size:var(--t-xs);color:var(--ash-faint)}
+footer nav{display:flex;flex-wrap:wrap;gap:6px 18px}
+footer a{color:var(--ash-dim);text-decoration:none}
+footer a:hover{color:var(--ash)}
+@media (max-width:760px){ .nav{flex-wrap:wrap} .nav ul{width:100%;overflow-x:auto;flex-wrap:nowrap;margin-inline:-6px} .nav li a{white-space:nowrap} }
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto} *{animation:none!important;transition:none!important}}
+
+.toc{display:flex;flex-wrap:wrap;gap:8px;margin-top:26px}
+.toc a{display:inline-block;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--glass);color:var(--ash-dim);text-decoration:none;font-size:var(--t-sm)}
+.toc a:hover{color:var(--ash)}
+.sec{padding-block:44px 8px;border-top:1px solid var(--line);scroll-margin-top:80px}
+.sec h2{display:flex;align-items:baseline;gap:14px;font-size:var(--t-lg);line-height:1.35}
+.sec h2 .k{font-family:var(--f-display);font-weight:900;font-size:1.5em;color:var(--gold);min-width:1.4em}
+.sec .txt{margin-top:14px;display:grid;gap:12px;color:var(--ash-dim);max-width:44em}
+.sec .txt strong{color:var(--ash);font-weight:500}
+.tbl{margin-top:18px;overflow-x:auto;border:1px solid var(--line);border-radius:16px;background:rgba(20,16,13,.6);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+table{width:100%;border-collapse:collapse;font-size:var(--t-sm);min-width:560px}
+th,td{text-align:left;vertical-align:top;padding:10px 14px;border-bottom:1px solid var(--line)}
+thead th{font-family:var(--f-mono);font-size:var(--t-xs);font-weight:500;letter-spacing:.04em;color:var(--gold);background:rgba(255,181,71,.05)}
+tbody tr:last-child td{border-bottom:0}
+td b{color:var(--ash);font-weight:500}
+td{color:var(--ash-dim)}
+tr.grp th{font-size:var(--t-xs);color:var(--ash);background:rgba(255,236,220,.04);font-weight:500;letter-spacing:.02em}
+.ob{display:inline-block;padding:2px 8px;border-radius:999px;font-size:11px;font-family:var(--f-mono);white-space:nowrap}
+.ob.src{color:var(--lime);border:1px solid rgba(255,181,71,.35)}
+.ob.ntc{color:var(--ash-dim);border:1px solid var(--line)}
+.legend{margin-top:10px;font-size:var(--t-xs);color:var(--ash-faint)}
+ol.restr{margin:6px 0 0;padding-left:1.4em;display:grid;gap:4px;font-size:var(--t-sm)}
+.callout{margin-top:16px;padding:16px 18px;border-radius:16px;border:1px solid rgba(255,181,71,.25);background:rgba(255,181,71,.04);color:var(--ash-dim);font-size:var(--t-sm)}
+.btn{display:inline-flex;align-items:center;gap:8px;margin-top:6px;padding:10px 16px;border-radius:999px;border:1px solid rgba(255,181,71,.4);color:var(--lime);text-decoration:none;font-size:var(--t-sm);background:rgba(255,181,71,.06);width:max-content}
+
+.sum{margin-top:26px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:10px}
+.sum div{padding:16px 18px;border-radius:16px;background:var(--glass);border:1px solid var(--line)}
+.sum b{display:block;color:var(--ash);font-weight:500}
+.sum span{display:block;margin-top:4px;font-size:var(--t-sm);color:var(--ash-dim)}
+.na{display:inline-block;margin-left:8px;padding:2px 8px;border-radius:999px;font-family:var(--f-mono);font-size:11px;color:var(--ash-dim);border:1px solid var(--line);vertical-align:middle}
+
+
+/* 10-07 siteredesign: 첫 페이지와 같은 제목 서체(Hahmlet) */
+:root{--f-head:"Hahmlet","Noto Serif KR","AppleMyungjo",serif}
+.page-head h1,.chap h2,.sec h2{font-family:var(--f-head);letter-spacing:-.025em}
+
+/* 10-08 ghpages: 누름 자리 44px 이상(휴대폰), 좌우 안전 영역 */
+@media (pointer:coarse){.nav li a{padding-block:12px}footer a,footer nav a{display:inline-flex;align-items:center;min-height:44px}.brand{min-height:44px}}
+:root{--gutter:max(clamp(16px,5vw,72px),env(safe-area-inset-left,0px),env(safe-area-inset-right,0px))}
+</style>
+<link rel="stylesheet" href="../assets/site-shell.css">
+<script src="../assets/site-shell.js" defer></script>
+
+<link rel="alternate" hreflang="ko" href="https://eunggg0.github.io/ember-site/ko/source.html">
+<link rel="alternate" hreflang="en" href="https://eunggg0.github.io/ember-site/en/source.html">
+<link rel="alternate" hreflang="ja" href="https://eunggg0.github.io/ember-site/ja/source.html">
+<link rel="alternate" hreflang="zh-Hans" href="https://eunggg0.github.io/ember-site/zh-Hans/source.html">
+<link rel="alternate" hreflang="zh-Hant" href="https://eunggg0.github.io/ember-site/zh-Hant/source.html">
+<link rel="alternate" hreflang="x-default" href="https://eunggg0.github.io/ember-site/source.html">
+<script src="../assets/language.js" defer></script>
+</head>
+<body>
+<canvas id="sparks" aria-hidden="true"></canvas><div class="glow" aria-hidden="true"></div>
+<header class="nav">
+  <a class="brand" href="index.html" aria-label="Ember home">
+    <svg viewBox="0 0 100 130" aria-hidden="true"><path fill="url(#fl)" fill-rule="evenodd" d="M50 4C62 30 88 52 88 82C88 108 70 126 50 126C30 126 12 108 12 84C12 64 24 52 32 40C34 54 40 60 46 62C42 44 44 24 50 4ZM50 71a17 17 0 1 0 0.01 0Z"/><defs><linearGradient id="fl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffb547"/><stop offset="1" stop-color="#ff6a1f"/></linearGradient></defs></svg>
+    EMBER
+  </a>
+  <ul>
+    <li><a href="index.html#perf">Performance</a></li>
+    <li><a href="index.html#features">Features</a></li>
+    <li><a href="why.html">Why Ember</a></li>
+    <li><a href="license.html">Licenses</a></li>
+    <li><a href="privacy.html">Privacy</a></li>
+  </ul>
+</header>
+<main>
+
+<section class="page-head wrap"><div class="col">
+  <p class="callout legal-original">The Korean original takes precedence. Translations are provided for reference.</p>
+  <p class="eyebrow">Source code</p>
+  <h1>We publish all open-source code modified by Ember</h1>
+  <p class="lead">Ember has not been released yet. Changes to components such as Wine and DXMT are still evolving. To provide source code that exactly matches the distributed build, we will publish it here on the day of the first release.</p>
+  <div class="sum">
+    <div><b>When</b><span>On the day of the app’s first release. Source code for each subsequent release will also be published.</span></div>
+    <div><b>What is included</b><span>Complete source code for open-source components modified by Ember, including our changes and build instructions.</span></div>
+    <div><b>Not included</b><span>The Ember app and our own engine, EmberCore. These are separate programs from the open-source components.</span></div>
+  </div>
+  <nav class="toc" aria-label="On this page">
+    <a href="#what">What we publish</a><a href="#with">Accompanying materials</a><a href="#own">What remains private</a><a href="#when">When and where</a>
+  </nav>
+</div></section>
+<div class="wrap"><div class="col">
+<section class="sec" id="what"><h2><span class="k">1</span>What we publish</h2><div class="txt"><p>Source code for the following open-source components included in Ember, with all of Ember’s modifications.</p>
+<ul><li><b>Wine</b> — Wine based on CrossOver’s published source (Rosetta engine), Wine 11 ARM64 (FEX engine), and the x86_64 build. LGPL</li>
+<li><b>DXMT</b> — DirectX 11·12 to Metal translator (d3d11·d3d12·dxgi·winemetal). LGPL</li>
+<li><b>FEX</b> — Engine for translating x86 code on ARM (ARM64EC). MIT</li>
+<li><b>DXVK</b> — CrossOver published-source build. zlib</li>
+<li><b>GStreamer, GLib, FFmpeg, and others</b> — Video and audio playback libraries. LGPL</li>
+<li><b>wine-gecko</b> — MPL</li>
+<li><b>7 Wine changes from ForgePlay</b> — Originals and notices</li></ul>
+  <p class="legend">The 10/20 installation includes improvements to GPU result readback and waiting in DXMT, plus automatic adjustment of the low-latency presentation queue. Changes within open-source components, including interfaces that call EmberCore, are also covered by source disclosure.</p></div></section>
+<section class="sec" id="with"><h2><span class="k">2</span>Accompanying materials</h2><div class="txt"><ul>
+<li>Ember’s changes to the original source (patch series) and a list of modified files</li>
+<li>The configuration and scripts used for the actual build, with rebuild instructions</li>
+<li>A copy of the original archive and its SHA-256</li>
+<li>How to identify the source used for the distributed binaries</li></ul></div></section>
+<section class="sec" id="own"><h2><span class="k">3</span>What remains private</h2><div class="txt"><p>The Ember app, our independently developed EmberCore engine (frame generation, text protection, image refinement, and more), trained models, and the Ember character and artwork.</p><p>EmberCore is a separate library from the open-source components; LGPL components are loaded as shared libraries. Ember’s modifications and interfaces within LGPL components are published under section 1 above.</p></div><a class="btn" href="license.html">View licenses and notices</a></section>
+<section class="sec" id="when"><h2><span class="k">4</span>When and where</h2><div class="txt"><p>On the day the app becomes available, we will post the public repository address and download links here. After release, please contact us if you cannot obtain the source or find anything missing.</p></div><a class="btn" href="mailto:realnoma@naver.com" data-link="contact">Contact us</a></section>
+</div></div>
+</main>
+<footer class="wrap">
+  <p>Ember is an independent project with no affiliation to Apple, Microsoft, or the game companies. Game names and screenshots belong to their respective rights holders.</p>
+  <nav aria-label="Footer"><a href="index.html">Ember</a><a href="why.html">Why Ember</a><a href="license.html">Licenses and notices</a><a href="terms.html" data-link="terms">Terms of service</a><a href="privacy.html">Privacy policy</a></nav>
+</footer>
+<script>
+(() => {
+  const c = document.getElementById('sparks'); const g = c.getContext('2d');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let W, H, dpr, P = [];
+  function size() {
+    dpr = Math.min(devicePixelRatio || 1, 1.5); W = innerWidth; H = innerHeight; c.width = W * dpr; c.height = H * dpr; g.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const n = Math.round(Math.min(120, W * H / 14000)); P = Array.from({ length: n }, () => spawn(true));
+  }
+  function spawn(any) { return { x: Math.random() * W, y: any ? Math.random() * H : H + 10, r: 0.6 + Math.random() * 1.8, v: 8 + Math.random() * 26, s: Math.random() * 6.28, lime: Math.random() < 0.08, a: 0.25 + Math.random() * 0.6 }; }
+  let last = performance.now();
+  function draw(now) {
+    const dt = Math.min(0.05, (now - last) / 1000); last = now;
+    g.clearRect(0, 0, W, H); g.globalCompositeOperation = 'lighter';
+    for (const p of P) {
+      if (!reduce) { p.y -= p.v * dt; p.s += dt; p.x += Math.sin(p.s * 0.8) * 6 * dt; if (p.y < -10) Object.assign(p, spawn(false)); }
+      const fade = Math.min(1, p.y / (H * 0.35));
+      const col = p.lime ? '255,181,71' : (p.r > 1.6 ? '255,181,71' : '255,106,31');
+      const grd = g.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 5);
+      grd.addColorStop(0, `rgba(${col},${p.a * fade})`); grd.addColorStop(1, `rgba(${col},0)`);
+      g.fillStyle = grd; g.beginPath(); g.arc(p.x, p.y, p.r * 5, 0, 6.283); g.fill();
+    }
+    if (!reduce) requestAnimationFrame(draw);
+  }
+  size(); addEventListener('resize', () => { size(); if (reduce) draw(performance.now()); });
+  requestAnimationFrame(draw);
+})();
+</script>
+<script>
+/* 링크·값은 assets/site-config.json 한곳에서 읽는다 (출시 때 실제 주소로 교체). 못 읽으면 HTML 기본값을 그대로 둔다. */
+fetch('../assets/site-config.json').then((r) => { if (!r.ok) throw new Error('config'); return r.json(); }).then((c) => {
+  document.querySelectorAll('[data-link]').forEach((a) => { const v = c[a.dataset.link]; if (v) a.setAttribute('href', v.replace('https://eunggg0.github.io/ember-site/', './')); });
+  document.querySelectorAll('[data-cfg]').forEach((el) => { const v = c[el.dataset.cfg]; if (v) el.textContent = v; });
+}).catch(() => {});
+</script>
+</body>
+</html>

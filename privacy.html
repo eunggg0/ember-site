@@ -120,6 +120,13 @@ ol.restr{margin:6px 0 0;padding-left:1.4em;display:grid;gap:4px;font-size:var(--
 <link rel="stylesheet" href="assets/site-shell.css">
 <script src="assets/site-shell.js" defer></script>
 
+<link rel="alternate" hreflang="ko" href="https://eunggg0.github.io/ember-site/ko/privacy.html">
+<link rel="alternate" hreflang="en" href="https://eunggg0.github.io/ember-site/en/privacy.html">
+<link rel="alternate" hreflang="ja" href="https://eunggg0.github.io/ember-site/ja/privacy.html">
+<link rel="alternate" hreflang="zh-Hans" href="https://eunggg0.github.io/ember-site/zh-Hans/privacy.html">
+<link rel="alternate" hreflang="zh-Hant" href="https://eunggg0.github.io/ember-site/zh-Hant/privacy.html">
+<link rel="alternate" hreflang="x-default" href="https://eunggg0.github.io/ember-site/privacy.html">
+<script src="assets/language.js" defer></script>
 </head>
 <body>
 <canvas id="sparks" aria-hidden="true"></canvas><div class="glow" aria-hidden="true"></div>
@@ -138,10 +145,10 @@ ol.restr{margin:6px 0 0;padding-left:1.4em;display:grid;gap:4px;font-size:var(--
 </header>
 <main>
 
-<section class="page-head wrap"><div class="col">
+<section class="page-head wrap"><div class="col"><span id="en" aria-hidden="true"></span><p class="legal-notice">한국어 원문이 우선합니다(번역은 참고용).</p>
   <p class="eyebrow">개인정보 처리방침</p>
   <h1>Ember는 꼭 필요한 정보만 처리합니다</h1>
-  <p class="lead">Ember에는 회원가입, 광고, 분석 도구가 없습니다. 엠버 AI의 음성·화면·대화 처리는 지금처럼 모두 맥 안에서 이뤄집니다. 맥 밖으로 나가는 것은 라이선스 확인과 이용 정책 확인에 쓰는 기기 식별 해시·라이선스 정보·앱 버전, 그리고 이용자가 동의하고 직접 보낸 로그뿐입니다. 아래에 무엇을, 왜, 얼마 동안, 어디에 두는지 정확히 적었습니다. <a href="#en">English</a></p>
+  <p class="lead">Ember에는 회원가입, 광고, 분석 도구가 없습니다. 엠버 AI의 음성·화면·대화 처리는 지금처럼 모두 맥 안에서 이뤄집니다. 맥 밖으로 나가는 것은 라이선스 확인과 이용 정책 확인에 쓰는 기기 식별 해시·라이선스 정보·앱 버전, 그리고 이용자가 동의하고 직접 보낸 로그뿐입니다. 아래에 무엇을, 왜, 얼마 동안, 어디에 두는지 정확히 적었습니다.</p>
   <div class="sum">
     <div><b>꼭 필요한 것만</b><span>이름·이메일·결제 정보는 Ember 서버로 받지 않습니다. 기기는 원래 값 대신 해시로만 구분합니다.</span></div>
     <div><b>로그는 동의할 때만</b><span>‘로그 보내기’는 보낼 내용을 모두 보여 주고, 개인 정보를 가린 뒤, 이용자가 동의해야만 보냅니다. 30일 뒤 지웁니다.</span></div>
@@ -241,44 +248,6 @@ ol.restr{margin:6px 0 0;padding-left:1.4em;display:grid;gap:4px;font-size:var(--
 </div><a class="btn" href="mailto:realnoma@naver.com" data-link="contact">문의하기</a></section>
 
 <section class="sec" id="date"><h2><span class="k">12</span>시행일과 변경</h2><div class="txt"><p>이 방침은 <span data-cfg="privacyEffective">2026년 10월 20일</span>부터 시행합니다. 내용이 바뀌면 시행 7일 전까지 이 페이지와 앱에서 알리고, 이용자 권리에 중요한 변경은 30일 전까지 알립니다.</p><p>이전 방침: <a href="privacy-2026-10-01.html">2026년 10월 1일 시행본</a></p></div></section>
-
-<section class="sec" id="en" lang="en"><h2>Ember Privacy Policy</h2><div class="txt"><p>Effective <span data-cfg="privacyEffectiveEn">October 20, 2026</span>. This English text is a translation; if it differs from the Korean text above, the Korean text prevails.</p></div></section>
-<section class="sec" lang="en"><h2>1. What we process and why</h2><div class="txt">
-  <p>Ember has no sign-up, ads or analytics. Voice, screen and conversation processing for the Ember assistant stays on your Mac. Only the following leaves your Mac:</p>
-  <ol class="restr">
-    <li><b>Trial registration</b> (automatic on first launch): device hash, app version, trial start time — to track the trial period and prevent repeated trials.</li>
-    <li><b>License activation and removal</b>: license key, device hash, app version — to verify purchases and limit one key to two Macs.</li>
-    <li><b>License refresh</b> (every 6 hours): license number, device hash, app version — to apply refunds and check update eligibility.</li>
-    <li><b>Policy check</b> (at launch and every 30 minutes): device hash, license number (if any), app version and build; the server records first and last check times — to stop new game launches for faulty versions or specific devices (see 6).</li>
-    <li><b>Send Logs</b> (optional, only when you agree and press Send): app and Mac info (Ember version/build, Mac model, chip, memory, macOS version, language), the records you select (end of Ember run logs, settings change log, Frame Check results, crash type and location from the last 14 days), your note, device hash, and for paid licenses the license number, plan and the payment platform's customer number — to find and fix problems.</li>
-    <li><b>Purchase</b>: Polar processes payments on its own checkout page; payment details never reach Ember's server. In the Polar seller dashboard the Ember developer can see the order number, buyer name and email, and the product, amount and date of the order, used only for order checks, refunds and purchase support; this is not copied to Ember's server.</li>
-  </ol>
-  <p>The <b>device hash</b> is a salted SHA-256 of your Mac's hardware UUID; the UUID itself is never sent or stored. The license number is assigned by our server; the customer number is the payment platform's internal ID, not a name or email.</p>
-  <p>Before logs are sent, Ember automatically masks user and full names, home paths, email, IP and MAC addresses, tokens, cookies and passwords, license keys and tokens, Steam and STOVE account names and IDs, and computer name, serial number and hardware UUID. Masking is automatic and may miss something, so review the full preview first, turn off anything you do not want to send, or use Save to File instead.</p>
-</div></section>
-<section class="sec" lang="en"><h2>2. Information kept on your Mac</h2><div class="txt"><p>Microphone audio, assistant conversations and memory, game screen analysis, voice synthesis, run and measurement logs, settings and launcher accounts are processed only on your Mac. Run and measurement logs leave your Mac only when you choose them in Send Logs and agree.</p></div></section>
-<section class="sec" lang="en"><h2>3. Retention and deletion</h2><div class="txt">
-  <p>Granted periods (trial extensions, temporary usage periods, update-period extensions): the server stores the end date and an internal reason against the device fingerprint hash or license number, delivers it to the app in a signed response, and deletes it when the grant is cancelled or together with the device or license record.</p>
-  <p>Records are deleted hourly by the server once their period ends. Received logs: 30 days after receipt, or sooner on request. License records (key, registered device hashes, plan, update period, payment platform order and customer numbers): while the license is in use, then 5 years after it ends (refund, revocation or expiry); removing a Mac deletes its device hash from the license record immediately. Revocation list: 5 years after revocation. Trial records: 1 year after the last check (trial registration or policy check). Policy check records: only the latest one per device is kept (each check overwrites it); for devices with neither a registered license nor a trial record (such as removed Macs), 1 year after the last check. Suspension flags: deleted as soon as the suspension is lifted, otherwise together with the device or license records above. Admin records: 3 years. Send Logs rate counters: 2 days. Server access logs: the period set by Railway for our plan (up to 30 days).</p>
-  <p>If you ask for deletion earlier, we delete without delay, except that license records and the revocation list linked to purchases and refunds are kept separately for the 5-year period required by Korean e-commerce consumer protection law and used only for that purpose. Ember does not make separate backup copies of the server database.</p>
-  <p>Electronic records are deleted in a way that cannot be restored. Records on your Mac stay until you delete them.</p>
-</div></section>
-<section class="sec" lang="en"><h2>4. Sharing with third parties</h2><div class="txt"><p>We do not provide your personal information to third parties, except where required by law.</p></div></section>
-<section class="sec" lang="en"><h2>5. Processors and transfer outside Korea</h2><div class="txt">
-  <p>The Ember license server runs on Railway's cloud, so the data listed in 1 is transferred to and stored in the United States. Recipient: Railway Corporation (548 Market St PMB 68956, San Francisco, CA 94104, USA; privacy@railway.com). Country: United States (server region: California). Items: everything listed in 1 that is sent to the server, and the server records in 3. When and how: at each trial registration, activation, refresh and policy check, and when you send logs, over encrypted HTTPS. Purpose and period: hosting and storage, for the periods in 3 or until the contract ends. How to refuse: do not send logs (Save to File stays on your Mac). License and policy checks are required to provide the license; if you do not want them, you may stop using Ember and request deletion under 8. Ember keeps working offline for 14 days.</p>
-  <p>Payments are handled by Polar as merchant of record under Polar's privacy policy. On activation, refresh and removal, our server sends the license key and device hash (activation label) over HTTPS to Polar Software, Inc. (USA, privacy@polar.sh) to verify the license.</p>
-</div></section>
-<section class="sec" lang="en"><h2>6. License server and network connections</h2><div class="txt">
-  <p>Ember connects to the Ember license server (Railway, US) for the items in 1, to Polar via our server for license checks, to Hugging Face when you download AI models, to Microsoft for VC++ runtimes, to the GitHub API for runtime updates, and to launchers, games and links you open. Those services receive ordinary connection data such as IP address and are governed by their own policies.</p>
-  <p><b>Policy check.</b> If a released version has a serious problem, or a device or license is refunded, misused or in breach of the terms, Ember may use a signed policy to stop <b>new game launches only</b> for that version or device, with an explanation and update link. It never deletes your games, bottles, saves or settings, never closes running games and collects nothing beyond the items in 1. Offline, the last signed policy applies; if none was ever received, nothing is blocked.</p>
-  <p><b>Devices.</b> One license key works on up to two Macs. Removing a Mac in the app frees the seat and immediately deletes its device hash from the license record; its policy check record is deleted on the schedule in 3.</p>
-</div></section>
-<section class="sec" lang="en"><h2>7. Mac permissions</h2><div class="txt"><p>Microphone, Speech Recognition and Screen Recording are requested only when you turn on the related feature; Local Network and Notifications are requested by macOS. You can revoke them anytime in System Settings › Privacy &amp; Security; game launching is not affected.</p></div></section>
-<section class="sec" lang="en"><h2>8. Your rights</h2><div class="txt"><p>You may ask to access, correct or delete your personal information, or to stop its processing, and you may withdraw consent at any time. Contact us at the address in 11 with your license key or the receipt number shown after sending logs. We will verify your request and act on it without delay. A legal representative or authorized agent may also make a request.</p></div></section>
-<section class="sec" lang="en"><h2>9. Security</h2><div class="txt"><p>Voice, screen and conversations never leave your Mac. Devices are identified only by hash. Traffic is encrypted with HTTPS, and licenses and policies are followed only after their signatures are verified. Logs are masked on your Mac before sending and deleted from the server after 30 days. Server access logs do not record IP addresses. Admin functions require the developer's signing key and are logged.</p></div></section>
-<section class="sec" lang="en"><h2>10. This website</h2><div class="txt"><p>This website uses no cookies or analytics. Fonts load from Google Fonts and scripts from jsDelivr, and the hosting service may keep ordinary access logs, under their own policies.</p></div></section>
-<section class="sec" lang="en"><h2>11. Privacy officer and contact</h2><div class="txt"><p>Privacy officer: Eunghyun Kim (developer) · <a href="mailto:realnoma@naver.com" data-link="contact">realnoma@naver.com</a></p></div></section>
-<section class="sec" lang="en"><h2>12. Changes</h2><div class="txt"><p>We will announce changes on this page and in the app at least 7 days before they take effect, or 30 days for changes that matter to your rights.</p></div></section>
 
 </div></div>
 </main>

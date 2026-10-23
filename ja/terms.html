@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b0908">
+<meta name="color-scheme" content="dark">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<link rel="canonical" href="https://eunggg0.github.io/ember-site/ja/terms.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Ember">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:title" content="Ember 利用規約">
+<meta property="og:description" content="Ember アプリと独自エンジン EmberCore の利用条件、LGPL コンポーネントに関する権利、保証の免責とお問い合わせ先。">
+<meta property="og:url" content="https://eunggg0.github.io/ember-site/ja/terms.html">
+<meta property="og:image" content="https://eunggg0.github.io/ember-site/assets/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="EmberのキャラクターとMac用Windowsゲームランチャー。ゲームの互換性と起動設定。">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Ember 利用規約">
+<meta name="twitter:description" content="Ember アプリと独自エンジン EmberCore の利用条件、LGPL コンポーネントに関する権利、保証の免責とお問い合わせ先。">
+<meta name="twitter:image" content="https://eunggg0.github.io/ember-site/assets/og.jpg">
+<title>Ember 利用規約</title>
+<meta name="description" content="Ember アプリと独自エンジン EmberCore の利用条件、LGPL コンポーネントに関する権利、保証の免責とお問い合わせ先。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Hahmlet:wght@500;700&family=IBM+Plex+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column over a quiet ember-spark backdrop; same tokens as the main page. Single committed dark look. */
+:root{
+  color-scheme:dark;
+  --ink:#0a0706; --ink-2:#14100d; --ash:#efe6dc; --ash-dim:#b2a79c; --ash-faint:#998d82;
+  --ember:#ff6a1f; --gold:#ffb547; --lime:#c6ff3d;
+  --glass:rgba(255,236,220,.05); --line:rgba(255,214,180,.14);
+  --f-display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
+  --f-body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+  --gutter:clamp(16px,5vw,72px);
+  --t-xs:12px; --t-sm:14px; --t-md:16.5px; --t-lg:clamp(21px,2.2vw,27px); --t-xl:clamp(32px,5vw,62px);
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box}
+html{background:var(--ink);scroll-behavior:smooth}
+body{margin:0;background:var(--ink);color:var(--ash);font-family:var(--f-body);font-size:var(--t-md);line-height:1.72;-webkit-font-smoothing:antialiased;overflow-x:hidden;word-break:keep-all;overflow-wrap:break-word}
+a{color:var(--gold);text-underline-offset:3px}
+a:hover{color:var(--ash)}
+:focus-visible{outline:2px solid var(--lime);outline-offset:3px;border-radius:6px}
+h1,h2,h3{margin:0;text-wrap:balance;font-weight:700;letter-spacing:-.01em}
+p{margin:0}
+[hidden]{display:none!important}
+#sparks{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.glow{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(60% 45% at 75% 0%,rgba(255,106,31,.16),transparent 70%),radial-gradient(40% 35% at 0% 100%,rgba(198,255,61,.05),transparent 70%)}
+.nav,main,footer{position:relative;z-index:2}
+.nav{position:sticky;top:0;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px var(--gutter);background:rgba(10,7,6,.96);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ash);font-family:var(--f-display);font-weight:900;font-size:21px;letter-spacing:.14em}
+.brand svg{width:19px;height:25px}
+.nav ul{display:flex;flex-wrap:wrap;gap:2px;list-style:none;margin:0;padding:0}
+.nav li a{display:block;padding:7px 12px;border-radius:999px;font-size:var(--t-sm);text-decoration:none;color:var(--ash-dim)}
+.nav li a:hover{color:var(--ash);background:var(--glass)}
+.nav li a[aria-current="page"]{color:var(--ash);background:rgba(255,181,71,.12)}
+.wrap{padding-inline:var(--gutter)}
+.col{max-width:820px;margin-inline:auto}
+.eyebrow{font-family:var(--f-mono);font-size:var(--t-xs);letter-spacing:.08em;color:var(--gold)}
+.page-head{padding-block:clamp(56px,10vh,110px) 40px}
+.page-head h1{font-size:var(--t-xl);line-height:1.16;margin-top:14px}
+.page-head .lead{margin-top:18px;color:var(--ash-dim);max-width:38em}
+.muted{color:var(--ash-dim)}
+footer{margin-top:80px;padding-block:28px 32px;border-top:1px solid var(--line);background:rgba(10,7,6,.85);display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px 24px;font-size:var(--t-xs);color:var(--ash-faint)}
+footer nav{display:flex;flex-wrap:wrap;gap:6px 18px}
+footer a{color:var(--ash-dim);text-decoration:none}
+footer a:hover{color:var(--ash)}
+@media (max-width:760px){ .nav{flex-wrap:wrap} .nav ul{width:100%;overflow-x:auto;flex-wrap:nowrap;margin-inline:-6px} .nav li a{white-space:nowrap} }
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto} *{animation:none!important;transition:none!important}}
+
+.toc{display:flex;flex-wrap:wrap;gap:8px;margin-top:26px}
+.toc a{display:inline-block;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--glass);color:var(--ash-dim);text-decoration:none;font-size:var(--t-sm)}
+.toc a:hover{color:var(--ash)}
+.sec{padding-block:44px 8px;border-top:1px solid var(--line);scroll-margin-top:80px}
+.sec h2{display:flex;align-items:baseline;gap:14px;font-size:var(--t-lg);line-height:1.35}
+.sec h2 .k{font-family:var(--f-display);font-weight:900;font-size:1.5em;color:var(--gold);min-width:1.4em}
+.sec .txt{margin-top:14px;display:grid;gap:12px;color:var(--ash-dim);max-width:44em}
+.sec .txt strong{color:var(--ash);font-weight:500}
+.tbl{margin-top:18px;overflow-x:auto;border:1px solid var(--line);border-radius:16px;background:rgba(20,16,13,.6);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+table{width:100%;border-collapse:collapse;font-size:var(--t-sm);min-width:560px}
+th,td{text-align:left;vertical-align:top;padding:10px 14px;border-bottom:1px solid var(--line)}
+thead th{font-family:var(--f-mono);font-size:var(--t-xs);font-weight:500;letter-spacing:.04em;color:var(--gold);background:rgba(255,181,71,.05)}
+tbody tr:last-child td{border-bottom:0}
+@media (max-width:620px){table{min-width:0}thead{display:none}table,tbody,tr,td,th{display:block;width:auto}tbody tr{border-bottom:1px solid var(--line);padding:8px 0}tbody tr:last-child{border-bottom:0}td{border-bottom:0;padding:3px 14px}tr.grp th{padding:10px 14px}}
+td b{color:var(--ash);font-weight:500}
+td{color:var(--ash-dim)}
+tr.grp th{font-size:var(--t-xs);color:var(--ash);background:rgba(255,236,220,.04);font-weight:500;letter-spacing:.02em}
+.ob{display:inline-block;padding:2px 8px;border-radius:999px;font-size:11px;font-family:var(--f-mono);white-space:nowrap}
+.ob.src{color:var(--lime);border:1px solid rgba(198,255,61,.35)}
+.ob.ntc{color:var(--ash-dim);border:1px solid var(--line)}
+.legend{margin-top:10px;font-size:var(--t-xs);color:var(--ash-faint)}
+ol.restr{margin:6px 0 0;padding-left:1.4em;display:grid;gap:4px;font-size:var(--t-sm)}
+.callout{margin-top:16px;padding:16px 18px;border-radius:16px;border:1px solid rgba(198,255,61,.25);background:rgba(198,255,61,.04);color:var(--ash-dim);font-size:var(--t-sm)}
+.btn{display:inline-flex;align-items:center;gap:8px;margin-top:6px;padding:10px 16px;border-radius:999px;border:1px solid rgba(198,255,61,.4);color:var(--lime);text-decoration:none;font-size:var(--t-sm);background:rgba(198,255,61,.06);width:max-content}
+
+
+/* gen:licenses */
+.ob.own{color:var(--ash);border:1px solid rgba(255,236,220,.3)}
+.ob.trm{color:var(--gold);border:1px solid rgba(255,181,71,.4)}
+td .use{margin-top:2px;font-size:var(--t-xs);color:var(--ash-faint)}
+td .cp{margin-top:2px;font-size:var(--t-xs);color:var(--ash-faint)}
+td .nt{margin-top:4px;font-size:var(--t-xs);color:var(--ash-dim)}
+td .lt{margin-top:4px;font-size:var(--t-xs)}
+td .mod{font-size:11px;font-family:var(--f-mono);color:var(--ash-faint);white-space:nowrap}
+a.ext{font-size:var(--t-xs);white-space:nowrap}
+.sec h3{font-size:var(--t-md);color:var(--ash);margin-top:6px}
+pre.attr{margin:14px 0 0;padding:14px 16px;border-radius:12px;border:1px solid var(--line);background:rgba(20,16,13,.7);font-family:var(--f-mono);font-size:var(--t-sm);color:var(--ash);white-space:pre-wrap;overflow-wrap:anywhere}
+ul.fp{margin:12px 0 0;padding-left:1.2em;display:grid;gap:4px;font-size:var(--t-sm);color:var(--ash-dim)}
+ul.fp b{color:var(--ash);font-weight:500}
+
+/* 10-07 siteredesign: 첫 페이지와 같은 제목 서체(Hahmlet) */
+:root{--f-head:"Hahmlet","Noto Serif KR","AppleMyungjo",serif}
+.page-head h1,.sec h2{font-family:var(--f-head);letter-spacing:-.025em}
+
+/* 10-08 ghpages: 누름 자리 44px 이상(휴대폰), 좌우 안전 영역 */
+@media (pointer:coarse){.nav li a{padding-block:12px}footer a,footer nav a{display:inline-flex;align-items:center;min-height:44px}.brand{min-height:44px}}
+:root{--gutter:max(clamp(16px,5vw,72px),env(safe-area-inset-left,0px),env(safe-area-inset-right,0px))}
+
+</style>
+<link rel="stylesheet" href="../assets/site-shell.css">
+<script src="../assets/site-shell.js" defer></script>
+
+<link rel="alternate" hreflang="ko" href="https://eunggg0.github.io/ember-site/ko/terms.html">
+<link rel="alternate" hreflang="en" href="https://eunggg0.github.io/ember-site/en/terms.html">
+<link rel="alternate" hreflang="ja" href="https://eunggg0.github.io/ember-site/ja/terms.html">
+<link rel="alternate" hreflang="zh-Hans" href="https://eunggg0.github.io/ember-site/zh-Hans/terms.html">
+<link rel="alternate" hreflang="zh-Hant" href="https://eunggg0.github.io/ember-site/zh-Hant/terms.html">
+<link rel="alternate" hreflang="x-default" href="https://eunggg0.github.io/ember-site/terms.html">
+<script src="../assets/language.js" defer></script>
+</head>
+<body>
+<canvas id="sparks" aria-hidden="true"></canvas><div class="glow" aria-hidden="true"></div>
+<header class="nav">
+  <a class="brand" href="index.html" aria-label="Ember ホームへ">
+    <svg viewBox="0 0 100 130" aria-hidden="true"><path fill="url(#fl)" fill-rule="evenodd" d="M50 4C62 30 88 52 88 82C88 108 70 126 50 126C30 126 12 108 12 84C12 64 24 52 32 40C34 54 40 60 46 62C42 44 44 24 50 4ZM50 71a17 17 0 1 0 0.01 0Z"/><defs><linearGradient id="fl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffb547"/><stop offset="1" stop-color="#ff6a1f"/></linearGradient></defs></svg>
+    EMBER
+  </a>
+  <ul>
+    <li><a href="index.html#perf">性能</a></li>
+    <li><a href="index.html#features">機能</a></li>
+    <li><a href="why.html">開発の理由</a></li>
+    <li><a href="license.html">ライセンス</a></li>
+    <li><a href="privacy.html">プライバシー</a></li>
+  </ul>
+</header>
+<main>
+<section class="page-head wrap"><div class="col"><span id="en" aria-hidden="true"></span><p class="legal-notice">韓国語の原文が優先されます。翻訳は参考用です。</p><p class="eyebrow">利用規約</p><h1>Ember 利用規約</h1><p class="lead">施行日 2026-10-20 · お問い合わせ <a href="mailto:realnoma@naver.com" data-link="contact">realnoma@naver.com</a></p></div></section>
+<div class="wrap"><div class="col"><section class="sec"><h2>1. 適用範囲</h2><div class="txt"><p>本規約は、Ember アプリと Ember が独自に制作した構成要素（独自エンジン EmberCore と、その中の Ember Flow・Forge・Tone・Flare・Pulse・Boost・Lens・Guard、Ember が学習させたモデル、Ember のキャラクターとイラスト。以下「Ember 独自部分」）に適用されます。</p><p>Ember に同梱されるオープンソースの構成要素には、それぞれのライセンスが適用されます。本規約は、そのライセンスが認める権利を制限しません。一覧と全文は、アプリの「設定 › ライセンス・告知」とウェブサイトのライセンスページに掲載しています。</p></div></section><section class="sec"><h2>2. 使用許諾</h2><div class="txt"><p>Ember は、本規約を守る利用者に対し、自ら所有または管理する Mac に Ember をインストールして使用する、非独占的かつ譲渡不能な使用権を許諾します。Ember 独自部分の著作権その他の権利は Ember に帰属します。</p></div></section><section class="sec"><h2>3. 禁止事項（Ember 独自部分）</h2><div class="txt"><p>本規約または法令で認められる場合を除き、Ember 独自部分の複製・再配布・販売・貸与、改変・リバースエンジニアリング・逆コンパイル・逆アセンブル、他の製品への組み込みを目的とした抽出、著作権やライセンス表示の削除を禁止します。</p><p>違法な目的や他者の権利を侵害する目的で Ember を使用してはなりません。</p></div></section><section class="sec"><h2>4. LGPL コンポーネントに関する権利</h2><div class="txt"><p>Wine、DXMT、GStreamer、FFmpeg など GNU LGPL に従う構成要素は、個別のライブラリとして同梱されています。各ライセンスに従い、これらを改変したり、自分でビルドした版に置き換えたりできます。</p><p>LGPL 2.1 第6条に従い、個人で使用する LGPL コンポーネントの改変と、その改変のデバッグに必要な範囲で Ember をリバースエンジニアリングできます。この許可は LGPL コンポーネントの改変・置き換え・デバッグに限られ、その他の目的で Ember 独自部分をリバースエンジニアリングまたは再配布する権利を与えるものではありません。</p><p>LGPL コンポーネントのソースコードはソース公開ページから入手できます。また、Ember を受け取った日から3年間、realnoma@naver.com に請求できます。</p></div></section><section class="sec"><h2>5. ゲームと他社のサービス</h2><div class="txt"><p>Ember はゲームを販売・提供しません。ゲーム、ランチャー、ゲームアカウントには各社の利用規約が適用されます。Ember で実行するゲームは、適法に利用する権利のあるものに限ります。</p><p>D3DMetal など、利用者が別途インストールする Apple の構成要素には、Apple の使用許諾契約が適用されます。</p></div></section><section class="sec"><h2>6. AI 機能</h2><div class="txt"><p>Ember AI の回答や音声は機械が生成するもので、誤りを含むことがあります。重要な判断では、そのまま信頼しないでください。</p><p>設定からダウンロードする AI モデルには、それぞれのライセンスが適用されます。Supertonic 3 音声モデルは OpenRAIL-M の付属書 A に定める利用制限に従う必要があります。</p></div></section><section class="sec" id="policy"><h2>7. ライセンス・利用ポリシーの確認と利用停止</h2><div class="txt"><p>正規ライセンスの確認と安全な利用のため、Ember は起動時とその後の定期的な間隔で、Ember ライセンスサーバーから署名済みの利用ポリシーを受け取ります。ライセンスキー一つで Mac 2台まで使えます。アプリで Mac の登録を解除すると、その分の枠が空きます。</p><p>配布済みのバージョンに重大な問題がある場合、または特定の機器やライセンスに返金、不正利用、本規約違反がある場合、Ember はそのバージョンまたは機器で <strong>新たなゲームの起動を停止</strong> することがあります。その際は理由と更新方法をアプリで案内します。問題のない更新版が公開されるか、停止の理由が解消されると、再び使用できます。</p><p>この措置は、ゲーム、ボトル、ゲームのセーブデータ、設定などの利用者データを <strong>削除せず</strong>、実行中のゲームも終了しません。オフラインでは最後に受け取ったポリシーに従い、一度も受け取っていない場合は何も制限しません。この際にやり取りする情報と「ログを送信」は、次の方針に従います。 <a href="privacy.html">プライバシーポリシー</a>。</p><p>配布済みのバージョンの不具合など、利用者に責任のない理由で利用を停止した場合、1年間の更新ライセンスは、停止期間分だけ更新期限を延長します。無期限更新ライセンスには更新期限がないため、この扱いは適用されません。</p></div></section><section class="sec"><h2>8. 保証の免責</h2><div class="txt"><p>Ember は現状のまま提供されます。法令で認められる最大限の範囲で、商品性、特定目的への適合性、権利の非侵害を含め、いかなる保証も行いません。すべてのゲームの動作や特定の性能を保証するものではありません。</p><p>ゲームのセーブデータやその他のデータは、ご自身でバックアップしてください。</p></div></section><section class="sec"><h2>9. 責任の制限</h2><div class="txt"><p>法令で認められる範囲で、Ember の使用により生じた間接的・付随的・特別・結果的損害およびデータの消失について、Ember は責任を負いません。ただし、Ember の故意または重大な過失による損害、および消費者保護法令が責任の制限を認めない場合を除きます。</p></div></section><section class="sec"><h2>10. 使用権の終了</h2><div class="txt"><p>本規約に違反すると使用権は終了し、Ember を削除する必要があります。オープンソースの構成要素に関する権利は、それぞれのライセンスに従って引き続き有効です。</p></div></section><section class="sec"><h2>11. 規約の変更と準拠法</h2><div class="txt"><p>本規約を変更する際は、ウェブサイトとアプリでお知らせします。本規約には大韓民国の法律が適用されます。</p></div></section><section class="sec"><h2>12. お問い合わせ</h2><div class="txt"><p>本規約、ライセンス、ソースコードの請求については、realnoma@naver.com までお問い合わせください。</p></div></section></div></div>
+</main>
+<footer class="wrap">
+  <p>Ember は Apple、Microsoft、各ゲーム会社とは関係のない独立したプロジェクトです。ゲーム名や画面の権利は、それぞれの権利者に帰属します。</p>
+  <nav aria-label="フッター"><a href="index.html">Ember</a><a href="why.html">開発の理由</a><a href="license.html">ライセンスと告知</a><a href="terms.html" data-link="terms">利用規約</a><a href="privacy.html">プライバシーポリシー</a></nav>
+</footer>
+<script>
+(() => {
+  const c = document.getElementById('sparks'); const g = c.getContext('2d');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let W, H, dpr, P = [];
+  function size() {
+    dpr = Math.min(devicePixelRatio || 1, 1.5); W = innerWidth; H = innerHeight; c.width = W * dpr; c.height = H * dpr; g.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const n = Math.round(Math.min(120, W * H / 14000)); P = Array.from({ length: n }, () => spawn(true));
+  }
+  function spawn(any) { return { x: Math.random() * W, y: any ? Math.random() * H : H + 10, r: 0.6 + Math.random() * 1.8, v: 8 + Math.random() * 26, s: Math.random() * 6.28, lime: Math.random() < 0.08, a: 0.25 + Math.random() * 0.6 }; }
+  let last = performance.now();
+  function draw(now) {
+    const dt = Math.min(0.05, (now - last) / 1000); last = now;
+    g.clearRect(0, 0, W, H); g.globalCompositeOperation = 'lighter';
+    for (const p of P) {
+      if (!reduce) { p.y -= p.v * dt; p.s += dt; p.x += Math.sin(p.s * 0.8) * 6 * dt; if (p.y < -10) Object.assign(p, spawn(false)); }
+      const fade = Math.min(1, p.y / (H * 0.35));
+      const col = p.lime ? '198,255,61' : (p.r > 1.6 ? '255,181,71' : '255,106,31');
+      const grd = g.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 5);
+      grd.addColorStop(0, `rgba(${col},${p.a * fade})`); grd.addColorStop(1, `rgba(${col},0)`);
+      g.fillStyle = grd; g.beginPath(); g.arc(p.x, p.y, p.r * 5, 0, 6.283); g.fill();
+    }
+    if (!reduce) requestAnimationFrame(draw);
+  }
+  size(); addEventListener('resize', () => { size(); if (reduce) draw(performance.now()); });
+  requestAnimationFrame(draw);
+})();
+</script>
+<script>
+/* 링크·값은 assets/site-config.json 한곳에서 읽는다 (출시 때 실제 주소로 교체). 못 읽으면 HTML 기본값을 그대로 둔다. */
+fetch('../assets/site-config.json').then((r) => { if (!r.ok) throw new Error('config'); return r.json(); }).then((c) => {
+  document.querySelectorAll('[data-link]').forEach((a) => { const v = c[a.dataset.link]; if (v) a.setAttribute('href', v.replace('https://eunggg0.github.io/ember-site/', './')); });
+  document.querySelectorAll('[data-cfg]').forEach((el) => { const v = c[el.dataset.cfg]; if (v) el.textContent = v; });
+}).catch(() => {});
+</script>
+</body>
+</html>
