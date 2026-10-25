@@ -13,7 +13,7 @@
 <meta property="og:site_name" content="Ember">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:title" content="Ember 源代码公开">
-<meta property="og:description" content="Ember 1.0 修改过的开源组件（Wine、DXMT、FEX 等）的源代码已公开。这里说明公开的内容和获取位置。">
+<meta property="og:description" content="说明 Ember 开源组件的源代码提供范围、对应关系及公开访问的核查状态。">
 <meta property="og:url" content="https://eunggg0.github.io/ember-site/zh-Hans/source.html">
 <meta property="og:image" content="https://eunggg0.github.io/ember-site/assets/og.jpg">
 <meta property="og:image:width" content="1200">
@@ -21,10 +21,10 @@
 <meta property="og:image:alt" content="Ember角色与Mac版Windows游戏启动器。游戏兼容性和启动设置。">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Ember 源代码公开">
-<meta name="twitter:description" content="Ember 1.0 修改过的开源组件（Wine、DXMT、FEX 等）的源代码已公开。这里说明公开的内容和获取位置。">
+<meta name="twitter:description" content="说明 Ember 开源组件的源代码提供范围、对应关系及公开访问的核查状态。">
 <meta name="twitter:image" content="https://eunggg0.github.io/ember-site/assets/og.jpg">
 <title>Ember 源代码公开</title>
-<meta name="description" content="Ember 1.0 修改过的开源组件（Wine、DXMT、FEX 等）的源代码已公开。这里说明公开的内容和获取位置。">
+<meta name="description" content="说明 Ember 开源组件的源代码提供范围、对应关系及公开访问的核查状态。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Hahmlet:wght@500;700&family=IBM+Plex+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
@@ -145,10 +145,10 @@ ol.restr{margin:6px 0 0;padding-left:1.4em;display:grid;gap:4px;font-size:var(--
 <section class="page-head wrap"><div class="col">
   <p class="callout legal-original">以韩语原文为准，译文仅供参考。</p>
   <p class="eyebrow">源代码公开</p>
-  <h1>Ember 修改过的开源代码将全部公开</h1>
-  <p class="lead">Ember 1.0 开源组件的源代码现已公开。与发布版本对应的 Ember 修改、构建方法和原始源代码压缩包均可从公开仓库获取。</p>
+  <h1>开源代码与核查状态</h1>
+  <p class="lead">本地源代码候选包包含修改和构建说明。公开仓库及发布文件的实际访问，以及与当前全部发行二进制的对应关系尚未确认。</p>
   <div class="sum">
-    <div><b>公开时间</b><span>已于 1.0 发布当天（2026 年 10 月 24 日）公开。之后每次发布都会上传对应版本的源代码。</span></div>
+    <div><b>公开时间</b><span>截至 2026-10-25 复核，公开访问及各发行版对应关系的核查尚未完成。</span></div>
     <div><b>公开范围</b><span>Ember 修改过的开源组件的完整源码、修改内容和构建方法。</span></div>
     <div><b>不公开的内容</b><span>Ember 应用及自研引擎 EmberCore。它们是与开源组件分离的独立程序。</span></div>
   </div>
@@ -157,7 +157,7 @@ ol.restr{margin:6px 0 0;padding-left:1.4em;display:grid;gap:4px;font-size:var(--
   </nav>
 </div></section>
 <div class="wrap"><div class="col">
-<section class="sec" id="what"><h2><span class="k">1</span>公开的内容</h2><div class="txt"><p>以下 Ember 所用开源组件的源码，以及 Ember 对其所做的全部修改。</p>
+<section class="sec" id="what"><h2><span class="k">1</span>公开的内容</h2><div class="txt"><p>以下组件需要或计划提供对应源代码。此列表不代表源代码完整性已获验证。</p>
 <ul><li><b>Wine</b> — 基于 CrossOver 公开源码的 Wine（Rosetta 引擎）、Wine 11 ARM64（FEX 引擎）及 x86_64 版。LGPL</li>
 <li><b>DXMT</b> — 将 DirectX 11·12 转换为 Metal 的转换器（d3d11·d3d12·dxgi·winemetal）。LGPL</li>
 <li><b>FEX</b> — 在 ARM 上转换 x86 代码的引擎（ARM64EC）。MIT</li>
@@ -171,8 +171,8 @@ ol.restr{margin:6px 0 0;padding-left:1.4em;display:grid;gap:4px;font-size:var(--
 <li>实际构建所用的配置、构建脚本及重新构建方法</li>
 <li>原始压缩包副本及 SHA-256</li>
 <li>如何确认发行二进制文件所对应的源码</li></ul></div></section>
-<section class="sec" id="own"><h2><span class="k">3</span>不公开的内容</h2><div class="txt"><p>Ember 应用、从零开发的自研引擎 EmberCore（补帧、文字保护、画质优化等）、训练模型，以及 Ember 角色和插画。</p><p>EmberCore 是与开源组件分离的独立库，LGPL 组件以共享库方式加载。Ember 在 LGPL 组件内部的修改和接口将按上述第1项公开。</p></div><a class="btn" href="license.html">查看许可证与声明</a></section>
-<section class="sec" id="when"><h2><span class="k">4</span>时间与位置</h2><div class="txt"><p>源代码位于公开仓库 github.com/eunggg0/ember-source。原始源代码压缩包可从该仓库的 v1.0 发布中获取。如无法获取源代码或发现缺失，请联系我们。</p></div><a class="btn" href="https://github.com/eunggg0/ember-source" data-link="sourceCode">开源源代码</a> <a class="btn" href="mailto:realnoma@naver.com" data-link="contact">联系我们</a></section>
+<section class="sec" id="own"><h2><span class="k">3</span>不公开的内容</h2><div class="txt"><p>Ember 应用、从零开发的自研引擎 EmberCore（补帧、文字保护、画质优化等）、训练模型，以及 Ember 角色和插画。</p><p>LGPL 组件中的修改、连接层及实际链接输入须按相应许可证要求提供。当前安装版与公开源代码的完整对应关系尚未确认。</p></div><a class="btn" href="license.html">查看许可证与声明</a></section>
+<section class="sec" id="when"><h2><span class="k">4</span>时间与位置</h2><div class="txt"><p>下方提供源代码仓库与 v1.0 发布页链接。本次审计未确认远程访问或文件接收。若无法获取所需源代码，请向 realnoma@naver.com 索取。</p></div><a class="btn" href="https://github.com/eunggg0/ember-source">源代码仓库</a> <a class="btn" href="https://github.com/eunggg0/ember-source/releases/tag/v1.0">v1.0 发布（接收未确认）</a> <a class="btn" href="mailto:realnoma@naver.com" data-link="contact">联系我们</a></section>
 </div></div>
 </main>
 <footer class="wrap">
