@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-24",
+  "updated": "2026-10-27",
   "games": [
     {
       "id": "l4d2",
@@ -84,7 +84,7 @@
       "environment": "既有紀錄： M4 Pro · 試玩版 · 各圖形路徑分別測量",
       "result": "已使用 D3DMetal 驗證遊戲內遊玩。FEX · DXMT 和 Rosetta · DXMT 也已在 FHD 下執行並測得約 60 fps（10月22日）。已修復 FEX 偶發畫面凍結（9 次中 3 次 → 7 次中 0 次）。 2026-10-24 D3D12比較：FHD · 插幀/升頻關閉 · 選單。Rosetta · D3DMetal顯示正常，但fps未測量。Rosetta · DXMT為60.0 fps（上限），FEX · DXMT為59.7 fps，啟動時分別停頓5.4秒和8.4秒。FEX隨後也記錄到最高1088 ms。另一次FEX 15款測試為60.0 fps · 彙總最大影格時間28.5 ms，未進行遊戲內效能比較。",
       "issue": "先前 DXMT 路徑記錄過 GPU 停滯和使用 FSR3 時的畫面異常，近期測量未複查。FEX 紀錄中約 290–307 ms 的最大影格時間，已確認是測量開始時首次將視窗移至前景造成的卡頓（Rosetta 也超過 600 ms）。請與 D3DMetal 結果區分。 10月24日的FEX 15款紀錄是FHD設定下的Frame Check彙總值。場景未單獨記錄，數值可能與包含啟動階段的全程最大影格時間不同。這些測試開啟了診斷取樣，因此不保證正常遊玩效能。",
-      "fps": "D3DMetal · Ember Flow · 144Hz：遊戲 60 → 平均畫面輸出 116.7 fps · 4K D3DMetal（10月23日）：遊戲約 34 → 畫面輸出約 55 fps · FHD DXMT（10月22日）：FEX、Rosetta 均約 60 fps · Rosetta D3DMetal 流暢方式的顯示改進：FHD 延遲 24.2 → 14.1 ms · 輸出 116.6 → 119.2 fps，QHD 延遲 24.2 → 15.8 ms · 輸出 114.0 → 118.8 fps · 這些數值不構成穩定性保證",
+      "fps": "D3DMetal · Ember Flow · 144Hz：遊戲 60 → 平均畫面輸出 116.7 fps · 4K D3DMetal（10月23日）：遊戲約 34 → 畫面輸出約 55 fps · 4K DXMT · 遊戲 DLSS 由 MetalFX 處理（10月27日）：不使用 DLSS 約 15 fps → 遊戲 28 fps · Ember Flow 畫面輸出約 55 fps（Rosetta、FEX 相同） · FHD DXMT（10月22日）：FEX、Rosetta 均約 60 fps · Rosetta D3DMetal 流暢方式的顯示改進：FHD 延遲 24.2 → 14.1 ms · 輸出 116.6 → 119.2 fps，QHD 延遲 24.2 → 15.8 ms · 輸出 114.0 → 118.8 fps · 這些數值不構成穩定性保證",
       "image": "stellar.webp"
     },
     {

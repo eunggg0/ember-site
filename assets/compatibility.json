@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-24",
+  "updated": "2026-10-27",
   "games": [
     {
       "id": "l4d2",
@@ -84,7 +84,7 @@
       "environment": "기존 기록: M4 Pro · 데모 · 그래픽 경로별 별도 측정",
       "result": "D3DMetal에서 인게임 플레이를 확인했습니다. FEX · DXMT와 Rosetta · DXMT에서도 FHD 약 60 fps로 실행·측정했고(10월 22일), FEX에서 간헐적으로 화면이 멈추던 문제도 고쳤습니다(9판 중 3판 → 7판 중 0판). 2026-10-24 D3D12 비교: FHD · 보간/업스케일 끔 · 메뉴. Rosetta · D3DMetal은 화면 정상이나 fps 미측정입니다. Rosetta · DXMT 60.0 fps(상한), FEX · DXMT 59.7 fps이며 시작 시 각각 5.4초·8.4초 멈춤이 있었습니다. FEX는 이후에도 최대 1088 ms가 기록됐습니다. 별도 FEX 15종 회차는 60.0 fps · 요약 최대 프레임 28.5 ms이며 인게임 성능 비교는 미실시입니다.",
       "issue": "예전에 DXMT 경로에서 GPU 멈춤과 FSR3 사용 시 화면 깨짐이 기록됐고, 최근 측정에서는 따로 확인하지 않았습니다. FEX 기록의 최대 프레임 시간 약 290–307 ms는 측정을 시작하며 창을 처음 앞으로 올릴 때의 끊김으로 확인했습니다(Rosetta도 600 ms 이상). D3DMetal 결과와 구분해서 보세요. 10월 24일 FEX 15종 기록은 FHD 설정의 Frame Check 요약값입니다. 장면은 따로 기록되지 않았으며, 시작 구간을 포함한 전체 최대 프레임 시간과 다를 수 있습니다. 진단용 샘플링을 켠 회차이므로 일반 플레이 성능을 보장하지 않습니다.",
-      "fps": "D3DMetal · Ember Flow · 144Hz: 게임 60 → 화면 출력 평균 116.7 fps · 4K D3DMetal(10월 23일): 게임 약 34 → 화면 출력 약 55 fps · FHD DXMT(10월 22일): FEX · Rosetta 모두 약 60 fps · Rosetta D3DMetal 부드러움 방식 표시 개선: FHD 지연 24.2 → 14.1 ms · 출력 116.6 → 119.2 fps, QHD 지연 24.2 → 15.8 ms · 출력 114.0 → 118.8 fps · 안정성 보증 수치 아님",
+      "fps": "D3DMetal · Ember Flow · 144Hz: 게임 60 → 화면 출력 평균 116.7 fps · 4K D3DMetal(10월 23일): 게임 약 34 → 화면 출력 약 55 fps · 4K DXMT · 게임 DLSS를 MetalFX로 처리(10월 27일): DLSS 없이 약 15 fps → 게임 28 fps · Ember Flow 화면 출력 약 55 fps(Rosetta · FEX 같음) · FHD DXMT(10월 22일): FEX · Rosetta 모두 약 60 fps · Rosetta D3DMetal 부드러움 방식 표시 개선: FHD 지연 24.2 → 14.1 ms · 출력 116.6 → 119.2 fps, QHD 지연 24.2 → 15.8 ms · 출력 114.0 → 118.8 fps · 안정성 보증 수치 아님",
       "image": "stellar.webp"
     },
     {

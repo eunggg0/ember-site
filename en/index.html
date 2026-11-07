@@ -283,6 +283,16 @@ main{position:relative;z-index:2}
 .live-text h3{font-family:var(--f-head);font-size:var(--t-lg);line-height:1.34}
 .live-text p{margin-top:12px;color:var(--ash-dim)}
 .live-text .facts{margin-top:22px}
+#new101{max-width:1440px;margin-inline:auto}
+#new101 .sec-head{grid-template-columns:minmax(0,1fr);gap:12px}
+#new101 .sec-head h2{font-size:clamp(30px,3.4vw,48px);text-wrap:balance}
+#new101 .sec-head .note{max-width:none}
+#new101 .live+.live{margin-top:clamp(36px,4vw,56px)}
+#new101 .nw-shot img,#new101 .small img{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:10px}
+#new101 figcaption{margin-top:10px;font-size:var(--t-sm);color:var(--ash-dim)}
+#new101 .small figcaption{margin-top:0}
+#new101 .nwfix{margin-top:18px}
+#new101 .nwfix li{grid-template-columns:minmax(0,1fr)}
 
 /* app tour */
 .tour{display:grid;grid-template-columns:minmax(0,15em) minmax(0,1fr);gap:clamp(24px,4vw,64px);margin-top:clamp(36px,6vh,64px);align-items:start}
@@ -342,7 +352,7 @@ footer p{max-width:60em}
 @media (max-width:1100px){
   .nav ul{gap:16px}
   .caps{grid-template-columns:repeat(3,minmax(0,1fr))}
-  .ix{grid-template-columns:minmax(0,13em) minmax(0,1fr)}
+  .ix{grid-template-columns:minmax(0,14em) minmax(0,1fr)}
   .ix-val{grid-column:2;text-align:left}
 }
 .menu{display:none}
@@ -527,7 +537,7 @@ footer p{max-width:60em}
         <p class="lead">Launch settings tailored to each game, with Ember Flow frame generation. If something goes wrong, ask the AI assistant running on your Mac.</p>
         <div class="hero-row">
           <a class="get" href="https://eunggg0.github.io/ember-releases/download/" data-link="download"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M6 10l6 6 6-6M4 20h16"/></svg>Download for Mac</a>
-          <span class="hero-meta">Version <span data-cfg="version">1.0</span> · Apple Silicon · macOS 14 or later</span>
+          <span class="hero-meta">Version <span data-cfg="version">1.0.1</span> · Apple Silicon · macOS 14 or later</span>
         </div>
       </div>
       <div class="hero-proof">
@@ -550,8 +560,8 @@ footer p{max-width:60em}
     </div>
     <div class="cap" style="--t:268vh">
       <p class="eyebrow">Built by Ember</p>
-      <h2>From frame generation to image enhancement.</h2>
-      <p>Ember Flow creates intermediate frames, Ember Forge sharpens image detail, and Ember Pulse keeps frames arriving at even intervals.</p>
+      <h2>From upscaling to frame generation.</h2>
+      <p>Ember Stoke upscales a lower-resolution image to raise fps, Ember Flow creates intermediate frames, and Ember Pulse keeps frames arriving at even intervals.</p>
     </div>
     <div class="cap r" style="--t:432vh">
       <p class="eyebrow lime">Ember Flow · Frame generation</p>
@@ -561,9 +571,9 @@ footer p{max-width:60em}
     </div>
     <div class="ring-hold">
       <div class="ring-cap">
-        <p class="eyebrow">11 features built by Ember</p>
-        <h2>Eleven engines developed by Ember.</h2>
-        <p>Flow · Guard · Forge · Tone · Flare · Pulse · Boost · Kindle · Kiln · Spark · Lens. Third-party technologies such as MetalFX, DXMT, and D3DMetal keep their own names. The Ember name is reserved for what we build on top of them.</p>
+        <p class="eyebrow">12 features built by Ember</p>
+        <h2>Twelve engines developed by Ember.</h2>
+        <p>Flow · Guard · Stoke · Forge · Tone · Flare · Pulse · Boost · Kindle · Kiln · Spark · Lens. Third-party technologies such as MetalFX, DXMT, and D3DMetal keep their own names. The Ember name is reserved for what we build on top of them.</p>
       </div>
     </div>
   </section>
@@ -571,7 +581,7 @@ footer p{max-width:60em}
   <section class="mani wrap" id="mani" aria-label="Ember at a glance">
     <div class="mani-in">
       <p class="slogan"><span>Windows games,</span><span>on your Mac.</span></p>
-      <p class="prose" id="prose">Ember launches Windows games on Apple Silicon Macs. It selects an engine and graphics translator for each game, and retries with another translator if a game crashes during launch. It also includes Ember's own frame generation, image enhancement, and frame pacing. See the test scope and performance measured on an M4 Pro for each game below.</p>
+      <p class="prose" id="prose">Ember launches Windows games on Apple Silicon Macs. It selects an engine and graphics translator for each game, and retries with another translator if a game crashes during launch. It also includes Ember's own upscaling, frame generation, image enhancement, and frame pacing. See the test scope and performance measured on an M4 Pro for each game below.</p>
     </div>
   </section>
 
@@ -580,7 +590,7 @@ footer p{max-width:60em}
   <section class="sec wrap" id="screens" aria-labelledby="compat-title">
     <div class="sec-head"><p class="eyebrow">Game compatibility · Test records</p><h2 id="compat-title">What can you play?</h2><p class="note">These are games we have run and documented. Select one to see the scenes tested, launch settings, frame rates, and remaining issues.</p></div>
     <form class="compat-tools" role="search" aria-label="Search game compatibility" hidden><div><label for="compat-query">Find a game</label><input id="compat-query" type="search" placeholder="Search game names · Korean / English" autocomplete="off" aria-controls="compat-list"></div><div><label for="compat-filter">Test result</label><select id="compat-filter" aria-controls="compat-list"><option value="all">All results</option><option value="play">Gameplay tested</option><option value="issues">Has issues</option><option value="menu">Menu tested</option><option value="blocked">Launch failed</option></select></div><button type="reset">Reset</button></form>
-    <div class="compat-meta"><p id="compat-count" role="status" aria-live="polite" aria-atomic="true">22 games total · alphabetical order</p><span>Site updated <span data-cfg="siteUpdated">2026-10-24</span></span></div>
+    <div class="compat-meta"><p id="compat-count" role="status" aria-live="polite" aria-atomic="true">22 games total · alphabetical order</p><span>Site updated <span data-cfg="siteUpdated">2026-10-27</span></span></div>
     <div class="compat-head" aria-hidden="true"><span>Game</span><span>Test result</span><span>Launch settings</span><span>Test scope</span><span></span></div>
     <div id="compat-list"><details class="compat-game" id="game-l4d2" data-status="play" data-search="Left 4 Dead 2 L4D2 레프트 4 데드 2">
       <summary><span class="compat-name"><strong>Left 4 Dead 2</strong><small>Steam</small></span><span class="compat-status play">Gameplay tested</span><span class="compat-renderer">DXVK</span><span class="compat-scope">Dead Center · Local campaign</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
@@ -604,7 +614,7 @@ footer p{max-width:60em}
     </details>
 <details class="compat-game" id="game-stellar" data-status="play" data-search="Stellar Blade 스텔라 블레이드">
       <summary><span class="compat-name"><strong>Stellar Blade</strong><small>Steam · Trial</small></span><span class="compat-status play">Gameplay tested</span><span class="compat-renderer">D3DMetal / DXMT · FEX</span><span class="compat-scope">Trial · Camp and gameplay</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
-      <div class="compat-detail"><div><p class="compat-result">Gameplay was tested with D3DMetal. FEX · DXMT and Rosetta · DXMT also ran and measured about 60 fps at FHD (October 22). An intermittent FEX screen freeze was fixed (3 of 9 runs → 0 of 7). 2026-10-24 D3D12 comparison: FHD · interpolation/upscaling off · menu. Rosetta · D3DMetal displayed correctly but fps was not measured. Rosetta · DXMT measured 60.0 fps (cap), FEX · DXMT 59.7 fps, with startup stalls of 5.4 s and 8.4 s respectively. FEX also recorded up to 1088 ms afterward. The separate 15-game FEX run measured 60.0 fps · summary maximum frame time 28.5 ms; in-game performance was not compared.</p><dl><div><dt>Test environment</dt><dd>Previous record: M4 Pro · Demo · Separate measurements for each graphics path</dd></div><div><dt>Frame-rate record</dt><dd>D3DMetal · Ember Flow · 144Hz: game 60 → average display 116.7 fps · 4K D3DMetal (October 23): game about 34 → display about 55 fps · FHD DXMT (October 22): both FEX and Rosetta about 60 fps · Rosetta D3DMetal smooth mode presentation update: FHD latency 24.2 → 14.1 ms · Output 116.6 → 119.2 fps; QHD latency 24.2 → 15.8 ms · Output 114.0 → 118.8 fps · These figures do not guarantee stability</dd></div><div><dt>Things to know</dt><dd>Earlier DXMT runs recorded GPU hangs and visual corruption with FSR3; these were not rechecked in recent measurements. FEX maximum frame times of about 290–307 ms were traced to bringing the window to the front at measurement start (Rosetta also exceeded 600 ms). Treat these separately from D3DMetal results. The October 24 15-game FEX records are Frame Check summary values with the FHD setting. Scenes were not recorded separately, and the values may differ from the maximum frame time over the full run, including startup. Diagnostic sampling was enabled in these runs, so they do not guarantee normal gameplay performance.</dd></div><div><dt>Record checked</dt><dd><time datetime="2026-10-24">2026-10-24</time> · 4K measurement · FHD measured on 2026-10-22 · FEX freeze fix checked on 2026-10-19 · Frame rates may come from separate runs.</dd></div></dl><a class="compat-permalink" href="#game-stellar">Link to this game ↗</a></div><figure class="compat-shot"><a href="../assets/stellar.webp" target="_blank" rel="noopener"><img src="../assets/stellar.webp" alt="Stellar Blade running in Ember" loading="lazy" width="1600" height="900"></a><figcaption>Earlier test capture · Trial menu · Click for original</figcaption></figure></div>
+      <div class="compat-detail"><div><p class="compat-result">Gameplay was tested with D3DMetal. FEX · DXMT and Rosetta · DXMT also ran and measured about 60 fps at FHD (October 22). An intermittent FEX screen freeze was fixed (3 of 9 runs → 0 of 7). 2026-10-24 D3D12 comparison: FHD · interpolation/upscaling off · menu. Rosetta · D3DMetal displayed correctly but fps was not measured. Rosetta · DXMT measured 60.0 fps (cap), FEX · DXMT 59.7 fps, with startup stalls of 5.4 s and 8.4 s respectively. FEX also recorded up to 1088 ms afterward. The separate 15-game FEX run measured 60.0 fps · summary maximum frame time 28.5 ms; in-game performance was not compared.</p><dl><div><dt>Test environment</dt><dd>Previous record: M4 Pro · Demo · Separate measurements for each graphics path</dd></div><div><dt>Frame-rate record</dt><dd>D3DMetal · Ember Flow · 144Hz: game 60 → average display 116.7 fps · 4K D3DMetal (October 23): game about 34 → display about 55 fps · 4K DXMT · game DLSS handled by MetalFX (October 27): about 15 fps without DLSS → game 28 fps · display about 55 fps with Ember Flow (same on Rosetta · FEX) · FHD DXMT (October 22): both FEX and Rosetta about 60 fps · Rosetta D3DMetal smooth mode presentation update: FHD latency 24.2 → 14.1 ms · Output 116.6 → 119.2 fps; QHD latency 24.2 → 15.8 ms · Output 114.0 → 118.8 fps · These figures do not guarantee stability</dd></div><div><dt>Things to know</dt><dd>Earlier DXMT runs recorded GPU hangs and visual corruption with FSR3; these were not rechecked in recent measurements. FEX maximum frame times of about 290–307 ms were traced to bringing the window to the front at measurement start (Rosetta also exceeded 600 ms). Treat these separately from D3DMetal results. The October 24 15-game FEX records are Frame Check summary values with the FHD setting. Scenes were not recorded separately, and the values may differ from the maximum frame time over the full run, including startup. Diagnostic sampling was enabled in these runs, so they do not guarantee normal gameplay performance.</dd></div><div><dt>Record checked</dt><dd><time datetime="2026-10-24">2026-10-24</time> · 4K measurement · FHD measured on 2026-10-22 · FEX freeze fix checked on 2026-10-19 · Frame rates may come from separate runs.</dd></div></dl><a class="compat-permalink" href="#game-stellar">Link to this game ↗</a></div><figure class="compat-shot"><a href="../assets/stellar.webp" target="_blank" rel="noopener"><img src="../assets/stellar.webp" alt="Stellar Blade running in Ember" loading="lazy" width="1600" height="900"></a><figcaption>Earlier test capture · Trial menu · Click for original</figcaption></figure></div>
     </details>
 <details class="compat-game" id="game-overwatch" data-status="play" data-search="Overwatch 오버워치">
       <summary><span class="compat-name"><strong>Overwatch</strong><small>Steam</small></span><span class="compat-status play">Gameplay tested</span><span class="compat-renderer">D3DMetal</span><span class="compat-scope">Steam version · Gameplay after launch</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
@@ -692,7 +702,7 @@ footer p{max-width:60em}
     <div class="sec-head">
       <p class="eyebrow">Features built by Ember</p>
       <h2 id="feat-title">More than getting games to run on a Mac</h2>
-      <p class="note">Once a game is running, Ember's own engines get to work: Ember Flow · Forge · Tone · Flare · Pulse · Boost · Kindle · Kiln · Spark · Lens · Guard. Select <span class="finfo-demo" aria-hidden="true">i</span>beside a name to see how it works and its measurements.</p>
+      <p class="note">Once a game is running, Ember's own engines get to work: Ember Flow · Stoke · Forge · Tone · Flare · Pulse · Boost · Kindle · Kiln · Spark · Lens · Guard. Select <span class="finfo-demo" aria-hidden="true">i</span>beside a name to see how it works and its measurements.</p>
     </div>
 
     <article class="flow" aria-labelledby="f-flow">
@@ -712,7 +722,7 @@ footer p{max-width:60em}
           <li><b>Flow neural network</b>A neural network trained by Ember reads motion to create intermediate scenes. It is the default in Auto mode, and at 4K its cost is about&nbsp;60% of the previous method.</li>
           <li><b>Frame generation engine 1.6</b>In Lost Ark (FEX · DXMT), skipped neural frame generation frames fell from 76~133 per 120 seconds → 0.</li>
           <li><b>Ripples and foliage</b>Generates frames even in scenes with scattered fine detail, without repeating original frames.</li>
-          <li><b>Generate frames before upscaling</b>With MetalFX, frame generation runs at the pre-upscale resolution to reduce GPU load. Lost Ark game fps rose by 10%.</li>
+          <li><b>Generate frames before upscaling</b>With Ember Stoke, frame generation runs at the pre-upscale resolution to reduce GPU load. Lost Ark game fps rose by 10%.</li>
           <li><b>Lightweight upscaling</b>Generated frames use a lightweight single-pass upscale instead of MetalFX. Lost Ark game 49.7 → 51.6&nbsp;fps, with text and HUD unchanged.</li>
           <li><b>Ember Prism</b>Experimental and off by default. When enabled, it uses Apple's frame generation engine in Rosetta · D3DMetal games to prioritize image quality, with a small latency increase. Works with Ember Flow on macOS 26 or later.</li>
         </ul>
@@ -751,9 +761,15 @@ footer p{max-width:60em}
         <div class="ix-val"><p class="num">95<em>→</em>0%</p><p>Frame generation skip rate in Lost Ark's waterpark</p></div>
       </article>
       <article class="ix">
+        <div class="ix-name"><strong>Ember <span>Stoke</span></strong><span class="kind">Upscaling<button class="finfo" type="button" data-b="stoke" aria-label="About Ember Stoke" aria-expanded="false">i</button></span></div>
+        <div class="ix-text"><p>Renders the game at a lower resolution and upscales it to your display resolution to raise fps. Turn it on in the first card of the game settings and choose a render resolution: Native, Quality, or Performance.</p>
+          <details><summary>Details</summary><ul class="pts"><li><b>Auto method</b>If the game has DLSS, Ember upscales with the motion data the game provides; otherwise it uses Apple MetalFX spatial upscaling.</li><li><b>DLSS via MetalFX</b>Choose DLSS in the game's graphics settings and Apple MetalFX handles the request. Ember built this path itself so it works not only with D3DMetal but also with DXMT (DX11 · DX12). On DXMT it is turned on game by game after testing (currently the Stellar Blade demo).</li><li><b>Stellar Blade 4K</b>On DXMT, a scene that ran at about 15 fps without DLSS reached 28 fps in game, and about 55 fps on screen with Ember Flow. Rosetta and FEX gave the same result.</li><li><b>Ember temporal upscaling</b>Ember's own method, which also gathers detail from previous frames. It is experimental (DXMT) and its effect is still being measured, so Auto does not use it until measurements are complete.</li><li><b>Sharpen · Ember Forge</b>Under Advanced, sharpen the image further or use Ember Forge to restore blurred detail.</li><li><b>Default</b>Off. Works with DXMT and D3DMetal. After changing the render resolution, restart the launcher too for it to take effect.</li></ul></details></div>
+        <div class="ix-val"><p class="num">15<em>→</em>55</p><p>Stellar Blade demo 4K fps · DLSS via MetalFX + Ember Flow (game 28 fps)</p></div>
+      </article>
+      <article class="ix">
         <div class="ix-name"><strong>Ember <span>Forge</span></strong><span class="kind">AI detail restoration<button class="finfo" type="button" data-b="forge" aria-label="About Ember Forge" aria-expanded="false">i</button></span></div>
-        <div class="ix-text"><p>After MetalFX doubles the image dimensions, an AI model built by Ember refines blurred detail and overly sharp edges, restoring detail lost when running at a lower resolution.</p>
-          <details><summary>Details</summary><ul class="pts"><li><b>Overhead</b>About 1.4 ms extra GPU time for FHD → 4K (M4 Pro).</li><li><b>In game</b>Once Human stayed at 60 fps with it both on and off.</li><li><b>Default</b>Off. Enable it in game settings. Works in D3DMetal when scaling FHD to exactly twice its dimensions at 4K.</li></ul>
+        <div class="ix-text"><p>After Ember Stoke (MetalFX) doubles the image dimensions, an AI model built by Ember refines blurred detail and overly sharp edges, restoring detail lost when running at a lower resolution.</p>
+          <details><summary>Details</summary><ul class="pts"><li><b>Overhead</b>About 1.4 ms extra GPU time for FHD → 4K (M4 Pro).</li><li><b>In game</b>Once Human stayed at 60 fps with it both on and off.</li><li><b>Default</b>Off. Turn it on under Advanced in the Ember Stoke card. Works in D3DMetal when scaling FHD to exactly twice its dimensions at 4K.</li></ul>
           <figure class="ba" data-key="forge" hidden><div class="ba-view"><img class="ba-a" alt="Image upscaled with MetalFX alone"><img class="ba-b" alt="Image upscaled with MetalFX and Ember Forge"><span class="ba-line"></span><span class="lab a">MetalFX only</span><span class="lab b">+ Ember Forge</span><input type="range" id="ba-forge" min="0" max="100" value="50" aria-label="MetalFX only / Ember Forge comparison position"></div></figure></details></div>
         <div class="ix-val"><p class="num">−33~57%</p><p>Difference from original (LPIPS), compared with MetalFX alone</p></div>
       </article>
@@ -797,7 +813,7 @@ footer p{max-width:60em}
       <article class="ix">
         <div class="ix-name"><strong>Ember <span>Spark</span></strong><span class="kind">Reduce input latency<button class="finfo" type="button" data-b="spark" aria-label="About Ember Spark" aria-expanded="false">i</button></span></div>
         <div class="ix-text"><p>Briefly holds the game back from starting the next frame too early. This lets the frame include more recent input, reducing the time until your action appears on screen.</p>
-          <details><summary>Details</summary><ul class="pts"><li><b>Lethal Company</b>Input latency at a 60 fps cap: 37~39 → 18~29 ms.</li><li><b>Performance impact</b>fps and display p99 were unchanged.</li><li><b>Default</b>On by default for DXMT games. Turns off automatically when Ember Flow is enabled.</li></ul></details></div>
+          <details><summary>Details</summary><ul class="pts"><li><b>Lethal Company</b>Input latency at a 60 fps cap: 37~39 → 18~29 ms.</li><li><b>Performance impact</b>fps and display p99 were unchanged.</li><li><b>Default</b>Turned on and off together with Low Latency mode in the ‘Lower Latency’ card of the game settings. On by default for DXMT games; turns off automatically when Ember Flow is enabled.</li></ul></details></div>
         <div class="ix-val"><p class="num long">35–39<em>→</em>26–28</p><p>Valheim input latency at a 60 fps cap, ms</p></div>
       </article>
       <article class="ix">
@@ -892,6 +908,55 @@ footer p{max-width:60em}
     </div>
   </section>
 
+  <!-- ===== 1.0.1 새 기능 ===== -->
+  <section class="sec wrap" id="new101" aria-labelledby="new-title">
+    <div class="sec-head">
+      <p class="eyebrow">New in Ember 1.0.1</p>
+      <h2 id="new-title">A virtual machine and Ember Shield join Ember</h2>
+      <p class="note">Games that are hard to run directly on the Mac can run in a Windows 11 ARM virtual machine, and Ember Shield checks safety before a game starts.</p>
+    </div>
+    <div class="live">
+      <figure class="nw-shot"><img src="../assets/ui-vm.webp" alt="Ember virtual machine screen with Windows 11 ARM and CPU core, memory, and resolution settings" loading="lazy" width="1400" height="944"><figcaption>Virtual machine · start and stop it inside Ember</figcaption></figure>
+      <div class="live-text">
+        <h3>Windows 11 ARM virtual machine</h3>
+        <p>Create and start a virtual machine inside Ember. Ember installs Windows and sets up the drivers for you. D3D12 games can also run in the virtual machine.</p>
+        <ul class="facts">
+          <li>Windows<b>11 ARM</b></li>
+          <li>macOS<b>15 or later</b></li>
+          <li>Setup and drivers<b>Automatic</b></li>
+          <li>D3D12 games<b>Supported</b></li>
+          <li>Installer (ISO)<b>Download from Microsoft</b></li>
+          <li>Windows license<b>Purchased separately</b></li>
+        </ul>
+        <figure class="small"><img src="../assets/vm-wukong.webp" alt="Black Myth: Wukong benchmark scene running in the Ember virtual machine window" loading="lazy" width="1200" height="696"><figcaption>The Black Myth: Wukong benchmark, run to completion in the virtual machine</figcaption></figure>
+      </div>
+    </div>
+    <div class="live">
+      <div class="live-text">
+        <h3>Ember Shield</h3>
+        <p>Before a game starts, Ember checks for known signs of infection and tells you right away if it finds any. It also blocks connections to known malicious addresses.</p>
+        <ul class="facts">
+          <li>Infection check<b>Before each game</b></li>
+          <li>Malicious addresses<b>Blocked</b></li>
+          <li>Engines<b>Rosetta · FEX</b></li>
+          <li>Blocked count<b>Shown in Settings</b></li>
+          <li>Availability<b>Everyone, purchased or not</b></li>
+        </ul>
+      </div>
+      <div class="live-text">
+        <h3>Fixed in 1.0.1</h3>
+        <ul class="pts nwfix">
+          <li>Fixed a crash when The Witcher 3: Wild Hunt starts.</li>
+          <li>Fixed white dots appearing on screen in Stellar Blade.</li>
+          <li>Fixed Dome Keeper closing right after it starts.</li>
+          <li>Fixed the Black Myth: Wukong benchmark stopping partway and showing black terrain. The benchmark now runs to the end.</li>
+          <li>Ember 1.0 can now receive new versions through the in-app updater.</li>
+          <li>On macOS 28, you may see an "app update required" notice when you open Ember. You can keep using Ember when it appears.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
   <!-- ===== 앱 둘러보기 ===== -->
   <section class="sec wrap" id="app" aria-labelledby="gal-title">
     <div class="sec-head">
@@ -903,16 +968,16 @@ footer p{max-width:60em}
       <div class="tabs" role="tablist" aria-label="App screenshots">
         <button role="tab" id="tab-0" aria-controls="pane-0" aria-selected="true"><b>Home</b><span>Recent games and Mac status at a glance</span></button>
         <button role="tab" id="tab-1" aria-controls="pane-1" aria-selected="false" tabindex="-1"><b>Game details</b><span>Choose an engine and translator per game</span></button>
-        <button role="tab" id="tab-2" aria-controls="pane-2" aria-selected="false" tabindex="-1"><b>Launch options</b><span>Display and Ember Flow groups</span></button>
+        <button role="tab" id="tab-2" aria-controls="pane-2" aria-selected="false" tabindex="-1"><b>Launch options</b><span>Five main cards</span></button>
         <button role="tab" id="tab-3" aria-controls="pane-3" aria-selected="false" tabindex="-1"><b>Troubleshoot</b><span>Live performance and Ember chat</span></button>
         <button role="tab" id="tab-4" aria-controls="pane-4" aria-selected="false" tabindex="-1"><b>Ember speech bubbles</b><span>Listens, changes settings, and keeps you informed</span></button>
         <button role="tab" id="tab-5" aria-controls="pane-5" aria-selected="false" tabindex="-1"><b>Boss mechanic panel</b><span>Current and upcoming mechanics</span></button>
       </div>
       <div class="panes">
-        <figure role="tabpanel" id="pane-0" aria-labelledby="tab-0"><img src="../assets/ui-home.webp" alt="Ember home screen: recently played Lost Ark, game library, and system status" loading="lazy" width="1400" height="894"><figcaption>Home · Recent games and Mac status at a glance</figcaption></figure>
-        <figure role="tabpanel" id="pane-1" aria-labelledby="tab-1" hidden><img src="../assets/ui-game.webp" alt="Lost Ark game page: engine and graphics translator selection" loading="lazy" width="1400" height="875"><figcaption>Game details · An engine and translator for each game</figcaption></figure>
-        <figure role="tabpanel" id="pane-2" aria-labelledby="tab-2" hidden><img src="../assets/ui-options.webp" alt="Launch options: resolution and upscaling in the Display group; computation and frame generation methods in the Ember Flow group" loading="lazy" width="1400" height="875"><figcaption>Launch options · Resolution, upscaling, and Ember Flow in groups</figcaption></figure>
-        <figure role="tabpanel" id="pane-3" aria-labelledby="tab-3" hidden><img src="../assets/ui-troubleshoot.webp" alt="Troubleshooting screen: live performance and Ask Ember" loading="lazy" width="1400" height="875"><figcaption>Troubleshooting · Live performance and Ember chat</figcaption></figure>
+        <figure role="tabpanel" id="pane-0" aria-labelledby="tab-0"><img src="../assets/ui-home.webp" alt="Ember home screen with recently played Lost Ark, the game library, system status, and Ember Shield" loading="lazy" width="1400" height="944"><figcaption>Home · Recent games and Mac status at a glance</figcaption></figure>
+        <figure role="tabpanel" id="pane-1" aria-labelledby="tab-1" hidden><img src="../assets/ui-game.webp" alt="Stellar Blade Demo game page with engine and graphics translator choices" loading="lazy" width="1400" height="944"><figcaption>Game details · An engine and translator for each game</figcaption></figure>
+        <figure role="tabpanel" id="pane-2" aria-labelledby="tab-2" hidden><img src="../assets/ui-options.webp" alt="Launch options: the Ember Flow card with interpolation and calculation modes, and the latency reduction card" loading="lazy" width="1400" height="944"><figcaption>Launch options · Five main cards, including Ember Stoke and Ember Flow</figcaption></figure>
+        <figure role="tabpanel" id="pane-3" aria-labelledby="tab-3" hidden><img src="../assets/ui-troubleshoot.webp" alt="Troubleshooting screen: live performance and Ask Ember" loading="lazy" width="1400" height="944"><figcaption>Troubleshooting · Live performance and Ember chat</figcaption></figure>
         <figure role="tabpanel" id="pane-4" aria-labelledby="tab-4" class="tall" hidden><img src="../assets/ui-coach.webp" alt="Ember speech bubbles over a game: listening, settings replies, and mechanic alerts" loading="lazy" width="900" height="1047"><figcaption>Ember speech bubbles · Listening, adjusting, and informing</figcaption></figure>
         <figure role="tabpanel" id="pane-5" aria-labelledby="tab-5" class="wide" hidden><img src="../assets/ui-boss.webp" alt="Boss mechanic panel: boss name, HP-bar count, current and upcoming mechanics" loading="lazy" width="1200" height="448"><figcaption>Boss mechanic panel · Current and upcoming mechanics</figcaption></figure>
       </div>
@@ -937,7 +1002,7 @@ footer p{max-width:60em}
       <div><dt>Add games from folders or ZIP files</dt><dd>Games without installers can be added to your library by choosing a folder or opening a ZIP file.</dd></div>
       <div><dt>Dialog alerts</dt><dd>Ember notifies you when a game is waiting at a notice or confirmation dialog. Check the dialog yourself to continue.</dd></div>
       <div><dt>Microphone permission dialog</dt><dd>Limits voice-input initialization time so a microphone permission dialog does not leave the game unresponsive. Microphone input may not be ready while the permission dialog is pending.</dd></div>
-      <div><dt>Per-game launch options</dt><dd>Set frame caps, resolution (FHD · QHD · 4K), and upscaling for each game. Options are grouped into Display, Ember Flow, Frames &amp; Latency, Image Refinement, Experimental, and Advanced.</dd></div>
+      <div><dt>Per-game launch options</dt><dd>Game settings are organized into five main cards: Ember Stoke (upscaling) · Ember Flow (frame generation) · Lower Latency (Ember Spark) · Ember Tone (color and tone) · Auto HDR (Ember Flare). Each card has a single switch, and detailed settings are tucked under Advanced inside the card. Render resolution (Native · Quality · Performance) and the FPS cap are also set per game.</dd></div>
       <div><dt>Launch logs</dt><dd>View what went wrong in the logs and ask Ember about them directly. Ember AI suggests actions based on the game and recent settings changes, keeping applied settings reversible.</dd></div>
       <div><dt>Ember updates</dt><dd>An automatic update bar shows progress from checking for new versions through download and installation.</dd></div>
       <div><dt>Send diagnostic logs</dt><dd>Choose what to include and review a preview with personal information masked. Logs are sent only with your consent. Saving to a file keeps them on your Mac. <a href="privacy.html">Privacy Policy</a>explains retention and deletion.</dd></div>
@@ -952,7 +1017,7 @@ footer p{max-width:60em}
     <div class="stop" data-stop="end0" style="top:0"></div>
     <div class="stop" data-stop="end" style="top:80vh"></div>
     <div class="end-in">
-      <p class="eyebrow">Ember <span data-cfg="version">1.0</span></p>
+      <p class="eyebrow">Ember <span data-cfg="version">1.0.1</span></p>
       <h2 id="end-title">Start playing Windows games on your Mac.</h2>
       <p><a class="get lg" href="https://eunggg0.github.io/ember-releases/download/" data-link="download"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M6 10l6 6 6-6M4 20h16"/></svg>Download for Mac</a></p>
       <ul class="req" aria-label="Requirements">
@@ -1072,7 +1137,8 @@ document.querySelectorAll('.vid').forEach((f) => {
 /* Ember 고유 기능 설명 판 — 앱의 FeatureInfo(EmberBrand.lines)와 같은 글. 수치는 실측만. */
 const D = {
   flow:   ['Ember Flow',"Frame generation","Creates intermediate frames to increase display output fps by up to two times",["Fills the gaps when game frames are scarce, with up to twice as many display frames.","The GPU tracks how objects moved between adjacent frames, then draws a new intermediate scene along those paths.","Frame generation engine 1.6: Lost Ark (FEX · DXMT) neural frame skips fell from 76~133 per 120 seconds → 0. Lost Ark QHD 47~54 → 94~107 fps. GPU cost is about 1 ms at FHD. Even GPU-bound Overwatch QHD reached 60 → 116 fps in smooth mode. Stellar Blade (144Hz) average display output 109.6 → 116.7 fps. Latency varies by game and scene.","Off by default. Rests when game fps reaches the display refresh rate, and pauses if the game becomes too slow. The reason is shown on screen. HDR (PQ) games in D3DMetal display original frames to preserve color."]],
-  forge:  ['Ember Forge',"AI detail restoration","Sharpens detail in upscaled images",["Restores clarity to grass, text, and edges in images upscaled by MetalFX.","A small neural network trained by Ember refines the upscaled image, bringing it closer to the original 4K image.","33~57% less difference from the original than MetalFX alone. Adds 1.4 ms GPU time for FHD → 4K.","Off by default. Works only in D3DMetal when scaling FHD to exactly twice its dimensions at 4K."]],
+  stoke:  ['Ember Stoke',"Upscaling","Renders at a lower resolution and upscales to your display for higher fps",["Renders the game at a lower resolution and upscales it to your display resolution to raise fps.","By default, Apple MetalFX upscales the image sharply. If the game has DLSS, the motion data it provides makes the upscale even sharper.","Stellar Blade demo at 4K (DXMT): about 15 fps without DLSS → 28 fps in game with the game's DLSS handled by MetalFX, and about 55 fps on screen with Ember Flow (same on Rosetta and FEX). Ember temporal upscaling is still being measured.","Off by default. Works with DXMT and D3DMetal. After changing the resolution, restart the launcher too for it to take effect."]],
+  forge:  ['Ember Forge',"AI detail restoration","Sharpens detail in upscaled images",["Restores clarity to grass, text, and edges in images upscaled by Ember Stoke (MetalFX).","A small neural network trained by Ember refines the upscaled image, bringing it closer to the original 4K image.","33~57% less difference from the original than MetalFX alone. Adds 1.4 ms GPU time for FHD → 4K.","Off by default. Turn it on under Advanced in the Ember Stoke card. Works only in D3DMetal when scaling FHD to exactly twice its dimensions at 4K."]],
   tone:   ['Ember Tone',"AI image refinement","Brings out color and contrast naturally",["Naturally refines color and contrast in the game image.","A neural network creates a color lookup table once at game launch. Each frame then simply reads the table.","GPU 0.3~0.4 ms per frame (QHD). Once Human stayed at 104 fps even alongside Ember Flow.","Off by default. With Battery Mode enabled, switches off automatically when unplugged."]],
   flare:  ['Ember Flare',"AI Auto HDR","Brings SDR highlights into HDR",["Shows bright areas such as sunlight and flames in SDR games more brightly on an HDR display.","A small neural network estimates the original brightness of highlights. Only those areas brighten; text and menus stay unchanged.","GPU time per frame: 1080p 0.3 ms, 4K 0.8 ms.","Off by default. Works only with HDR enabled on the display, and switches off if the game enables HDR itself. HDR (PQ) games in D3DMetal show original frames instead of frame generation to preserve color. Tested in The Witcher 3."]],
   pulse:  ['Ember Pulse',"Frame pacing","Delivers frames evenly with the display cycle, reducing latency",["Reduces stutter and latency caused by uneven frame delivery.","Measures when the display will accept the next frame, then submits the frame at that moment.","In Once Human, pauses over 25 ms fell from 55~101 → 4~10. Latency was 12.6~15.3 → 4.5~6.4 ms.","Enabled automatically in DXMT (D3D11) games. Disables itself in scenes with high GPU usage."]],
@@ -1338,11 +1404,12 @@ const floor = new THREE.Mesh(new THREE.CircleGeometry(16, 96), new THREE.ShaderM
 }));
 floor.rotation.x = -Math.PI / 2; scene.add(floor);
 
-/* ---------- glass ring: nine names in refracting iridescent slabs ---------- */
+/* ---------- glass ring: twelve names in refracting iridescent slabs ---------- */
 const C = new THREE.Vector3(0, 1.8, 0), R = 5.5;
 const SLABS = [
   ['FLOW', "Frame generation", '×2', "Adds intermediate frames to increase display output"],
   ['GUARD', "Text and nameplate protection", '95→0%', "Frame generation skip rate in the waterpark"],
+  ['STOKE', "Upscaling", '15→55', "Stellar Blade 4K, DLSS→MetalFX + Flow"],
   ['FORGE', "AI detail restoration", '−57%', "33~57% less difference from original (LPIPS)"],
   ['TONE', "AI image refinement", '0.3ms', "GPU time per frame at QHD"],
   ['FLARE', "AI Auto HDR", '0.8ms', "GPU time per frame at 4K"],
@@ -1565,8 +1632,14 @@ const lens = document.getElementById('lens'), lensFps = document.getElementById(
 const lg = debugFPS ? document.getElementById('lensg').getContext('2d') : null;
 lens.hidden = !debugFPS;
 const clock = new THREE.Clock(); let t = 0, acc = 0, frames = 0, slowFor = 0, degraded = false, running = false, visAct = true, visEnd = false, waveStop = ''; const ft = [];
+// Frame budget (10-26): the scene ran at the display rate (144Hz on a 4K monitor) and kept ~40% of the GPU busy
+// even while the window sat unfocused behind other apps. 60fps cap, 30fps after 8s without input, 15fps unfocused.
+let lastDraw = 0, lastInput = performance.now();
+for (const ev of ['pointermove', 'pointerdown', 'wheel', 'keydown', 'scroll', 'touchstart']) addEventListener(ev, () => { lastInput = performance.now(); }, { passive: true });
+const frameBudget = (now) => !document.hasFocus() ? 1000 / 15 : now - lastInput > 8000 ? 1000 / 30 : 1000 / 60;
 function frame() {
   if (!running || dead) return;
+  { const now = performance.now(); if (!first && now - lastDraw < frameBudget(now) - 2) { requestAnimationFrame(frame); return; } lastDraw = now; }
   const dt = Math.min(clock.getDelta(), 0.1); if (!reduce) t += dt;
   const sT = sceneT(); cur.s = first || reduce ? sT : lerp(cur.s, sT, 1 - Math.exp(-dt * 5));
   const i = Math.min(Math.floor(cur.s), stops.length - 1), fr = cur.s - i;
@@ -1620,7 +1693,7 @@ function frame() {
   ft.push(dt * 1000); if (ft.length > 32) ft.shift(); acc += dt; frames++;
   if (acc > 0.5) {
     const fps = frames / acc; if (debugFPS) lensFps.textContent = Math.round(fps); acc = 0; frames = 0;
-    if (fps < 50 && t > 3) { if (++slowFor >= 4) { slowFor = 0; if (DPR > 1) { DPR = 1; renderer.setPixelRatio(1); composer.setPixelRatio(1); PU.uPR.value = 1; lastSz = [0, 0]; resize(); Object.assign(ST, { DPR: 1, degraded: 1 }); } else if (!degraded) { degraded = true; ST.degraded = 2; } else if (geo.drawRange.count === Infinity || geo.drawRange.count > N / 2) { geo.setDrawRange(0, Math.floor(N / 2)); ST.degraded = 3; } else if (fps < 20) toFallback('slow'); } } else slowFor = 0;
+    if (fps < Math.min(50, 0.83 * 1000 / frameBudget(performance.now())) && t > 3) { if (++slowFor >= 4) { slowFor = 0; if (DPR > 1) { DPR = 1; renderer.setPixelRatio(1); composer.setPixelRatio(1); PU.uPR.value = 1; lastSz = [0, 0]; resize(); Object.assign(ST, { DPR: 1, degraded: 1 }); } else if (!degraded) { degraded = true; ST.degraded = 2; } else if (geo.drawRange.count === Infinity || geo.drawRange.count > N / 2) { geo.setDrawRange(0, Math.floor(N / 2)); ST.degraded = 3; } else if (fps < 20) toFallback('slow'); } } else slowFor = 0;
     if (lg) {
     lg.clearRect(0, 0, 128, 48); lg.strokeStyle = '#ffb547'; lg.lineWidth = 2; lg.beginPath();
     ft.forEach((v, j) => { const x = j * 4, y = 46 - Math.min(44, v / 33.3 * 44); j ? lg.lineTo(x, y) : lg.moveTo(x, y); }); lg.stroke();

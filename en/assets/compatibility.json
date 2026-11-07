@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-24",
+  "updated": "2026-10-27",
   "games": [
     {
       "id": "l4d2",
@@ -84,7 +84,7 @@
       "environment": "Previous record: M4 Pro · Demo · Separate measurements for each graphics path",
       "result": "Gameplay was tested with D3DMetal. FEX · DXMT and Rosetta · DXMT also ran and measured about 60 fps at FHD (October 22). An intermittent FEX screen freeze was fixed (3 of 9 runs → 0 of 7). 2026-10-24 D3D12 comparison: FHD · interpolation/upscaling off · menu. Rosetta · D3DMetal displayed correctly but fps was not measured. Rosetta · DXMT measured 60.0 fps (cap), FEX · DXMT 59.7 fps, with startup stalls of 5.4 s and 8.4 s respectively. FEX also recorded up to 1088 ms afterward. The separate 15-game FEX run measured 60.0 fps · summary maximum frame time 28.5 ms; in-game performance was not compared.",
       "issue": "Earlier DXMT runs recorded GPU hangs and visual corruption with FSR3; these were not rechecked in recent measurements. FEX maximum frame times of about 290–307 ms were traced to bringing the window to the front at measurement start (Rosetta also exceeded 600 ms). Treat these separately from D3DMetal results. The October 24 15-game FEX records are Frame Check summary values with the FHD setting. Scenes were not recorded separately, and the values may differ from the maximum frame time over the full run, including startup. Diagnostic sampling was enabled in these runs, so they do not guarantee normal gameplay performance.",
-      "fps": "D3DMetal · Ember Flow · 144Hz: game 60 → average display 116.7 fps · 4K D3DMetal (October 23): game about 34 → display about 55 fps · FHD DXMT (October 22): both FEX and Rosetta about 60 fps · Rosetta D3DMetal smooth mode presentation update: FHD latency 24.2 → 14.1 ms · Output 116.6 → 119.2 fps; QHD latency 24.2 → 15.8 ms · Output 114.0 → 118.8 fps · These figures do not guarantee stability",
+      "fps": "D3DMetal · Ember Flow · 144Hz: game 60 → average display 116.7 fps · 4K D3DMetal (October 23): game about 34 → display about 55 fps · 4K DXMT · game DLSS handled by MetalFX (October 27): about 15 fps without DLSS → game 28 fps · display about 55 fps with Ember Flow (same on Rosetta · FEX) · FHD DXMT (October 22): both FEX and Rosetta about 60 fps · Rosetta D3DMetal smooth mode presentation update: FHD latency 24.2 → 14.1 ms · Output 116.6 → 119.2 fps; QHD latency 24.2 → 15.8 ms · Output 114.0 → 118.8 fps · These figures do not guarantee stability",
       "image": "stellar.webp"
     },
     {

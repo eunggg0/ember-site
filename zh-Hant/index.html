@@ -283,6 +283,16 @@ main{position:relative;z-index:2}
 .live-text h3{font-family:var(--f-head);font-size:var(--t-lg);line-height:1.34}
 .live-text p{margin-top:12px;color:var(--ash-dim)}
 .live-text .facts{margin-top:22px}
+#new101{max-width:1440px;margin-inline:auto}
+#new101 .sec-head{grid-template-columns:minmax(0,1fr);gap:12px}
+#new101 .sec-head h2{font-size:clamp(30px,3.4vw,48px);text-wrap:balance}
+#new101 .sec-head .note{max-width:none}
+#new101 .live+.live{margin-top:clamp(36px,4vw,56px)}
+#new101 .nw-shot img,#new101 .small img{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:10px}
+#new101 figcaption{margin-top:10px;font-size:var(--t-sm);color:var(--ash-dim)}
+#new101 .small figcaption{margin-top:0}
+#new101 .nwfix{margin-top:18px}
+#new101 .nwfix li{grid-template-columns:minmax(0,1fr)}
 
 /* app tour */
 .tour{display:grid;grid-template-columns:minmax(0,15em) minmax(0,1fr);gap:clamp(24px,4vw,64px);margin-top:clamp(36px,6vh,64px);align-items:start}
@@ -342,7 +352,7 @@ footer p{max-width:60em}
 @media (max-width:1100px){
   .nav ul{gap:16px}
   .caps{grid-template-columns:repeat(3,minmax(0,1fr))}
-  .ix{grid-template-columns:minmax(0,13em) minmax(0,1fr)}
+  .ix{grid-template-columns:minmax(0,14em) minmax(0,1fr)}
   .ix-val{grid-column:2;text-align:left}
 }
 .menu{display:none}
@@ -527,7 +537,7 @@ footer p{max-width:60em}
         <p class="lead">提供適合各款遊戲的啟動設定與 Ember Flow 補幀。遇到問題時，可以詢問在 Mac 本機執行的 AI 助理。</p>
         <div class="hero-row">
           <a class="get" href="https://eunggg0.github.io/ember-releases/download/" data-link="download"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M6 10l6 6 6-6M4 20h16"/></svg>下載 Mac 版</a>
-          <span class="hero-meta">版本 <span data-cfg="version">1.0</span> · Apple Silicon · macOS 14 或以上</span>
+          <span class="hero-meta">版本 <span data-cfg="version">1.0.1</span> · Apple Silicon · macOS 14 或以上</span>
         </div>
       </div>
       <div class="hero-proof">
@@ -550,8 +560,8 @@ footer p{max-width:60em}
     </div>
     <div class="cap" style="--t:268vh">
       <p class="eyebrow">Ember 自研技術</p>
-      <h2>從補幀到畫質提升。</h2>
-      <p>Ember Flow 產生中間影格，Ember Forge 提升畫面清晰度，Ember Pulse 調整影格的顯示間隔，讓輸出更加均勻。</p>
+      <h2>從升頻到補幀。</h2>
+      <p>Ember Stoke 將低解析度繪製的畫面放大以提高 fps，Ember Flow 產生中間影格，Ember Pulse 調整影格的顯示間隔，讓輸出更加均勻。</p>
     </div>
     <div class="cap r" style="--t:432vh">
       <p class="eyebrow lime">Ember Flow · 補幀</p>
@@ -561,9 +571,9 @@ footer p{max-width:60em}
     </div>
     <div class="ring-hold">
       <div class="ring-cap">
-        <p class="eyebrow">Ember 的 11 項功能</p>
-        <h2>Ember 自主開發了 11 種引擎。</h2>
-        <p>Flow · Guard · Forge · Tone · Flare · Pulse · Boost · Kindle · Kiln · Spark · Lens。MetalFX、DXMT、D3DMetal 等第三方技術保留原名，只有 Ember 在其基礎上自主開發的功能才使用 Ember 名稱。</p>
+        <p class="eyebrow">Ember 的 12 項功能</p>
+        <h2>Ember 自主開發了 12 種引擎。</h2>
+        <p>Flow · Guard · Stoke · Forge · Tone · Flare · Pulse · Boost · Kindle · Kiln · Spark · Lens。MetalFX、DXMT、D3DMetal 等第三方技術保留原名，只有 Ember 在其基礎上自主開發的功能才使用 Ember 名稱。</p>
       </div>
     </div>
   </section>
@@ -571,7 +581,7 @@ footer p{max-width:60em}
   <section class="mani wrap" id="mani" aria-label="Ember 簡介">
     <div class="mani-in">
       <p class="slogan"><span>Windows 遊戲，</span><span>在 Mac 上玩。</span></p>
-      <p class="prose" id="prose">Ember 是在 Apple Silicon Mac 上執行 Windows 遊戲的啟動器。它為每款遊戲選擇合適的引擎與圖形轉換器，若啟動時當機，會換用其他轉譯器重試。同時提供自研的補幀、畫質提升與影格間隔調整功能。下方列出了各遊戲的測試範圍及 M4 Pro 實測效能。</p>
+      <p class="prose" id="prose">Ember 是在 Apple Silicon Mac 上執行 Windows 遊戲的啟動器。它為每款遊戲選擇合適的引擎與圖形轉換器，若啟動時當機，會換用其他轉譯器重試。同時提供自研的升頻、補幀、畫質提升與影格間隔調整功能。下方列出了各遊戲的測試範圍及 M4 Pro 實測效能。</p>
     </div>
   </section>
 
@@ -580,7 +590,7 @@ footer p{max-width:60em}
   <section class="sec wrap" id="screens" aria-labelledby="compat-title">
     <div class="sec-head"><p class="eyebrow">遊戲相容性 · 測試紀錄</p><h2 id="compat-title">可以玩哪些遊戲？</h2><p class="note">這裡列出的遊戲均已實際執行並記錄。選擇遊戲可查看測試場景、啟動設定、影格率及尚未解決的問題。</p></div>
     <form class="compat-tools" role="search" aria-label="搜尋遊戲相容性" hidden><div><label for="compat-query">尋找遊戲</label><input id="compat-query" type="search" placeholder="搜尋遊戲名稱 · 韓文 / 英文" autocomplete="off" aria-controls="compat-list"></div><div><label for="compat-filter">測試結果</label><select id="compat-filter" aria-controls="compat-list"><option value="all">全部結果</option><option value="play">已驗證遊玩</option><option value="issues">存在問題</option><option value="menu">已驗證選單</option><option value="blocked">啟動失敗</option></select></div><button type="reset">重設</button></form>
-    <div class="compat-meta"><p id="compat-count" role="status" aria-live="polite" aria-atomic="true">共22款遊戲 · 按名稱排序</p><span>網站更新日期 <span data-cfg="siteUpdated">2026-10-24</span></span></div>
+    <div class="compat-meta"><p id="compat-count" role="status" aria-live="polite" aria-atomic="true">共22款遊戲 · 按名稱排序</p><span>網站更新日期 <span data-cfg="siteUpdated">2026-10-27</span></span></div>
     <div class="compat-head" aria-hidden="true"><span>遊戲</span><span>測試結果</span><span>啟動設定</span><span>已驗證範圍</span><span></span></div>
     <div id="compat-list"><details class="compat-game" id="game-l4d2" data-status="play" data-search="Left 4 Dead 2 L4D2 레프트 4 데드 2">
       <summary><span class="compat-name"><strong>惡靈勢力 2</strong><small>Steam</small></span><span class="compat-status play">已驗證遊玩</span><span class="compat-renderer">DXVK</span><span class="compat-scope">死亡中心 · 本機戰役</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
@@ -604,7 +614,7 @@ footer p{max-width:60em}
     </details>
 <details class="compat-game" id="game-stellar" data-status="play" data-search="Stellar Blade 스텔라 블레이드">
       <summary><span class="compat-name"><strong>劍星</strong><small>Steam · 試玩版</small></span><span class="compat-status play">已驗證遊玩</span><span class="compat-renderer">D3DMetal / DXMT · FEX</span><span class="compat-scope">試玩版 · 營地與遊戲內</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
-      <div class="compat-detail"><div><p class="compat-result">已使用 D3DMetal 驗證遊戲內遊玩。FEX · DXMT 和 Rosetta · DXMT 也已在 FHD 下執行並測得約 60 fps（10月22日）。已修復 FEX 偶發畫面凍結（9 次中 3 次 → 7 次中 0 次）。 2026-10-24 D3D12比較：FHD · 插幀/升頻關閉 · 選單。Rosetta · D3DMetal顯示正常，但fps未測量。Rosetta · DXMT為60.0 fps（上限），FEX · DXMT為59.7 fps，啟動時分別停頓5.4秒和8.4秒。FEX隨後也記錄到最高1088 ms。另一次FEX 15款測試為60.0 fps · 彙總最大影格時間28.5 ms，未進行遊戲內效能比較。</p><dl><div><dt>測試環境</dt><dd>既有紀錄： M4 Pro · 試玩版 · 各圖形路徑分別測量</dd></div><div><dt>影格率紀錄</dt><dd>D3DMetal · Ember Flow · 144Hz：遊戲 60 → 平均畫面輸出 116.7 fps · 4K D3DMetal（10月23日）：遊戲約 34 → 畫面輸出約 55 fps · FHD DXMT（10月22日）：FEX、Rosetta 均約 60 fps · Rosetta D3DMetal 流暢方式的顯示改進：FHD 延遲 24.2 → 14.1 ms · 輸出 116.6 → 119.2 fps，QHD 延遲 24.2 → 15.8 ms · 輸出 114.0 → 118.8 fps · 這些數值不構成穩定性保證</dd></div><div><dt>注意事項</dt><dd>先前 DXMT 路徑記錄過 GPU 停滯和使用 FSR3 時的畫面異常，近期測量未複查。FEX 紀錄中約 290–307 ms 的最大影格時間，已確認是測量開始時首次將視窗移至前景造成的卡頓（Rosetta 也超過 600 ms）。請與 D3DMetal 結果區分。 10月24日的FEX 15款紀錄是FHD設定下的Frame Check彙總值。場景未單獨記錄，數值可能與包含啟動階段的全程最大影格時間不同。這些測試開啟了診斷取樣，因此不保證正常遊玩效能。</dd></div><div><dt>紀錄確認日期</dt><dd><time datetime="2026-10-24">2026-10-24</time> · 4K 測量 · FHD 測量於 2026-10-22 · FEX 凍結修復確認於 2026-10-19 · 影格率資料可能來自另一次測試。</dd></div></dl><a class="compat-permalink" href="#game-stellar">此遊戲的直達連結 ↗</a></div><figure class="compat-shot"><a href="../assets/stellar.webp" target="_blank" rel="noopener"><img src="../assets/stellar.webp" alt="透過 Ember 執行的《劍星》實機畫面" loading="lazy" width="1600" height="900"></a><figcaption>先前測試畫面 · 試玩版選單 · 點擊查看原圖</figcaption></figure></div>
+      <div class="compat-detail"><div><p class="compat-result">已使用 D3DMetal 驗證遊戲內遊玩。FEX · DXMT 和 Rosetta · DXMT 也已在 FHD 下執行並測得約 60 fps（10月22日）。已修復 FEX 偶發畫面凍結（9 次中 3 次 → 7 次中 0 次）。 2026-10-24 D3D12比較：FHD · 插幀/升頻關閉 · 選單。Rosetta · D3DMetal顯示正常，但fps未測量。Rosetta · DXMT為60.0 fps（上限），FEX · DXMT為59.7 fps，啟動時分別停頓5.4秒和8.4秒。FEX隨後也記錄到最高1088 ms。另一次FEX 15款測試為60.0 fps · 彙總最大影格時間28.5 ms，未進行遊戲內效能比較。</p><dl><div><dt>測試環境</dt><dd>既有紀錄： M4 Pro · 試玩版 · 各圖形路徑分別測量</dd></div><div><dt>影格率紀錄</dt><dd>D3DMetal · Ember Flow · 144Hz：遊戲 60 → 平均畫面輸出 116.7 fps · 4K D3DMetal（10月23日）：遊戲約 34 → 畫面輸出約 55 fps · 4K DXMT · 遊戲 DLSS 由 MetalFX 處理（10月27日）：不使用 DLSS 約 15 fps → 遊戲 28 fps · Ember Flow 畫面輸出約 55 fps（Rosetta、FEX 相同） · FHD DXMT（10月22日）：FEX、Rosetta 均約 60 fps · Rosetta D3DMetal 流暢方式的顯示改進：FHD 延遲 24.2 → 14.1 ms · 輸出 116.6 → 119.2 fps，QHD 延遲 24.2 → 15.8 ms · 輸出 114.0 → 118.8 fps · 這些數值不構成穩定性保證</dd></div><div><dt>注意事項</dt><dd>先前 DXMT 路徑記錄過 GPU 停滯和使用 FSR3 時的畫面異常，近期測量未複查。FEX 紀錄中約 290–307 ms 的最大影格時間，已確認是測量開始時首次將視窗移至前景造成的卡頓（Rosetta 也超過 600 ms）。請與 D3DMetal 結果區分。 10月24日的FEX 15款紀錄是FHD設定下的Frame Check彙總值。場景未單獨記錄，數值可能與包含啟動階段的全程最大影格時間不同。這些測試開啟了診斷取樣，因此不保證正常遊玩效能。</dd></div><div><dt>紀錄確認日期</dt><dd><time datetime="2026-10-24">2026-10-24</time> · 4K 測量 · FHD 測量於 2026-10-22 · FEX 凍結修復確認於 2026-10-19 · 影格率資料可能來自另一次測試。</dd></div></dl><a class="compat-permalink" href="#game-stellar">此遊戲的直達連結 ↗</a></div><figure class="compat-shot"><a href="../assets/stellar.webp" target="_blank" rel="noopener"><img src="../assets/stellar.webp" alt="透過 Ember 執行的《劍星》實機畫面" loading="lazy" width="1600" height="900"></a><figcaption>先前測試畫面 · 試玩版選單 · 點擊查看原圖</figcaption></figure></div>
     </details>
 <details class="compat-game" id="game-overwatch" data-status="play" data-search="Overwatch 오버워치">
       <summary><span class="compat-name"><strong>鬥陣特攻</strong><small>Steam</small></span><span class="compat-status play">已驗證遊玩</span><span class="compat-renderer">D3DMetal</span><span class="compat-scope">Steam 版 · 啟動後遊玩</span><span class="compat-expand" aria-hidden="true">＋</span></summary>
@@ -692,7 +702,7 @@ footer p{max-width:60em}
     <div class="sec-head">
       <p class="eyebrow">Ember 自研功能</p>
       <h2 id="feat-title">不止於在 Mac 上執行</h2>
-      <p class="note">遊戲啟動後，Ember 自研引擎便開始工作。Ember Flow · Forge · Tone · Flare · Pulse · Boost · Kindle · Kiln · Spark · Lens · Guard。點擊名稱旁的 <span class="finfo-demo" aria-hidden="true">i</span>可查看原理及實測資料。</p>
+      <p class="note">遊戲啟動後，Ember 自研引擎便開始工作。Ember Flow · Stoke · Forge · Tone · Flare · Pulse · Boost · Kindle · Kiln · Spark · Lens · Guard。點擊名稱旁的 <span class="finfo-demo" aria-hidden="true">i</span>可查看原理及實測資料。</p>
     </div>
 
     <article class="flow" aria-labelledby="f-flow">
@@ -712,7 +722,7 @@ footer p{max-width:60em}
           <li><b>Flow 神經網路</b>Ember 訓練的神經網路讀取動態資訊，產生中間畫面。自動模式預設使用此方式，4K 負荷約為原有方式的&nbsp;60%。</li>
           <li><b>補幀引擎 1.6</b>《失落的方舟》（FEX · DXMT）中，神經補幀略過次數從每 120 秒 76~133 次降至 0 次。</li>
           <li><b>水波與草叢</b>即使場景中有細碎紋理，也能補幀，無需重複原始影格。</li>
-          <li><b>先補幀，再放大</b>與 MetalFX 配合時，以放大前的解析度進行補幀，降低 GPU 負擔。《失落的方舟》遊戲 fps 提升了 10%。</li>
+          <li><b>先補幀，再放大</b>與 Ember Stoke 配合時，以放大前的解析度進行補幀，降低 GPU 負擔。《失落的方舟》遊戲 fps 提升了 10%。</li>
           <li><b>輕量放大</b>補幀影格不經過 MetalFX，而是使用輕量的單次處理放大。《失落的方舟》遊戲 49.7 → 51.6&nbsp;fps，文字和 HUD 保持不變。</li>
           <li><b>Ember Prism</b>實驗功能，預設關閉。啟用後，Rosetta · D3DMetal 遊戲會使用 Apple 補幀引擎，優先確保畫質，延遲會略有增加。需在 macOS 26 或以上版本配合 Ember Flow 使用。</li>
         </ul>
@@ -751,9 +761,15 @@ footer p{max-width:60em}
         <div class="ix-val"><p class="num">95<em>→</em>0%</p><p>失落的方舟水上樂園補幀略過比例</p></div>
       </article>
       <article class="ix">
+        <div class="ix-name"><strong>Ember <span>Stoke</span></strong><span class="kind">升頻<button class="finfo" type="button" data-b="stoke" aria-label="Ember Stoke 說明" aria-expanded="false">i</button></span></div>
+        <div class="ix-text"><p>以較低解析度繪製遊戲，再放大到顯示器解析度以提高 fps。在遊戲設定的第一張卡片中開啟，繪製解析度可選原生、品質或效能。</p>
+          <details><summary>了解詳情</summary><ul class="pts"><li><b>自動方式</b>遊戲支援 DLSS 時，利用遊戲提供的動態資訊放大；不支援時使用 Apple MetalFX 空間升頻。</li><li><b>用 MetalFX 處理 DLSS</b>在遊戲圖形設定中選擇 DLSS 後，該請求由 Apple MetalFX 處理。Ember 自行打通了這條路徑，不僅 D3DMetal，DXMT（DX11 · DX12）也能使用。DXMT 上會在驗證完成的遊戲中逐一開啟（目前為《劍星》試玩版）。</li><li><b>《劍星》4K</b>在 DXMT 上，未使用 DLSS 時約 15 fps 的場景提升到遊戲 28 fps，加上 Ember Flow 後畫面輸出約 55 fps。Rosetta 與 FEX 結果相同。</li><li><b>Ember 時間升頻</b>Ember 自研方式，會匯集先前影格的資訊來放大。目前為實驗功能（DXMT），效果仍在測量中。測量完成前不會納入自動方式。</li><li><b>銳利化 · Ember Forge</b>在進階設定中可進一步銳利化畫面，或用 Ember Forge 還原模糊的細節。</li><li><b>預設設定</b>關閉。支援 DXMT 與 D3DMetal。變更繪製解析度後，需連同啟動器一起重新開啟才會生效。</li></ul></details></div>
+        <div class="ix-val"><p class="num">15<em>→</em>55</p><p>《劍星》試玩版 4K fps · MetalFX 處理 DLSS + Ember Flow（遊戲 28 fps）</p></div>
+      </article>
+      <article class="ix">
         <div class="ix-name"><strong>Ember <span>Forge</span></strong><span class="kind">AI 細節還原<button class="finfo" type="button" data-b="forge" aria-label="Ember Forge 說明" aria-expanded="false">i</button></span></div>
-        <div class="ix-text"><p>MetalFX 將畫面放大兩倍後，Ember 自研 AI 模型會修復模糊細節與過銳邊緣，補足低解析度執行時損失的細節。</p>
-          <details><summary>了解詳情</summary><ul class="pts"><li><b>負荷</b>FHD → 4K 時增加約 1.4 ms GPU 時間（M4 Pro）。</li><li><b>遊戲實測</b>《七日世界》中，無論開關均維持 60 fps。</li><li><b>預設設定</b>關閉，可在遊戲設定中開啟。僅在 D3DMetal 下將 FHD 精確放大兩倍至 4K 時生效。</li></ul>
+        <div class="ix-text"><p>Ember Stoke（MetalFX）將畫面放大兩倍後，Ember 自研 AI 模型會修復模糊細節與過銳邊緣，補足低解析度執行時損失的細節。</p>
+          <details><summary>了解詳情</summary><ul class="pts"><li><b>負荷</b>FHD → 4K 時增加約 1.4 ms GPU 時間（M4 Pro）。</li><li><b>遊戲實測</b>《七日世界》中，無論開關均維持 60 fps。</li><li><b>預設設定</b>關閉，可在 Ember Stoke 卡片的進階設定中開啟。僅在 D3DMetal 下將 FHD 精確放大兩倍至 4K 時生效。</li></ul>
           <figure class="ba" data-key="forge" hidden><div class="ba-view"><img class="ba-a" alt="僅使用 MetalFX 放大的畫面"><img class="ba-b" alt="使用 MetalFX 與 Ember Forge 放大的畫面"><span class="ba-line"></span><span class="lab a">僅 MetalFX</span><span class="lab b">+ Ember Forge</span><input type="range" id="ba-forge" min="0" max="100" value="50" aria-label="僅 MetalFX 與 Ember Forge 比較位置"></div></figure></details></div>
         <div class="ix-val"><p class="num">−33~57%</p><p>與原圖的差異（LPIPS），對比僅使用 MetalFX</p></div>
       </article>
@@ -797,7 +813,7 @@ footer p{max-width:60em}
       <article class="ix">
         <div class="ix-name"><strong>Ember <span>Spark</span></strong><span class="kind">降低輸入延遲<button class="finfo" type="button" data-b="spark" aria-label="Ember Spark 說明" aria-expanded="false">i</button></span></div>
         <div class="ix-text"><p>短暫阻止遊戲過早開始下一個影格，讓影格能夠包含更新的輸入，縮短操作結果顯示到畫面上的時間。</p>
-          <details><summary>了解詳情</summary><ul class="pts"><li><b>致命公司</b>60 fps 上限時輸入延遲 37~39 → 18~29 ms。</li><li><b>效能影響</b>fps 與顯示 p99 保持不變。</li><li><b>預設設定</b>DXMT 遊戲預設開啟，啟用 Ember Flow 時會自動關閉。</li></ul></details></div>
+          <details><summary>了解詳情</summary><ul class="pts"><li><b>致命公司</b>60 fps 上限時輸入延遲 37~39 → 18~29 ms。</li><li><b>效能影響</b>fps 與顯示 p99 保持不變。</li><li><b>預設設定</b>在遊戲設定的「降低延遲」卡片中與低延遲模式一同開關。DXMT 遊戲預設開啟，啟用 Ember Flow 時會自動關閉。</li></ul></details></div>
         <div class="ix-val"><p class="num long">35–39<em>→</em>26–28</p><p>Valheim 60 fps 上限時輸入延遲，ms</p></div>
       </article>
       <article class="ix">
@@ -892,6 +908,55 @@ footer p{max-width:60em}
     </div>
   </section>
 
+  <!-- ===== 1.0.1 새 기능 ===== -->
+  <section class="sec wrap" id="new101" aria-labelledby="new-title">
+    <div class="sec-head">
+      <p class="eyebrow">Ember 1.0.1 新功能</p>
+      <h2 id="new-title">新增虛擬機與 Ember Shield</h2>
+      <p class="note">難以直接在 Mac 上執行的遊戲可以在 Windows 11 ARM 虛擬機中執行，遊戲啟動前的安全檢查由 Ember Shield 負責。</p>
+    </div>
+    <div class="live">
+      <figure class="nw-shot"><img src="../assets/ui-vm.webp" alt="Ember 虛擬機畫面：Windows 11 ARM 以及 CPU 核心、記憶體、解析度設定" loading="lazy" width="1400" height="944"><figcaption>虛擬機 · 在 Ember 中啟動和關閉</figcaption></figure>
+      <div class="live-text">
+        <h3>Windows 11 ARM 虛擬機</h3>
+        <p>在 Ember 中建立並啟動虛擬機。Ember 會自動完成 Windows 安裝和驅動程式設定。D3D12 遊戲也可以在虛擬機中執行。</p>
+        <ul class="facts">
+          <li>Windows<b>11 ARM</b></li>
+          <li>macOS<b>15 或更新版本</b></li>
+          <li>安裝與驅動程式設定<b>自動完成</b></li>
+          <li>D3D12 遊戲<b>可以執行</b></li>
+          <li>安裝檔案（ISO）<b>從 Microsoft 下載</b></li>
+          <li>Windows 授權<b>另行購買</b></li>
+        </ul>
+        <figure class="small"><img src="../assets/vm-wukong.webp" alt="在 Ember 虛擬機視窗中執行的《黑神話：悟空》基準測試畫面" loading="lazy" width="1200" height="696"><figcaption>在虛擬機中完整執行的《黑神話：悟空》基準測試</figcaption></figure>
+      </div>
+    </div>
+    <div class="live">
+      <div class="live-text">
+        <h3>Ember Shield</h3>
+        <p>在遊戲啟動前檢查是否有已知的感染痕跡，一旦發現會立即通知您。它也會阻擋連線到已知的惡意位址。</p>
+        <ul class="facts">
+          <li>感染痕跡檢查<b>遊戲啟動前</b></li>
+          <li>惡意位址連線<b>阻擋</b></li>
+          <li>執行引擎<b>Rosetta · FEX</b></li>
+          <li>阻擋次數<b>在設定中查看</b></li>
+          <li>使用<b>無論是否購買，所有人</b></li>
+        </ul>
+      </div>
+      <div class="live-text">
+        <h3>1.0.1 中的修正</h3>
+        <ul class="pts nwfix">
+          <li>修正了《巫師 3：狂獵》啟動時當機的問題。</li>
+          <li>修正了《劍星》（Stellar Blade）畫面上出現白點的問題。</li>
+          <li>修正了《Dome Keeper》啟動後立即關閉的問題。</li>
+          <li>修正了《黑神話：悟空》基準測試中途停止以及地形顯示為黑色的問題。基準測試現在可以完整執行。</li>
+          <li>Ember 1.0 現在可以透過 App 內更新取得新版本。</li>
+          <li>在 macOS 28 上開啟 Ember 時，可能會看到「需要更新 App」的通知。出現該通知後仍可繼續使用 Ember。</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
   <!-- ===== 앱 둘러보기 ===== -->
   <section class="sec wrap" id="app" aria-labelledby="gal-title">
     <div class="sec-head">
@@ -903,16 +968,16 @@ footer p{max-width:60em}
       <div class="tabs" role="tablist" aria-label="App 畫面">
         <button role="tab" id="tab-0" aria-controls="pane-0" aria-selected="true"><b>首頁</b><span>一覽最近遊戲與 Mac 狀態</span></button>
         <button role="tab" id="tab-1" aria-controls="pane-1" aria-selected="false" tabindex="-1"><b>遊戲詳情</b><span>為各遊戲選擇引擎與轉譯器</span></button>
-        <button role="tab" id="tab-2" aria-controls="pane-2" aria-selected="false" tabindex="-1"><b>啟動選項</b><span>畫面與 Ember Flow 分組</span></button>
+        <button role="tab" id="tab-2" aria-controls="pane-2" aria-selected="false" tabindex="-1"><b>啟動選項</b><span>整理為五張主要卡片</span></button>
         <button role="tab" id="tab-3" aria-controls="pane-3" aria-selected="false" tabindex="-1"><b>疑難排解</b><span>即時效能與 Ember 對話</span></button>
         <button role="tab" id="tab-4" aria-controls="pane-4" aria-selected="false" tabindex="-1"><b>Ember 對話泡泡</b><span>聆聽、調整、告知</span></button>
         <button role="tab" id="tab-5" aria-controls="pane-5" aria-selected="false" tabindex="-1"><b>首領機制面板</b><span>目前與下一項機制</span></button>
       </div>
       <div class="panes">
-        <figure role="tabpanel" id="pane-0" aria-labelledby="tab-0"><img src="../assets/ui-home.webp" alt="Ember 首頁：最近啟動的失落的方舟、遊戲庫、系統狀態" loading="lazy" width="1400" height="894"><figcaption>首頁 · 一覽最近遊戲與 Mac 狀態</figcaption></figure>
-        <figure role="tabpanel" id="pane-1" aria-labelledby="tab-1" hidden><img src="../assets/ui-game.webp" alt="失落的方舟遊戲頁面：引擎與圖形轉換器選擇" loading="lazy" width="1400" height="875"><figcaption>遊戲詳情 · 為各遊戲選擇引擎與轉譯器</figcaption></figure>
-        <figure role="tabpanel" id="pane-2" aria-labelledby="tab-2" hidden><img src="../assets/ui-options.webp" alt="啟動選項：畫面分組中的解析度與放大，Ember Flow 分組中的計算方式與補幀方式" loading="lazy" width="1400" height="875"><figcaption>啟動選項 · 分組設定解析度、放大及 Ember Flow</figcaption></figure>
-        <figure role="tabpanel" id="pane-3" aria-labelledby="tab-3" hidden><img src="../assets/ui-troubleshoot.webp" alt="疑難排解頁面：即時效能與向 Ember 提問" loading="lazy" width="1400" height="875"><figcaption>疑難排解 · 即時效能與 Ember 對話</figcaption></figure>
+        <figure role="tabpanel" id="pane-0" aria-labelledby="tab-0"><img src="../assets/ui-home.webp" alt="Ember 首頁：最近遊玩的《失落的方舟》、我的遊戲列表、系統狀態與 Ember Shield" loading="lazy" width="1400" height="944"><figcaption>首頁 · 一覽最近遊戲與 Mac 狀態</figcaption></figure>
+        <figure role="tabpanel" id="pane-1" aria-labelledby="tab-1" hidden><img src="../assets/ui-game.webp" alt="Stellar Blade Demo 遊戲頁面：選擇引擎和圖形轉換器" loading="lazy" width="1400" height="944"><figcaption>遊戲詳情 · 為各遊戲選擇引擎與轉譯器</figcaption></figure>
+        <figure role="tabpanel" id="pane-2" aria-labelledby="tab-2" hidden><img src="../assets/ui-options.webp" alt="啟動選項：Ember Flow 卡片中的插幀方式、計算方式以及降低延遲卡片" loading="lazy" width="1400" height="944"><figcaption>啟動選項 · Ember Stoke、Ember Flow 等五張主要卡片</figcaption></figure>
+        <figure role="tabpanel" id="pane-3" aria-labelledby="tab-3" hidden><img src="../assets/ui-troubleshoot.webp" alt="疑難排解頁面：即時效能與向 Ember 提問" loading="lazy" width="1400" height="944"><figcaption>疑難排解 · 即時效能與 Ember 對話</figcaption></figure>
         <figure role="tabpanel" id="pane-4" aria-labelledby="tab-4" class="tall" hidden><img src="../assets/ui-coach.webp" alt="遊戲上方的 Ember 對話泡泡：聆聽、設定變更回覆與機制提醒" loading="lazy" width="900" height="1047"><figcaption>Ember 對話泡泡 · 聆聽、調整、告知</figcaption></figure>
         <figure role="tabpanel" id="pane-5" aria-labelledby="tab-5" class="wide" hidden><img src="../assets/ui-boss.webp" alt="首領機制面板：首領名稱、血條數、目前與下一項機制" loading="lazy" width="1200" height="448"><figcaption>首領機制面板 · 目前與下一項機制</figcaption></figure>
       </div>
@@ -937,7 +1002,7 @@ footer p{max-width:60em}
       <div><dt>從檔案夾或 ZIP 加入遊戲</dt><dd>沒有安裝程式的遊戲，也可透過選擇檔案夾或開啟 ZIP 檔加入遊戲庫。</dd></div>
       <div><dt>提示視窗通知</dt><dd>遊戲在提示或確認視窗等待時，Ember 會通知你。請自行查看視窗後繼續。</dd></div>
       <div><dt>麥克風權限視窗</dt><dd>限制語音輸入初始化時間，避免麥克風權限視窗導致遊戲無回應。權限視窗等待期間，麥克風輸入可能尚未就緒。</dd></div>
-      <div><dt>各遊戲啟動選項</dt><dd>為各遊戲分別設定影格率上限、解析度（FHD·QHD·4K）和畫面放大。選項按畫面、Ember Flow、影格與延遲、畫質調整、實驗、進階分組。</dd></div>
+      <div><dt>各遊戲啟動選項</dt><dd>遊戲設定整理為五張主要卡片：Ember Stoke（升頻）· Ember Flow（補幀）· 降低延遲（Ember Spark）· Ember Tone（色彩與色調）· 自動 HDR（Ember Flare）。每張卡片一個開關，詳細設定收在卡片內的進階中。繪製解析度（原生·品質·效能）和幀率上限也可依遊戲分別設定。</dd></div>
       <div><dt>執行紀錄</dt><dd>可直接查看錯誤紀錄，並就此向 Ember 提問。Ember AI 會結合遊戲與近期設定變更提出處理建議，套用過的設定會保留還原紀錄。</dd></div>
       <div><dt>Ember 更新</dt><dd>自動更新進度條顯示從檢查新版本到下載、安裝的全過程。</dd></div>
       <div><dt>傳送問題記錄</dt><dd>選擇要傳送的項目，查看已遮蔽個人資訊的預覽，只有同意後才會傳送。儲存為檔案時僅保留在 Mac 本機。 <a href="privacy.html">隱私權政策</a>中說明了保留和刪除標準。</dd></div>
@@ -952,7 +1017,7 @@ footer p{max-width:60em}
     <div class="stop" data-stop="end0" style="top:0"></div>
     <div class="stop" data-stop="end" style="top:80vh"></div>
     <div class="end-in">
-      <p class="eyebrow">Ember <span data-cfg="version">1.0</span></p>
+      <p class="eyebrow">Ember <span data-cfg="version">1.0.1</span></p>
       <h2 id="end-title">在 Mac 上暢玩 Windows 遊戲。</h2>
       <p><a class="get lg" href="https://eunggg0.github.io/ember-releases/download/" data-link="download"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M6 10l6 6 6-6M4 20h16"/></svg>下載 Mac 版</a></p>
       <ul class="req" aria-label="系統需求">
@@ -1072,7 +1137,8 @@ document.querySelectorAll('.vid').forEach((f) => {
 /* Ember 고유 기능 설명 판 — 앱의 FeatureInfo(EmberBrand.lines)와 같은 글. 수치는 실측만. */
 const D = {
   flow:   ['Ember Flow',"補幀","產生中間影格，將畫面輸出 fps 提升至最高兩倍",["遊戲影格不足時填補間隙，畫面影格數最高加倍。","GPU 找出物體在前後影格間的移動軌跡，再沿軌跡繪製新的中間畫面。","補幀引擎 1.6：《失落的方舟》（FEX·DXMT）神經補幀略過次數從每 120 秒 76~133 次降至 0 次。失落的方舟 QHD 47~54 → 94~107 fps。FHD GPU 時間約 1 ms。即使 GPU 滿載的《鬥陣特攻》QHD，流暢方式也從 60 → 116 fps。《劍星》（144Hz）平均畫面輸出 109.6 → 116.7 fps。延遲因遊戲和場景而異。","預設關閉。遊戲 fps 達到顯示更新率時不運作，過慢時也會暫停，並在螢幕上顯示原因。D3DMetal 的 HDR（PQ）遊戲會顯示原始影格以保護色彩。"]],
-  forge:  ['Ember Forge',"AI 細節還原","讓放大畫面的細節更清晰",["讓 MetalFX 放大畫面中的草地、文字和邊緣重新清晰。","Ember 訓練的小型神經網路重新修飾放大畫面，使其更接近原生 4K。","與原圖的差異比僅使用 MetalFX 減少 33~57%。FHD → 4K 增加 1.4 ms GPU 時間。","預設關閉，僅在 D3DMetal 下將 FHD 精確放大兩倍至 4K 時生效。"]],
+  stoke:  ['Ember Stoke',"升頻","以較低解析度繪製，再放大到顯示器解析度以提高 fps",["以較低解析度繪製遊戲，再放大到顯示器解析度以提高 fps。","預設由 Apple MetalFX 清晰放大畫面。如果遊戲支援 DLSS，會利用遊戲提供的動態資訊放大得更清晰。","《劍星》試玩版 4K（DXMT）：不使用 DLSS 約 15 fps → 遊戲 DLSS 由 MetalFX 處理後遊戲 28 fps，加上 Ember Flow 畫面輸出約 55 fps（Rosetta、FEX 相同）。Ember 時間升頻仍在測量中。","預設關閉。可在 DXMT 和 D3DMetal 中使用，變更解析度後需連同啟動器一起重新啟動才會生效。"]],
+  forge:  ['Ember Forge',"AI 細節還原","讓放大畫面的細節更清晰",["讓 Ember Stoke（MetalFX）放大畫面中的草地、文字和邊緣重新清晰。","Ember 訓練的小型神經網路重新修飾放大畫面，使其更接近原生 4K。","與原圖的差異比僅使用 MetalFX 減少 33~57%。FHD → 4K 增加 1.4 ms GPU 時間。","預設關閉，可在 Ember Stoke 卡片的進階設定中開啟；僅在 D3DMetal 下將 FHD 精確放大兩倍至 4K 時生效。"]],
   tone:   ['Ember Tone',"AI 畫質調整","自然提升色彩與對比",["自然調整遊戲畫面的色彩和對比。","啟動遊戲時神經網路產生一次色彩查找表，此後每個影格只需讀取該表。","每個影格 GPU 0.3~0.4 ms（QHD）。《七日世界》與 Ember Flow 同時開啟也維持 104 fps。","預設關閉，啟用電池模式後，電池供電時自動關閉。"]],
   flare:  ['Ember Flare',"AI 自動 HDR","將 SDR 遊戲高光呈現為 HDR",["在 HDR 顯示器上，讓 SDR 遊戲中的太陽、火焰等高光更加明亮。","小型神經網路估算高光原本的亮度，只提升這些區域，文字與選單保持原樣。","每個影格 GPU 時間：1080p 0.3 ms，4K 0.8 ms。","預設關閉，僅在顯示器已開啟 HDR 時生效。遊戲自行開啟 HDR 後自動 HDR 會關閉。D3DMetal 的 HDR（PQ）遊戲會以原始影格代替補幀，以保護色彩。已在《巫師 3》中驗證。"]],
   pulse:  ['Ember Pulse',"影格節奏調整","配合顯示週期均勻提交影格，降低延遲",["減少影格輸出間隔不均造成的卡頓與延遲。","測量顯示器接收下一個影格的時機，並準時提交。","《七日世界》中超過 25 ms 的卡頓次數為 55~101 → 4~10，延遲為 12.6~15.3 → 4.5~6.4 ms。","在 DXMT（D3D11）遊戲中自動啟用，GPU 使用率較高的場景會自動關閉。"]],
@@ -1338,11 +1404,12 @@ const floor = new THREE.Mesh(new THREE.CircleGeometry(16, 96), new THREE.ShaderM
 }));
 floor.rotation.x = -Math.PI / 2; scene.add(floor);
 
-/* ---------- glass ring: nine names in refracting iridescent slabs ---------- */
+/* ---------- glass ring: twelve names in refracting iridescent slabs ---------- */
 const C = new THREE.Vector3(0, 1.8, 0), R = 5.5;
 const SLABS = [
   ['FLOW', "補幀", '×2', "加入中間影格，提高畫面輸出"],
   ['GUARD', "文字與名稱標籤保護", '95→0%', "水上樂園補幀略過比例"],
+  ['STOKE', "升頻", '15→55', "《劍星》4K，DLSS→MetalFX + Flow"],
   ['FORGE', "AI 細節還原", '−57%', "與原圖的差異減少 33~57%（LPIPS）"],
   ['TONE', "AI 畫質調整", '0.3ms', "QHD 每個影格 GPU 時間"],
   ['FLARE', "AI 自動 HDR", '0.8ms', "4K 每個影格 GPU 時間"],
@@ -1565,8 +1632,14 @@ const lens = document.getElementById('lens'), lensFps = document.getElementById(
 const lg = debugFPS ? document.getElementById('lensg').getContext('2d') : null;
 lens.hidden = !debugFPS;
 const clock = new THREE.Clock(); let t = 0, acc = 0, frames = 0, slowFor = 0, degraded = false, running = false, visAct = true, visEnd = false, waveStop = ''; const ft = [];
+// Frame budget (10-26): the scene ran at the display rate (144Hz on a 4K monitor) and kept ~40% of the GPU busy
+// even while the window sat unfocused behind other apps. 60fps cap, 30fps after 8s without input, 15fps unfocused.
+let lastDraw = 0, lastInput = performance.now();
+for (const ev of ['pointermove', 'pointerdown', 'wheel', 'keydown', 'scroll', 'touchstart']) addEventListener(ev, () => { lastInput = performance.now(); }, { passive: true });
+const frameBudget = (now) => !document.hasFocus() ? 1000 / 15 : now - lastInput > 8000 ? 1000 / 30 : 1000 / 60;
 function frame() {
   if (!running || dead) return;
+  { const now = performance.now(); if (!first && now - lastDraw < frameBudget(now) - 2) { requestAnimationFrame(frame); return; } lastDraw = now; }
   const dt = Math.min(clock.getDelta(), 0.1); if (!reduce) t += dt;
   const sT = sceneT(); cur.s = first || reduce ? sT : lerp(cur.s, sT, 1 - Math.exp(-dt * 5));
   const i = Math.min(Math.floor(cur.s), stops.length - 1), fr = cur.s - i;
@@ -1620,7 +1693,7 @@ function frame() {
   ft.push(dt * 1000); if (ft.length > 32) ft.shift(); acc += dt; frames++;
   if (acc > 0.5) {
     const fps = frames / acc; if (debugFPS) lensFps.textContent = Math.round(fps); acc = 0; frames = 0;
-    if (fps < 50 && t > 3) { if (++slowFor >= 4) { slowFor = 0; if (DPR > 1) { DPR = 1; renderer.setPixelRatio(1); composer.setPixelRatio(1); PU.uPR.value = 1; lastSz = [0, 0]; resize(); Object.assign(ST, { DPR: 1, degraded: 1 }); } else if (!degraded) { degraded = true; ST.degraded = 2; } else if (geo.drawRange.count === Infinity || geo.drawRange.count > N / 2) { geo.setDrawRange(0, Math.floor(N / 2)); ST.degraded = 3; } else if (fps < 20) toFallback('slow'); } } else slowFor = 0;
+    if (fps < Math.min(50, 0.83 * 1000 / frameBudget(performance.now())) && t > 3) { if (++slowFor >= 4) { slowFor = 0; if (DPR > 1) { DPR = 1; renderer.setPixelRatio(1); composer.setPixelRatio(1); PU.uPR.value = 1; lastSz = [0, 0]; resize(); Object.assign(ST, { DPR: 1, degraded: 1 }); } else if (!degraded) { degraded = true; ST.degraded = 2; } else if (geo.drawRange.count === Infinity || geo.drawRange.count > N / 2) { geo.setDrawRange(0, Math.floor(N / 2)); ST.degraded = 3; } else if (fps < 20) toFallback('slow'); } } else slowFor = 0;
     if (lg) {
     lg.clearRect(0, 0, 128, 48); lg.strokeStyle = '#ffb547'; lg.lineWidth = 2; lg.beginPath();
     ft.forEach((v, j) => { const x = j * 4, y = 46 - Math.min(44, v / 33.3 * 44); j ? lg.lineTo(x, y) : lg.moveTo(x, y); }); lg.stroke();
